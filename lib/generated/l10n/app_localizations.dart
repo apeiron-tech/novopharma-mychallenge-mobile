@@ -254,6 +254,12 @@ abstract class AppLocalizations {
   /// **'Select your pharmacy'**
   String get selectYourPharmacy;
 
+  /// No description provided for @selectYourCity.
+  ///
+  /// In en, this message translates to:
+  /// **'Select your city'**
+  String get selectYourCity;
+
   /// No description provided for @pleaseSelectPharmacy.
   ///
   /// In en, this message translates to:
@@ -596,6 +602,12 @@ abstract class AppLocalizations {
   /// **'Please select your position'**
   String get pleaseSelectPosition;
 
+  /// No description provided for @city.
+  ///
+  /// In en, this message translates to:
+  /// **'Your city'**
+  String get city;
+
   /// No description provided for @pharmacienTitulaire.
   ///
   /// In en, this message translates to:
@@ -763,6 +775,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Filter'**
   String get filter;
+
+  /// No description provided for @dateFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter by date'**
+  String get dateFilter;
 
   /// No description provided for @navHome.
   ///
@@ -1049,7 +1067,7 @@ abstract class AppLocalizations {
   /// No description provided for @onceApproved.
   ///
   /// In en, this message translates to:
-  /// **'We process your request and get back to you with an answer within 72 business hours'**
+  /// **'Your request will be processed and a response will be provided within 72 business hours.'**
   String get onceApproved;
 
   /// No description provided for @conversionRate.

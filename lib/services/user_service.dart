@@ -31,6 +31,7 @@ class UserService {
     required String phone,
     required String avatarUrl,
     required String position,
+    required String? city,
   }) async {
     try {
       await _firestore.collection(_collection).doc(user.uid).set({
@@ -43,6 +44,7 @@ class UserService {
         'pharmacy': pharmacyName,
         'pharmacyId': pharmacyId,
         'position': position,
+        'city': city,
         'points': 0,
         'status': 'pending', // Set initial status to pending
         'createdAt': FieldValue.serverTimestamp(),

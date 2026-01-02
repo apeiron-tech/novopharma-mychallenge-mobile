@@ -568,7 +568,7 @@ class _FormationsScreenState extends State<FormationsScreen>
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Formateur',
+                                  'Speaker',
                                   style: TextStyle(
                                     fontSize: 11,
                                     color: Colors.grey.shade600,

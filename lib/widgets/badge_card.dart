@@ -91,9 +91,9 @@ class BadgeCard extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
             SizedBox(
-              height: 18, // Fixed height for the bottom widget area
+              height: 16, // Fixed height for the bottom widget area
               child: !isAwarded
                   ? (badgeInfo.progress > 0 && badgeInfo.progress < 1
                         ? ClipRRect(

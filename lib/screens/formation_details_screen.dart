@@ -1431,10 +1431,6 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('Formation: ${widget.formation.title}'),
-              const SizedBox(height: 8),
-              Text(
-                'Quiz: ${widget.formation.linkedQuizId ?? "Quiz de validation"}',
-              ),
               const SizedBox(height: 16),
               const Text(
                 'Êtes-vous prêt(e) à commencer le quiz de validation ?',
