@@ -88,6 +88,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get selectYourPharmacy => 'Select your pharmacy';
 
   @override
+  String get selectYourCity => 'Select your city';
+
+  @override
   String get pleaseSelectPharmacy => 'Please select a pharmacy';
 
   @override
@@ -267,6 +270,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pleaseSelectPosition => 'Please select your position';
 
   @override
+  String get city => 'Your city';
+
+  @override
   String get pharmacienTitulaire => 'Licensed Pharmacist';
 
   @override
@@ -349,6 +355,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get filter => 'Filter';
+
+  @override
+  String get dateFilter => 'Filter by date';
 
   @override
   String get navHome => 'Home';
@@ -516,7 +525,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onceApproved =>
-      'We process your request and get back to you with an answer within 72 business hours';
+      'Your request will be processed and a response will be provided within 72 business hours.';
 
   @override
   String conversionRate(int points) {

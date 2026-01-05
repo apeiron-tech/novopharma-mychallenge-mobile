@@ -25,6 +25,7 @@
     "termsAndPrivacy": "Terms of Use and Privacy Policy",
     "alreadyHaveAccount": "Already have an account? ",
     "selectYourPharmacy": "Select your pharmacy",
+    "selectYourCity": "Select your city",
     "pleaseSelectPharmacy": "Please select a pharmacy",
     "resetPassword": "Reset Password",
     "resetPasswordInstructions": "Enter your email address and we'll send you a link to reset your password.",
@@ -82,6 +83,7 @@
     "yourPosition": "Your Position",
     "selectPosition": "Select your position",
     "pleaseSelectPosition": "Please select your position",
+    "city": "Your city",
     "pharmacienTitulaire": "Licensed Pharmacist",
     "pharmacienAssistant": "Assistant Pharmacist",
     "preparateur": "Pharmacy Technician",
@@ -110,6 +112,7 @@
     "select": "Select",
     "clear": "Clear",
     "filter": "Filter",
+    "dateFilter": "Filter by date",
     "navHome": "Home",
     "navChallenges": "Formations",
     "navLeaderboard": "Actualités",
@@ -193,7 +196,7 @@
     "howItWorks": "Redeem My Points – How Does It Work?",
     "choosePointsToConvert": "Choose the number of points you wish to convert",
     "submitForReview": "Validate your request with one click",
-    "onceApproved": "We process your request and get back to you with an answer within 72 business hours",
+    "onceApproved": "Your request will be processed and a response will be provided within 72 business hours.",
     "conversionRate": "{points} points = 1 Pluxee credit",
     "@conversionRate": {
         "placeholders": {

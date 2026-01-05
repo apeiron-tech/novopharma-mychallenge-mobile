@@ -89,13 +89,13 @@ class _PluxeeHistoryScreenState extends State<PluxeeHistoryScreen> {
                               size: 28,
                             ),
                           ),
-                          const SizedBox(width: 16),
+                          const SizedBox(width: 14),
                           Expanded(
                             child: Text(
                               l10n.redemptionHistory,
                               style: GoogleFonts.montserrat(
                                 color: Colors.white,
-                                fontSize: 24,
+                                fontSize: 22,
                                 fontWeight: FontWeight.w700,
                                 letterSpacing: -0.5,
                               ),

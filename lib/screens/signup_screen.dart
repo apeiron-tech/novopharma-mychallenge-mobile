@@ -39,6 +39,7 @@ class _SignupScreenState extends State<SignupScreen> {
   DateTime? _selectedDate;
   Pharmacy? _selectedPharmacy;
   String? _selectedPosition;
+  String? _selectedCity;
   late Future<List<Pharmacy>> _pharmaciesFuture;
   File? _profileImage;
   final ImagePicker _picker = ImagePicker();
@@ -47,7 +48,33 @@ class _SignupScreenState extends State<SignupScreen> {
     {'value': 'pharmacien_titulaire', 'key': 'pharmacienTitulaire'},
     {'value': 'pharmacien_assistant', 'key': 'pharmacienAssistant'},
     {'value': 'preparateur', 'key': 'preparateur'},
-    {'value': 'responsable_parapharmacie', 'key': 'responsableParapharmacie'},
+  ];
+
+  final List<String> _cities = [
+    'Ariana',
+    'Béja',
+    'Ben Arous',
+    'Bizerte',
+    'El Kef',
+    'Gabes',
+    'Gafsa',
+    'Jendouba',
+    'Kairouan',
+    'Kasserine',
+    'Kebili',
+    'Mahdia',
+    'Manouba',
+    'Medenine',
+    'Monastir',
+    'Nabeul',
+    'Sfax',
+    'Sidi Bouzid',
+    'Siliana',
+    'Sousse',
+    'Tataouine',
+    'Tozeur',
+    'Tunis',
+    'Zaghouan'
   ];
 
   @override
@@ -93,7 +120,8 @@ class _SignupScreenState extends State<SignupScreen> {
         _phoneController.text.isNotEmpty &&
         _selectedDate != null &&
         _selectedPharmacy != null &&
-        _selectedPosition != null;
+        _selectedPosition != null &&
+        _selectedCity != null;
     _profileImage != null;
 
     final bool shouldBeEnabled =
@@ -182,6 +210,7 @@ class _SignupScreenState extends State<SignupScreen> {
       phone: _phoneController.text.trim(),
       avatarUrl: downloadUrl ?? '',
       position: _selectedPosition!,
+      city: _selectedCity,
     );
 
     if (mounted) {
@@ -450,6 +479,10 @@ class _SignupScreenState extends State<SignupScreen> {
                     _buildModernLabel(l10n.yourPosition),
                     const SizedBox(height: 8),
                     _buildPositionDropdown(),
+                    const SizedBox(height: 16),
+                    _buildModernLabel(l10n.city),
+                    const SizedBox(height: 8),
+                    _buildCityDropdown(),
                   ],
                 ),
                 const SizedBox(height: 20),
@@ -904,6 +937,7 @@ class _SignupScreenState extends State<SignupScreen> {
         }
 
         final pharmacies = snapshot.data!;
+        final filteredPharmacies = pharmacies.where((pharmacy) => pharmacy.clientCategory != 'Para-Pharmacie').toList();
         return DropdownButtonFormField<Pharmacy>(
           value: _selectedPharmacy,
           isExpanded: true,
@@ -911,7 +945,7 @@ class _SignupScreenState extends State<SignupScreen> {
             hintText: l10n.selectYourPharmacy,
             prefixIcon: Icons.local_hospital_outlined,
           ),
-          items: pharmacies.map((pharmacy) {
+          items: filteredPharmacies.map((pharmacy) {
             return DropdownMenuItem<Pharmacy>(
               value: pharmacy,
               child: Text(
@@ -955,9 +989,6 @@ class _SignupScreenState extends State<SignupScreen> {
           case 'preparateur':
             labelText = l10n.preparateur;
             break;
-          case 'responsableParapharmacie':
-            labelText = l10n.responsableParapharmacie;
-            break;
           default:
             labelText = position['key']!;
         }
@@ -974,6 +1005,31 @@ class _SignupScreenState extends State<SignupScreen> {
         _updateButtonState();
       },
       validator: (value) => value == null ? l10n.pleaseSelectPosition : null,
+    );
+  }
+
+  Widget _buildCityDropdown() {
+    final l10n = AppLocalizations.of(context)!;
+    return DropdownButtonFormField<String>(
+      value: _selectedCity,
+      isExpanded: true,
+      decoration: _buildInputDecoration(
+        hintText: l10n.selectYourCity,
+        prefixIcon: Icons.location_city,
+      ),
+      items: _cities.map((city) {
+        return DropdownMenuItem<String>(
+          value: city,
+          child: Text(city, overflow: TextOverflow.ellipsis, maxLines: 1),
+        );
+      }).toList(),
+      onChanged: (String? newValue) {
+        setState(() {
+          _selectedCity = newValue;
+        });
+        _updateButtonState();
+      },
+      validator: (value) => value == null ? 'Please select a city' : null,
     );
   }
 }

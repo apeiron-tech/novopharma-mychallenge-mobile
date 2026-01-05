@@ -25,6 +25,7 @@
     "termsAndPrivacy": "les conditions d'utilisation et la politique de confidentialité",
     "alreadyHaveAccount": "Vous avez déjà un compte? ",
     "selectYourPharmacy": "Sélectionnez votre pharmacie",
+    "selectYourCity": "Sélectionnez votre ville",
     "pleaseSelectPharmacy": "Veuillez sélectionner une pharmacie",
     "resetPassword": "Réinitialiser le mot de passe",
     "resetPasswordInstructions": "Entrez votre adresse e-mail et nous vous enverrons un lien pour réinitialiser votre mot de passe.",
@@ -82,6 +83,7 @@
     "yourPosition": "Votre position",
     "selectPosition": "Sélectionnez votre position",
     "pleaseSelectPosition": "Veuillez sélectionner votre position",
+    "city": "Votre ville",
     "pharmacienTitulaire": "Pharmacien titulaire",
     "pharmacienAssistant": "Pharmacien assistant",
     "preparateur": "Préparateur",
@@ -110,6 +112,7 @@
     "select": "Sélectionner",
     "clear": "Effacer",
     "filter": "Filtrer",
+    "dateFilter": "Filtre par date",
     "navHome": "Accueil",
     "navChallenges": "Formations",
     "navLeaderboard": "Actualités",
@@ -193,7 +196,7 @@
     "howItWorks": "Échanger mes points – Comment ça marche ?",
     "choosePointsToConvert": "Choisissez le nombre de points que vous souhaitez convertir",
     "submitForReview": "Validez votre demande en un clic",
-    "onceApproved": "Nous traitons votre demande et vous revenons avec une réponse dans les 72h ouvrées",
+    "onceApproved": "Votre demande sera prise en charge et une réponse vous sera communiquée sous 72 heures ouvrées.",
     "conversionRate": "{points} points = 1 crédit Pluxee",
     "@conversionRate": {
         "placeholders": {

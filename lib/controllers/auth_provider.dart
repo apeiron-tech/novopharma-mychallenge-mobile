@@ -111,6 +111,7 @@ class AuthProvider with ChangeNotifier {
     required String phone,
     required String avatarUrl,
     required String position,
+    required String? city,
   }) async {
     try {
       UserCredential userCredential = await _authService
@@ -126,6 +127,7 @@ class AuthProvider with ChangeNotifier {
         phone: phone,
         avatarUrl: avatarUrl,
         position: position,
+        city: city,
       );
       return null; // Success
     } on FirebaseAuthException catch (e) {
