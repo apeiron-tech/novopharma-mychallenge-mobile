@@ -540,7 +540,9 @@ class _PluxeeRedemptionScreenState extends State<PluxeeRedemptionScreen> {
                             const SizedBox(height: 4),
                             _buildInfoStep('2', l10n.submitForReview),
                             const SizedBox(height: 4),
-                            _buildInfoStep('3', l10n.onceApproved),
+                            _buildInfoStep('3', Localizations.localeOf(context).languageCode == 'fr' 
+                                ? 'Votre demande sera prise en charge et une réponse vous sera communiquée sous 72 heures ouvrées.' 
+                                : 'Your request will be processed and a response will be provided within 72 business hours.'),
                             const SizedBox(height: 20),
                             Container(
                               padding: const EdgeInsets.all(16),

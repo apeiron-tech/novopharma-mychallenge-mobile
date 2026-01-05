@@ -387,8 +387,8 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                     ),
                   ),
                   const SizedBox(width: 12),
-                  const Text(
-                    'Filter Records',
+                  Text(
+                    l10n.dateFilter,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,

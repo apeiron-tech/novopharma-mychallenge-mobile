@@ -91,6 +91,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get selectYourPharmacy => 'Sélectionnez votre pharmacie';
 
   @override
+  String get selectYourCity => 'Sélectionnez votre ville';
+
+  @override
   String get pleaseSelectPharmacy => 'Veuillez sélectionner une pharmacie';
 
   @override
@@ -272,6 +275,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get pleaseSelectPosition => 'Veuillez sélectionner votre position';
 
   @override
+  String get city => 'Votre ville';
+
+  @override
   String get pharmacienTitulaire => 'Pharmacien titulaire';
 
   @override
@@ -355,6 +361,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get filter => 'Filtrer';
+
+  @override
+  String get dateFilter => 'Filtre par date';
 
   @override
   String get navHome => 'Accueil';
@@ -523,7 +532,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get onceApproved =>
-      'Nous traitons votre demande et vous revenons avec une réponse dans les 72h ouvrées';
+      'Votre demande sera prise en charge et une réponse vous sera communiquée sous 72 heures ouvrées.';
 
   @override
   String conversionRate(int points) {

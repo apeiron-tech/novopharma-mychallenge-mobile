@@ -830,9 +830,12 @@ class _ProductScreenState extends State<ProductScreen> {
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: SafeArea(
-        child: Row(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Expanded(
+            // Price row at the top, aligned to the left
+            Align(
+              alignment: Alignment.centerLeft,
               child: ValueListenableBuilder<int>(
                 valueListenable: _quantityNotifier,
                 builder: (context, quantity, child) {
@@ -851,13 +854,15 @@ class _ProductScreenState extends State<ProductScreen> {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        '${product.price.toStringAsFixed(2)} TND',
-                        style: const TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF102132),
+                      const SizedBox(height: 2.0),
+                      Padding(padding: const EdgeInsets.only(left: 6.0),
+                        child: Text(
+                          '${product.price.toStringAsFixed(3)} TND',
+                          style: const TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF102132),
+                          ),
                         ),
                       ),
                     ],
@@ -865,33 +870,32 @@ class _ProductScreenState extends State<ProductScreen> {
                 },
               ),
             ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () => _submitSale(product, user),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFEF4444),
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 18),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  elevation: 0,
+            const SizedBox(height: 16), // Space between price and button
+            // Button row at the bottom, centered
+            ElevatedButton(
+              onPressed: () => _submitSale(product, user),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFEF4444),
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 24),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.check_circle_outline, size: 20),
-                    const SizedBox(width: 8),
-                    Text(
-                      widget.sale != null ? l10n.updateSale : l10n.confirmSale,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                elevation: 0,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.check_circle_outline, size: 20),
+                  const SizedBox(width: 8),
+                  Text(
+                    widget.sale != null ? l10n.updateSale : l10n.confirmSale,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],
