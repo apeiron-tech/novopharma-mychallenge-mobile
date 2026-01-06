@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
+import '../theme.dart';
 
 class ProgressRing extends StatefulWidget {
   final double progress; // 0.0 to 1.0
@@ -15,8 +16,8 @@ class ProgressRing extends StatefulWidget {
     required this.progress,
     this.size = 64.0,
     this.strokeWidth = 6.0,
-    this.trackColor = const Color(0xFFE8EEF5),
-    this.progressColor = const Color(0xFF1F9BD1),
+    this.trackColor = LightModeColors.lightOutline,
+    this.progressColor = LightModeColors.lightPrimary,
     this.showPercentage = true,
     this.textStyle,
   });
@@ -99,7 +100,7 @@ class _ProgressRingState extends State<ProgressRing>
                       TextStyle(
                         fontSize: widget.size * 0.2,
                         fontWeight: FontWeight.w600,
-                        color: const Color(0xFF102132),
+                        color: LightModeColors.dashboardTextPrimary,
                       ),
                 );
               },

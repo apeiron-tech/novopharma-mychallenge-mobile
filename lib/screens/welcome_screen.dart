@@ -34,7 +34,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           children: [
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.8,
-              child: Image.asset('assets/images/logo.png'),
+              child: Image.asset('assets/logo/fullLogoBlue.png'),
             ),
             const SizedBox(height: 24),
             const CircularProgressIndicator(

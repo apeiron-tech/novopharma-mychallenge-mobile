@@ -7,6 +7,7 @@ import 'package:novopharma/models/goal.dart';
 import '../widgets/goal_card.dart';
 import '../widgets/bottom_navigation_bar.dart';
 import 'package:novopharma/generated/l10n/app_localizations.dart';
+import '../theme.dart';
 
 class GoalsScreen extends StatefulWidget {
   const GoalsScreen({super.key});
@@ -60,14 +61,14 @@ class _GoalsScreenState extends State<GoalsScreen>
       child: Consumer<GoalProvider>(
         builder: (context, goalProvider, child) {
           return Container(
-            color: Colors.white,
+            color: LightModeColors.lightBackground,
             child: CustomScrollView(
               slivers: [
                 // Enhanced Modern Header
                 SliverAppBar(
                   pinned: true,
-                  expandedHeight: 160,
-                  backgroundColor: Colors.white,
+                  expandedHeight: 180,
+                  backgroundColor: LightModeColors.lightBackground,
                   elevation: 0,
                   automaticallyImplyLeading: false,
                   flexibleSpace: FlexibleSpaceBar(
@@ -76,12 +77,12 @@ class _GoalsScreenState extends State<GoalsScreen>
                         gradient: LinearGradient(
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
-                          colors: [Colors.grey.shade50, Colors.white],
+                          colors: [LightModeColors.lightBackground, LightModeColors.lightSurface],
                         ),
                       ),
                       child: SafeArea(
                         child: Padding(
-                          padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+                          padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -94,16 +95,14 @@ class _GoalsScreenState extends State<GoalsScreen>
                                         begin: Alignment.topLeft,
                                         end: Alignment.bottomRight,
                                         colors: [
-                                          Color(0xFF1F9BD1),
-                                          Color(0xFF1887B8),
+                                          LightModeColors.lightPrimary,
+                                          LightModeColors.lightSecondary,
                                         ],
                                       ),
                                       borderRadius: BorderRadius.circular(18),
                                       boxShadow: [
                                         BoxShadow(
-                                          color: Color(
-                                            0xFF1F9BD1,
-                                          ).withValues(alpha: 0.35),
+                                          color: LightModeColors.lightPrimary.withValues(alpha: 0.35),
                                           blurRadius: 16,
                                           offset: const Offset(0, 6),
                                           spreadRadius: 0,
@@ -112,7 +111,7 @@ class _GoalsScreenState extends State<GoalsScreen>
                                     ),
                                     child: const Icon(
                                       Icons.flag_rounded,
-                                      color: Colors.white,
+                                      color: LightModeColors.lightOnPrimary,
                                       size: 32,
                                     ),
                                   ),
@@ -127,7 +126,7 @@ class _GoalsScreenState extends State<GoalsScreen>
                                           style: const TextStyle(
                                             fontSize: 32,
                                             fontWeight: FontWeight.w800,
-                                            color: Color(0xFF1F2937),
+                                            color: LightModeColors.dashboardTextPrimary,
                                             letterSpacing: -0.8,
                                             height: 1.1,
                                           ),
@@ -145,17 +144,13 @@ class _GoalsScreenState extends State<GoalsScreen>
                                                         vertical: 6,
                                                       ),
                                                   decoration: BoxDecoration(
-                                                    color: const Color(
-                                                      0xFF1F9BD1,
-                                                    ).withValues(alpha: 0.1),
+                                                    color: LightModeColors.lightPrimary.withValues(alpha: 0.1),
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                           12,
                                                         ),
                                                     border: Border.all(
-                                                      color: const Color(
-                                                        0xFF1F9BD1,
-                                                      ).withValues(alpha: 0.2),
+                                                      color: LightModeColors.lightPrimary.withValues(alpha: 0.2),
                                                     ),
                                                   ),
                                                   child: Text(
@@ -164,7 +159,7 @@ class _GoalsScreenState extends State<GoalsScreen>
                                                     ),
                                                     style: const TextStyle(
                                                       fontSize: 13,
-                                                      color: Color(0xFF1F9BD1),
+                                                      color: LightModeColors.lightPrimary,
                                                       fontWeight:
                                                           FontWeight.w700,
                                                       letterSpacing: 0.3,
@@ -190,7 +185,7 @@ class _GoalsScreenState extends State<GoalsScreen>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 32),
+                      const SizedBox(height: 24),
                       // Active Goals Section Header
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -199,15 +194,13 @@ class _GoalsScreenState extends State<GoalsScreen>
                             Container(
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
-                                color: const Color(
-                                  0xFF1F9BD1,
-                                ).withValues(alpha: 0.1),
+                                color: LightModeColors.lightPrimary.withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: const Icon(
                                 Icons.military_tech_rounded,
                                 size: 20,
-                                color: Color(0xFF1F9BD1),
+                                color: LightModeColors.lightPrimary,
                               ),
                             ),
                             const SizedBox(width: 12),
@@ -216,35 +209,35 @@ class _GoalsScreenState extends State<GoalsScreen>
                               style: const TextStyle(
                                 fontSize: 22,
                                 fontWeight: FontWeight.w700,
-                                color: Color(0xFF1F2937),
+                                color: LightModeColors.dashboardTextPrimary,
                                 letterSpacing: -0.3,
                               ),
                             ),
                           ],
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 16),
                       // Enhanced Goals Slider
                       if (goalProvider.isLoading)
                         Container(
-                          height: 260,
+                          height: 300,
                           margin: const EdgeInsets.symmetric(horizontal: 20),
                           decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(24),
-                            border: Border.all(color: Colors.grey.shade200),
+                            color: LightModeColors.lightSurface,
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: LightModeColors.lightOutline),
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.black.withValues(alpha: 0.05),
-                                blurRadius: 10,
-                                offset: const Offset(0, 2),
+                                blurRadius: 12,
+                                offset: const Offset(0, 4),
                               ),
                             ],
                           ),
                           child: const Center(
                             child: CircularProgressIndicator(
                               valueColor: AlwaysStoppedAnimation<Color>(
-                                Color(0xFF1F9BD1),
+                                LightModeColors.lightPrimary,
                               ),
                               strokeWidth: 3,
                             ),
@@ -254,7 +247,7 @@ class _GoalsScreenState extends State<GoalsScreen>
                         _buildEmptyState(l10n)
                       else
                         SizedBox(
-                          height: 260,
+                          height: 300,
                           child: PageView.builder(
                             controller: _pageController,
                             itemCount: goalProvider.goals.length,
@@ -294,21 +287,19 @@ class _GoalsScreenState extends State<GoalsScreen>
                                 gradient: _currentPage == index
                                     ? const LinearGradient(
                                         colors: [
-                                          Color(0xFF1F9BD1),
-                                          Color(0xFF1887B8),
+                                          LightModeColors.lightPrimary,
+                                          LightModeColors.lightSecondary,
                                         ],
                                       )
                                     : null,
                                 color: _currentPage != index
-                                    ? Colors.grey.shade300
+                                    ? LightModeColors.lightOutline
                                     : null,
                                 borderRadius: BorderRadius.circular(4),
                                 boxShadow: _currentPage == index
                                     ? [
                                         BoxShadow(
-                                          color: const Color(
-                                            0xFF1F9BD1,
-                                          ).withValues(alpha: 0.4),
+                                          color: LightModeColors.lightPrimary.withValues(alpha: 0.4),
                                           blurRadius: 8,
                                           offset: const Offset(0, 2),
                                         ),
@@ -338,10 +329,10 @@ class _GoalsScreenState extends State<GoalsScreen>
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Colors.white, Colors.grey.shade50],
+          colors: [LightModeColors.lightSurface, LightModeColors.lightBackground],
         ),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: LightModeColors.lightOutline),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
@@ -356,13 +347,13 @@ class _GoalsScreenState extends State<GoalsScreen>
           Container(
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: const Color(0xFF1F9BD1).withValues(alpha: 0.1),
+              color: LightModeColors.lightPrimary.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: const Icon(
               Icons.emoji_events_outlined,
               size: 64,
-              color: Color(0xFF1F9BD1),
+              color: LightModeColors.lightPrimary,
             ),
           ),
           const SizedBox(height: 24),
@@ -371,7 +362,7 @@ class _GoalsScreenState extends State<GoalsScreen>
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w700,
-              color: Color(0xFF1F2937),
+              color: LightModeColors.dashboardTextPrimary,
               letterSpacing: -0.3,
             ),
           ),
@@ -383,7 +374,7 @@ class _GoalsScreenState extends State<GoalsScreen>
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 15,
-                color: Colors.grey.shade600,
+                color: LightModeColors.dashboardTextSecondary,
                 height: 1.5,
               ),
             ),
@@ -414,7 +405,7 @@ class GoalBottomSheet extends StatelessWidget {
       builder: (context, scrollController) {
         return Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: LightModeColors.lightSurface,
             borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
             boxShadow: [
               BoxShadow(
@@ -432,7 +423,7 @@ class GoalBottomSheet extends StatelessWidget {
                 width: 48,
                 height: 5,
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
+                  color: LightModeColors.lightOutline,
                   borderRadius: BorderRadius.circular(3),
                 ),
               ),
@@ -451,13 +442,13 @@ class GoalBottomSheet extends StatelessWidget {
                             child: Text(
                               goal.title,
                               style: const TextStyle(
-                                fontSize: 26,
+                                fontSize: 24,
                                 fontWeight: FontWeight.w800,
-                                color: Color(0xFF1F2937),
+                                color: LightModeColors.dashboardTextPrimary,
                                 letterSpacing: -0.5,
                                 height: 1.2,
                               ),
-                              overflow: TextOverflow.visible,
+                              overflow: TextOverflow.ellipsis,
                               softWrap: true,
                             ),
                           ),
@@ -471,12 +462,12 @@ class GoalBottomSheet extends StatelessWidget {
                               gradient: LinearGradient(
                                 colors: progressPercent >= 100
                                     ? [
-                                        const Color(0xFF22C55E),
-                                        const Color(0xFF16A34A),
+                                        LightModeColors.success,
+                                        LightModeColors.lightSecondary,
                                       ]
                                     : [
-                                        const Color(0xFF1F9BD1),
-                                        const Color(0xFF1887B8),
+                                        LightModeColors.lightPrimary,
+                                        LightModeColors.lightSecondary,
                                       ],
                               ),
                               borderRadius: BorderRadius.circular(14),
@@ -484,8 +475,8 @@ class GoalBottomSheet extends StatelessWidget {
                                 BoxShadow(
                                   color:
                                       (progressPercent >= 100
-                                              ? const Color(0xFF22C55E)
-                                              : const Color(0xFF1F9BD1))
+                                              ? LightModeColors.success
+                                              : LightModeColors.lightPrimary)
                                           .withValues(alpha: 0.3),
                                   blurRadius: 8,
                                   offset: const Offset(0, 3),
@@ -522,7 +513,7 @@ class GoalBottomSheet extends StatelessWidget {
                         goal.description,
                         style: TextStyle(
                           fontSize: 16,
-                          color: Colors.grey.shade700,
+                          color: LightModeColors.dashboardTextSecondary,
                           height: 1.6,
                         ),
                       ),
@@ -534,10 +525,10 @@ class GoalBottomSheet extends StatelessWidget {
                           gradient: LinearGradient(
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
-                            colors: [Colors.grey.shade50, Colors.white],
+                            colors: [LightModeColors.lightBackground, LightModeColors.lightSurface],
                           ),
                           borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: Colors.grey.shade200),
+                          border: Border.all(color: LightModeColors.lightOutline),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withValues(alpha: 0.03),
@@ -554,15 +545,13 @@ class GoalBottomSheet extends StatelessWidget {
                                 Container(
                                   padding: const EdgeInsets.all(8),
                                   decoration: BoxDecoration(
-                                    color: const Color(
-                                      0xFF1F9BD1,
-                                    ).withValues(alpha: 0.1),
+                                    color: LightModeColors.lightPrimary.withValues(alpha: 0.1),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: const Icon(
                                     Icons.analytics_rounded,
                                     size: 18,
-                                    color: Color(0xFF1F9BD1),
+                                    color: LightModeColors.lightPrimary,
                                   ),
                                 ),
                                 const SizedBox(width: 12),
@@ -571,7 +560,7 @@ class GoalBottomSheet extends StatelessWidget {
                                   style: const TextStyle(
                                     fontSize: 17,
                                     fontWeight: FontWeight.w700,
-                                    color: Color(0xFF1F2937),
+                                    color: LightModeColors.dashboardTextPrimary,
                                     letterSpacing: -0.2,
                                   ),
                                 ),
@@ -599,14 +588,12 @@ class GoalBottomSheet extends StatelessWidget {
                           gradient: const LinearGradient(
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
-                            colors: [Color(0xFF1F9BD1), Color(0xFF1887B8)],
+                            colors: [LightModeColors.lightPrimary, LightModeColors.lightSecondary],
                           ),
                           borderRadius: BorderRadius.circular(16),
                           boxShadow: [
                             BoxShadow(
-                              color: const Color(
-                                0xFF1F9BD1,
-                              ).withValues(alpha: 0.4),
+                              color: LightModeColors.lightPrimary.withValues(alpha: 0.4),
                               blurRadius: 16,
                               offset: const Offset(0, 6),
                             ),
@@ -666,19 +653,19 @@ class GoalBottomSheet extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: LightModeColors.lightSurface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: LightModeColors.lightOutline),
       ),
       child: Row(
         children: [
           Container(
             padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
-              color: const Color(0xFF1F9BD1).withValues(alpha: 0.1),
+              color: LightModeColors.lightPrimary.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(icon, size: 18, color: const Color(0xFF1F9BD1)),
+            child: Icon(icon, size: 18, color: LightModeColors.lightPrimary),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -687,7 +674,7 @@ class GoalBottomSheet extends StatelessWidget {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
-                color: Colors.grey.shade700,
+                color: LightModeColors.dashboardTextSecondary,
               ),
             ),
           ),

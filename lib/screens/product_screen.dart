@@ -15,6 +15,7 @@ import 'package:novopharma/services/product_service.dart';
 import 'package:novopharma/services/user_service.dart';
 import 'package:novopharma/generated/l10n/app_localizations.dart';
 import 'package:novopharma/services/sale_service.dart';
+import '../theme.dart';
 
 // Helper class to hold all the data fetched for the screen
 class _ProductScreenData {
@@ -150,11 +151,13 @@ class _ProductScreenState extends State<ProductScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.scannedProduct),
-        backgroundColor: Colors.white,
-        foregroundColor: const Color(0xFF102132),
+        backgroundColor: LightModeColors.lightBackground,
+        foregroundColor: LightModeColors.dashboardTextPrimary,
         elevation: 0,
+        surfaceTintColor: Colors.transparent,
+        scrolledUnderElevation: 4,
       ),
-      backgroundColor: const Color(0xFFF6F8FB),
+      backgroundColor: LightModeColors.lightBackground,
       body: FutureBuilder<_ProductScreenData>(
         future: _dataFuture,
         builder: (context, snapshot) {
@@ -278,12 +281,12 @@ class _ProductScreenState extends State<ProductScreen> {
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Color(0xFF1F9BD1), Color(0xFF1887B8)],
+          colors: [LightModeColors.lightPrimary, LightModeColors.lightSecondary],
         ),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF1F9BD1).withOpacity(0.3),
+            color: LightModeColors.lightPrimary.withOpacity(0.3),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -295,9 +298,9 @@ class _ProductScreenState extends State<ProductScreen> {
             Container(
               height: 200,
               width: double.infinity,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
+              decoration: BoxDecoration(
+                color: LightModeColors.lightSurface,
+                borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(20),
                   topRight: Radius.circular(20),
                 ),
@@ -330,7 +333,7 @@ class _ProductScreenState extends State<ProductScreen> {
                   style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: LightModeColors.lightOnPrimary,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -349,7 +352,7 @@ class _ProductScreenState extends State<ProductScreen> {
                         product.marque,
                         style: const TextStyle(
                           fontSize: 14,
-                          color: Colors.white,
+                          color: LightModeColors.lightOnPrimary,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -368,13 +371,13 @@ class _ProductScreenState extends State<ProductScreen> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: LightModeColors.lightSurface,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
           ),
         ],
       ),
@@ -390,13 +393,13 @@ class _ProductScreenState extends State<ProductScreen> {
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
-                        colors: [Color(0xFF1F9BD1), Color(0xFF1887B8)],
+                        colors: [LightModeColors.lightPrimary, LightModeColors.lightSecondary],
                       ),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: const Icon(
                       Icons.shopping_cart_outlined,
-                      color: Colors.white,
+                      color: LightModeColors.lightOnPrimary,
                       size: 20,
                     ),
                   ),
@@ -425,8 +428,8 @@ class _ProductScreenState extends State<ProductScreen> {
                           icon: Icon(
                             Icons.remove_circle,
                             color: quantity > 1
-                                ? const Color(0xFF1F9BD1)
-                                : Colors.grey,
+                                ? LightModeColors.lightPrimary
+                                : LightModeColors.lightOnSurfaceVariant,
                           ),
                           onPressed: () {
                             if (quantity > 1) _quantityNotifier.value--;
@@ -438,7 +441,7 @@ class _ProductScreenState extends State<ProductScreen> {
                             vertical: 8,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: LightModeColors.lightSurface,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
@@ -453,7 +456,7 @@ class _ProductScreenState extends State<ProductScreen> {
                         IconButton(
                           icon: const Icon(
                             Icons.add_circle,
-                            color: Color(0xFF1F9BD1),
+                            color: LightModeColors.lightPrimary,
                           ),
                           onPressed: () {
                             _quantityNotifier.value++;
@@ -478,7 +481,7 @@ class _ProductScreenState extends State<ProductScreen> {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFFFF3E0),
+                      color: LightModeColors.warningContainer,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: const Icon(
@@ -493,7 +496,7 @@ class _ProductScreenState extends State<ProductScreen> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF102132),
+                      color: LightModeColors.dashboardTextPrimary,
                     ),
                   ),
                 ],
@@ -531,7 +534,7 @@ class _ProductScreenState extends State<ProductScreen> {
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Color(0xFF1F9BD1), Color(0xFF1887B8)],
+          colors: [LightModeColors.lightPrimary, LightModeColors.lightSecondary],
         ),
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
@@ -577,12 +580,12 @@ class _ProductScreenState extends State<ProductScreen> {
             gradient: const LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [Color(0xFF1F9BD1), Color(0xFF1887B8)],
+              colors: [LightModeColors.lightPrimary, LightModeColors.lightSecondary],
             ),
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF1F9BD1).withOpacity(0.3),
+                color: LightModeColors.lightPrimary.withOpacity(0.3),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               ),
@@ -593,10 +596,10 @@ class _ProductScreenState extends State<ProductScreen> {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
+                  color: LightModeColors.lightOnPrimary.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Icon(icon, color: Colors.white, size: 22),
+                child: Icon(icon, color: LightModeColors.lightOnPrimary, size: 22),
               ),
               const SizedBox(width: 12),
               Text(
@@ -604,7 +607,7 @@ class _ProductScreenState extends State<ProductScreen> {
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: LightModeColors.lightOnPrimary,
                 ),
               ),
             ],
@@ -613,13 +616,13 @@ class _ProductScreenState extends State<ProductScreen> {
         Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: LightModeColors.lightSurface,
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
+                color: Colors.black.withOpacity(0.08),
+                blurRadius: 12,
+                offset: const Offset(0, 6),
               ),
             ],
           ),
@@ -627,7 +630,7 @@ class _ProductScreenState extends State<ProductScreen> {
             content,
             style: const TextStyle(
               fontSize: 15,
-              color: Color(0xFF4A5568),
+              color: LightModeColors.dashboardTextSecondary,
               height: 1.6,
             ),
           ),
@@ -657,13 +660,13 @@ class _ProductScreenState extends State<ProductScreen> {
               width: 180,
               margin: const EdgeInsets.only(right: 16),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: LightModeColors.lightSurface,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
+                    color: Colors.black.withOpacity(0.08),
+                    blurRadius: 12,
+                    offset: const Offset(0, 6),
                   ),
                 ],
               ),
@@ -678,7 +681,7 @@ class _ProductScreenState extends State<ProductScreen> {
                     child: Container(
                       height: 140,
                       width: double.infinity,
-                      color: const Color(0xFFF6F8FB),
+                      color: LightModeColors.lightBackground,
                       child: CachedNetworkImage(
                         imageUrl: product.imageUrl,
                         fit: BoxFit.contain,
@@ -703,7 +706,7 @@ class _ProductScreenState extends State<ProductScreen> {
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
-                              color: Color(0xFF102132),
+                              color: LightModeColors.dashboardTextPrimary,
                             ),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
@@ -713,7 +716,7 @@ class _ProductScreenState extends State<ProductScreen> {
                             product.marque,
                             style: const TextStyle(
                               fontSize: 12,
-                              color: Color(0xFF9CA3AF),
+                              color: LightModeColors.dashboardTextSecondary,
                             ),
                           ),
                         ],
@@ -750,16 +753,16 @@ class _ProductScreenState extends State<ProductScreen> {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: isEligible
-                  ? [const Color(0xFF10B981), const Color(0xFF059669)]
-                  : [const Color(0xFFEF4444), const Color(0xFFDC2626)],
+                  ? [LightModeColors.success, LightModeColors.successContainer]
+                  : [LightModeColors.lightError, LightModeColors.lightErrorContainer],
             ),
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
                 color:
                     (isEligible
-                            ? const Color(0xFF10B981)
-                            : const Color(0xFFEF4444))
+                            ? LightModeColors.success
+                            : LightModeColors.lightError)
                         .withOpacity(0.3),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
@@ -776,7 +779,7 @@ class _ProductScreenState extends State<ProductScreen> {
                 ),
                 child: Icon(
                   isEligible ? Icons.check_circle : Icons.cancel,
-                  color: Colors.white,
+                  color: LightModeColors.lightOnPrimary,
                   size: 28,
                 ),
               ),
@@ -789,7 +792,7 @@ class _ProductScreenState extends State<ProductScreen> {
                       goal.title,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: LightModeColors.lightOnPrimary,
                         fontSize: 16,
                       ),
                     ),
@@ -797,7 +800,7 @@ class _ProductScreenState extends State<ProductScreen> {
                     Text(
                       isEligible ? "Eligible" : "Not eligible",
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.9),
+                        color: LightModeColors.lightOnPrimary.withOpacity(0.9),
                         fontSize: 14,
                       ),
                     ),
@@ -819,12 +822,12 @@ class _ProductScreenState extends State<ProductScreen> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: LightModeColors.lightSurface,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 20,
-            offset: const Offset(0, -5),
+            color: Colors.black.withOpacity(0.15),
+            blurRadius: 24,
+            offset: const Offset(0, -8),
           ),
         ],
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
@@ -839,8 +842,7 @@ class _ProductScreenState extends State<ProductScreen> {
               child: ValueListenableBuilder<int>(
                 valueListenable: _quantityNotifier,
                 builder: (context, quantity, child) {
-                  // Keep totalPrice calculation for internal use but don't show it
-                  final totalPrice = product.price * quantity;
+
                   // Display only the unit price (fixed, not multiplied)
                   return Column(
                     mainAxisSize: MainAxisSize.min,
@@ -850,7 +852,7 @@ class _ProductScreenState extends State<ProductScreen> {
                         l10n.recommendedPrice,
                         style: const TextStyle(
                           fontSize: 13,
-                          color: Color(0xFF9CA3AF),
+                          color: LightModeColors.dashboardTextSecondary,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -875,8 +877,8 @@ class _ProductScreenState extends State<ProductScreen> {
             ElevatedButton(
               onPressed: () => _submitSale(product, user),
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFEF4444),
-                foregroundColor: Colors.white,
+                backgroundColor: LightModeColors.lightError,
+                foregroundColor: LightModeColors.lightOnError,
                 padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 24),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
@@ -954,10 +956,10 @@ class _ProductScreenState extends State<ProductScreen> {
             Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: Colors.red.shade50,
+                color: LightModeColors.lightErrorContainer,
                 shape: BoxShape.circle,
               ),
-              child: Icon(Icons.block, color: Colors.red.shade700, size: 64),
+              child: Icon(Icons.block, color: LightModeColors.lightError, size: 64),
             ),
             const SizedBox(height: 24),
 
@@ -968,7 +970,7 @@ class _ProductScreenState extends State<ProductScreen> {
               style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF102132),
+                color: LightModeColors.dashboardTextPrimary,
               ),
             ),
             const SizedBox(height: 8),
@@ -977,7 +979,7 @@ class _ProductScreenState extends State<ProductScreen> {
             Text(
               product.marque,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 16, color: Color(0xFF4A5568)),
+              style: const TextStyle(fontSize: 16, color: LightModeColors.dashboardTextSecondary),
             ),
             const SizedBox(height: 32),
 
@@ -985,9 +987,9 @@ class _ProductScreenState extends State<ProductScreen> {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.red.shade50,
+                color: LightModeColors.lightErrorContainer,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.red.shade200, width: 2),
+                border: Border.all(color: LightModeColors.lightErrorContainer, width: 2),
               ),
               child: Column(
                 children: [
@@ -995,7 +997,7 @@ class _ProductScreenState extends State<ProductScreen> {
                     children: [
                       Icon(
                         Icons.info_outline,
-                        color: Colors.red.shade700,
+                        color: LightModeColors.lightError,
                         size: 24,
                       ),
                       const SizedBox(width: 12),
@@ -1005,7 +1007,7 @@ class _ProductScreenState extends State<ProductScreen> {
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Colors.red.shade700,
+                            color: LightModeColors.lightError,
                           ),
                         ),
                       ),
@@ -1017,7 +1019,7 @@ class _ProductScreenState extends State<ProductScreen> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 14,
-                      color: Colors.red.shade700,
+                      color: LightModeColors.lightError,
                       height: 1.5,
                     ),
                   ),
@@ -1032,8 +1034,8 @@ class _ProductScreenState extends State<ProductScreen> {
               child: ElevatedButton(
                 onPressed: () => Navigator.of(context).pop(),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF1F9BD1),
-                  foregroundColor: Colors.white,
+                  backgroundColor: LightModeColors.lightPrimary,
+                  foregroundColor: LightModeColors.lightOnPrimary,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
@@ -1044,7 +1046,7 @@ class _ProductScreenState extends State<ProductScreen> {
                   l10n.goBack,
                   style: const TextStyle(
                     fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),

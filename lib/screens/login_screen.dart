@@ -31,9 +31,15 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _handleLogin() async {
+    final l10n = AppLocalizations.of(context)!;
     if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill in all fields')),
+        SnackBar(
+          content: Text('Please fill in all fields'),
+          backgroundColor: LightModeColors.lightError,
+          behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.all(16),
+        ),
       );
       return;
     }
@@ -53,7 +59,14 @@ class _LoginScreenState extends State<LoginScreen> {
     if (error != null) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text(error)));
+      ).showSnackBar(
+        SnackBar(
+          content: Text(error),
+          backgroundColor: LightModeColors.lightError,
+          behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.all(16),
+        ),
+      );
     }
     // No navigation code needed here, AuthWrapper handles it.
   }
@@ -63,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: LightModeColors.novoPharmaLightBlue,
+      backgroundColor: LightModeColors.lightBackground,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -151,9 +164,22 @@ class _LoginScreenState extends State<LoginScreen> {
               // Top Logo Section
               Container(
                 padding: const EdgeInsets.symmetric(vertical: 40),
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  child: Image.asset('assets/images/logo.png'),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.6,
+                      child: Image.asset('assets/logo/fullLogoBlue.png'),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      l10n.signInToAccessAccount,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: LightModeColors.dashboardTextSecondary,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               // White Card Container
@@ -162,12 +188,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 padding: const EdgeInsets.all(32),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(32),
+                  borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 20,
-                      offset: const Offset(0, 10),
+                      color: LightModeColors.lightPrimary.withOpacity(0.1),
+                      blurRadius: 15,
+                      offset: const Offset(0, 8),
                     ),
                   ],
                 ),
@@ -183,7 +209,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             style: const TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
-                              color: LightModeColors.novoPharmaBlue,
+                              color: LightModeColors.lightPrimary,
                             ),
                           ),
                           const SizedBox(height: 8),
@@ -201,36 +227,47 @@ class _LoginScreenState extends State<LoginScreen> {
                     // Email Field
                     Text(
                       l10n.email,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black87,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: LightModeColors.dashboardTextPrimary,
                       ),
                     ),
                     const SizedBox(height: 8),
                     TextField(
                       controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                         hintText: 'johndoe@gmail.com',
-                        hintStyle: const TextStyle(color: Colors.grey),
+                        hintStyle: TextStyle(color: Colors.grey.shade500),
                         filled: true,
-                        fillColor: Colors.grey.shade50,
+                        fillColor: Colors.white,
+                        prefixIcon: Icon(Icons.email_outlined, color: LightModeColors.lightPrimary),
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          borderSide: BorderSide(color: Colors.grey.shade200),
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: Colors.grey.shade300),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          borderSide: BorderSide(color: Colors.grey.shade200),
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: Colors.grey.shade300),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          borderSide: const BorderSide(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(
                             color: LightModeColors.novoPharmaBlue,
+                            width: 2,
                           ),
                         ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: LightModeColors.lightError),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: LightModeColors.lightError, width: 2),
+                        ),
                         contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 20,
+                          horizontal: 16,
                           vertical: 16,
                         ),
                       ),
@@ -239,10 +276,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     // Password Field
                     Text(
                       l10n.password,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black87,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: LightModeColors.dashboardTextPrimary,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -251,15 +288,16 @@ class _LoginScreenState extends State<LoginScreen> {
                       obscureText: _obscurePassword,
                       decoration: InputDecoration(
                         hintText: '••••••••••••',
-                        hintStyle: const TextStyle(color: Colors.grey),
+                        hintStyle: TextStyle(color: Colors.grey.shade500),
                         filled: true,
-                        fillColor: Colors.grey.shade50,
+                        fillColor: Colors.white,
+                        prefixIcon: Icon(Icons.lock_outline, color: LightModeColors.lightPrimary),
                         suffixIcon: IconButton(
                           icon: Icon(
                             _obscurePassword
                                 ? Icons.visibility_off
                                 : Icons.visibility,
-                            color: Colors.grey,
+                            color: Colors.grey.shade600,
                           ),
                           onPressed: () {
                             setState(() {
@@ -268,21 +306,30 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                         ),
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          borderSide: BorderSide(color: Colors.grey.shade200),
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: Colors.grey.shade300),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          borderSide: BorderSide(color: Colors.grey.shade200),
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: Colors.grey.shade300),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          borderSide: const BorderSide(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(
                             color: LightModeColors.novoPharmaBlue,
+                            width: 2,
                           ),
                         ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: LightModeColors.lightError),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: LightModeColors.lightError, width: 2),
+                        ),
                         contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 20,
+                          horizontal: 16,
                           vertical: 16,
                         ),
                       ),
@@ -304,7 +351,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       _rememberMe = value ?? false;
                                     });
                                   },
-                                  activeColor: LightModeColors.novoPharmaBlue,
+                                  activeColor: LightModeColors.lightPrimary,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(4),
                                   ),
@@ -313,9 +360,10 @@ class _LoginScreenState extends State<LoginScreen> {
                               Flexible(
                                 child: Text(
                                   l10n.rememberMe,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 14,
-                                    color: Colors.black87,
+                                    color: LightModeColors.dashboardTextPrimary,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
                               ),
@@ -334,9 +382,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                           child: Text(
                             l10n.forgotPassword,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 14,
-                              color: LightModeColors.novoPharmaBlue,
+                              color: LightModeColors.lightPrimary,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
@@ -350,12 +399,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: ElevatedButton(
                         onPressed: _isLoading ? null : _handleLogin,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: LightModeColors.novoPharmaBlue,
+                          backgroundColor: _isLoading ? Colors.grey.shade400 : LightModeColors.lightPrimary,
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(28),
+                            borderRadius: BorderRadius.circular(12),
                           ),
                           elevation: 0,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          fixedSize: const Size.fromHeight(56),
                         ),
                         child: _isLoading
                             ? const SizedBox(
@@ -364,20 +415,29 @@ class _LoginScreenState extends State<LoginScreen> {
                                 child: CircularProgressIndicator(
                                   color: Colors.white,
                                   strokeWidth: 2,
+                                  value: null,
                                 ),
                               )
-                            : Text(
-                                l10n.signIn,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                            : Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(Icons.login_outlined, size: 18),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    l10n.signIn,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
                               ),
                       ),
                     ),
                     const SizedBox(height: 32), // Added space
                     // Sign Up Link
-                    Center(
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                       child: TextButton(
                         onPressed: () {
                           Navigator.push(
@@ -387,19 +447,22 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           );
                         },
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                        ),
                         child: RichText(
                           text: TextSpan(
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: Colors.black87,
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: LightModeColors.dashboardTextPrimary,
                             ),
                             children: [
                               TextSpan(text: l10n.dontHaveAnAccount),
                               TextSpan(
                                 text: l10n.signUp,
-                                style: const TextStyle(
-                                  color: LightModeColors.novoPharmaBlue,
-                                  fontWeight: FontWeight.w600,
+                                style: TextStyle(
+                                  color: LightModeColors.lightPrimary,
+                                  fontWeight: FontWeight.w700,
                                 ),
                               ),
                             ],
@@ -409,21 +472,23 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     const SizedBox(height: 16),
                     // Terms and Privacy
-                    Center(
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                       child: RichText(
                         textAlign: TextAlign.center,
                         text: TextSpan(
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 12,
-                            color: Colors.grey,
+                            color: LightModeColors.novoPharmaGray,
                           ),
                           children: [
                             TextSpan(text: l10n.byContinuingYouAgree),
                             TextSpan(
                               text: l10n.termsAndPrivacy,
-                              style: const TextStyle(
-                                color: LightModeColors.novoPharmaBlue,
+                              style: TextStyle(
+                                color: LightModeColors.lightPrimary,
                                 decoration: TextDecoration.underline,
+                                fontWeight: FontWeight.w600,
                               ),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {

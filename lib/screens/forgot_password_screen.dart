@@ -33,7 +33,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: LightModeColors.lightBackground,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -46,7 +46,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             ),
             child: const Icon(
               Icons.arrow_back_ios_new,
-              color: Colors.black87,
+              color: LightModeColors.dashboardTextPrimary,
               size: 16,
             ),
           ),
@@ -67,7 +67,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   l10n.resetPassword,
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+                    color: LightModeColors.dashboardTextPrimary,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -92,7 +92,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         style: Theme.of(context).textTheme.labelMedium
                             ?.copyWith(
                               fontWeight: FontWeight.w600,
-                              color: Colors.black87,
+                              color: LightModeColors.dashboardTextPrimary,
                             ),
                       ),
                       const SizedBox(height: 8),
@@ -106,19 +106,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             color: LightModeColors.novoPharmaGray,
                           ),
                           filled: true,
-                          fillColor: Colors.grey.shade50,
+                          fillColor: LightModeColors.lightSurface,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: Colors.grey.shade200),
+                            borderSide: BorderSide(color: LightModeColors.lightOutline),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: Colors.grey.shade200),
+                            borderSide: BorderSide(color: LightModeColors.lightOutline),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: const BorderSide(
-                              color: LightModeColors.novoPharmaBlue,
+                            borderSide: BorderSide(
+                              color: LightModeColors.lightPrimary,
                               width: 2,
                             ),
                           ),
@@ -152,7 +152,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   child: ElevatedButton(
                     onPressed: _sendResetEmail,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: LightModeColors.novoPharmaBlue,
+                      backgroundColor: LightModeColors.lightPrimary,
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
@@ -198,7 +198,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         style: Theme.of(context).textTheme.headlineMedium
                             ?.copyWith(
                               fontWeight: FontWeight.bold,
-                              color: Colors.black87,
+                              color: LightModeColors.dashboardTextPrimary,
                             ),
                       ),
 

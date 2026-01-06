@@ -33,7 +33,7 @@ class _PluxeeHistoryScreenState extends State<PluxeeHistoryScreen> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: LightModeColors.novoPharmaLightBlue,
+      backgroundColor: LightModeColors.lightBackground,
       body: CustomScrollView(
         slivers: [
           // Modern App Bar with gradient
@@ -42,32 +42,36 @@ class _PluxeeHistoryScreenState extends State<PluxeeHistoryScreen> {
             floating: false,
             pinned: true,
             elevation: 0,
-            backgroundColor: Colors.transparent,
+            backgroundColor: LightModeColors.lightSurface,
+            surfaceTintColor: LightModeColors.lightSurface,
+            scrolledUnderElevation: 6.0,
             leading: Padding(
               padding: const EdgeInsets.only(left: 8),
               child: IconButton(
                 icon: Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
+                    color: LightModeColors.lightSurfaceVariant.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Icon(
                     Icons.arrow_back_ios_new,
-                    color: Colors.white,
+                    color: LightModeColors.lightSurfaceVariant,
                     size: 20,
                   ),
                 ),
                 onPressed: () => Navigator.of(context).pop(),
+                iconSize: 20,
+                splashRadius: 20,
               ),
             ),
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [Color(0xFF074F75), Color(0xFF1F9BD1)],
+                    colors: [LightModeColors.lightPrimary, LightModeColors.lightTertiary],
                   ),
                 ),
                 child: SafeArea(
@@ -80,12 +84,12 @@ class _PluxeeHistoryScreenState extends State<PluxeeHistoryScreen> {
                           Container(
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.2),
+                              color: LightModeColors.lightSurfaceVariant.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: const Icon(
                               Icons.history,
-                              color: Colors.white,
+                              color: LightModeColors.lightSurfaceVariant,
                               size: 28,
                             ),
                           ),
@@ -94,7 +98,7 @@ class _PluxeeHistoryScreenState extends State<PluxeeHistoryScreen> {
                             child: Text(
                               l10n.redemptionHistory,
                               style: GoogleFonts.montserrat(
-                                color: Colors.white,
+                                color: LightModeColors.lightSurfaceVariant,
                                 fontSize: 22,
                                 fontWeight: FontWeight.w700,
                                 letterSpacing: -0.5,
@@ -150,12 +154,11 @@ class _PluxeeHistoryScreenState extends State<PluxeeHistoryScreen> {
                         Container(
                           padding: const EdgeInsets.all(32),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: LightModeColors.lightSurface,
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
-                                color: LightModeColors.novoPharmaBlue
-                                    .withOpacity(0.1),
+                                color: LightModeColors.novoPharmaBlue.withOpacity(0.1),
                                 blurRadius: 20,
                                 offset: const Offset(0, 10),
                               ),
@@ -245,15 +248,15 @@ class _PluxeeHistoryScreenState extends State<PluxeeHistoryScreen> {
         child: Container(
           margin: const EdgeInsets.only(bottom: 16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: LightModeColors.lightSurface,
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
                 color: request.isPending
-                    ? const Color(0xFFF59E0B).withOpacity(0.1)
+                    ? LightModeColors.warning.withOpacity(0.1)
                     : request.isApproved
-                    ? const Color(0xFF10B981).withOpacity(0.1)
-                    : const Color(0xFFEF4444).withOpacity(0.1),
+                    ? LightModeColors.success.withOpacity(0.1)
+                    : LightModeColors.lightError.withOpacity(0.1),
                 blurRadius: 15,
                 offset: const Offset(0, 4),
               ),
@@ -275,12 +278,12 @@ class _PluxeeHistoryScreenState extends State<PluxeeHistoryScreen> {
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: request.isPending
-                            ? [const Color(0xFFF59E0B), const Color(0xFFFBBF24)]
+                            ? [LightModeColors.warning, LightModeColors.warning]
                             : request.isApproved
-                            ? [const Color(0xFF10B981), const Color(0xFF34D399)]
+                            ? [LightModeColors.success, LightModeColors.success]
                             : [
-                                const Color(0xFFEF4444),
-                                const Color(0xFFF87171),
+                                LightModeColors.lightError,
+                                LightModeColors.lightError,
                               ],
                       ),
                     ),
@@ -315,7 +318,7 @@ class _PluxeeHistoryScreenState extends State<PluxeeHistoryScreen> {
                                 Icon(
                                   Icons.calendar_today,
                                   size: 14,
-                                  color: LightModeColors.dashboardTealBlue,
+                                  color: LightModeColors.dashboardTextPrimary,
                                 ),
                                 const SizedBox(width: 6),
                                 Text(
@@ -325,7 +328,7 @@ class _PluxeeHistoryScreenState extends State<PluxeeHistoryScreen> {
                                   style: GoogleFonts.inter(
                                     fontSize: 12,
                                     fontWeight: FontWeight.w600,
-                                    color: LightModeColors.dashboardTealBlue,
+                                    color: LightModeColors.dashboardTextPrimary,
                                   ),
                                 ),
                               ],
@@ -349,7 +352,7 @@ class _PluxeeHistoryScreenState extends State<PluxeeHistoryScreen> {
                               Icons.stars_rounded,
                               l10n.pointsToRedeem,
                               '${request.pointsToRedeem}',
-                              const Color(0xFFF59E0B),
+                              LightModeColors.warning,
                             ),
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 12),
@@ -361,9 +364,9 @@ class _PluxeeHistoryScreenState extends State<PluxeeHistoryScreen> {
                                       decoration: BoxDecoration(
                                         gradient: LinearGradient(
                                           colors: [
-                                            Colors.grey.withOpacity(0.1),
-                                            Colors.grey.withOpacity(0.3),
-                                            Colors.grey.withOpacity(0.1),
+                                            LightModeColors.dashboardTextSecondary.withOpacity(0.1),
+                                            LightModeColors.dashboardTextSecondary.withOpacity(0.3),
+                                            LightModeColors.dashboardTextSecondary.withOpacity(0.1),
                                           ],
                                         ),
                                       ),
@@ -386,9 +389,9 @@ class _PluxeeHistoryScreenState extends State<PluxeeHistoryScreen> {
                                       decoration: BoxDecoration(
                                         gradient: LinearGradient(
                                           colors: [
-                                            Colors.grey.withOpacity(0.1),
-                                            Colors.grey.withOpacity(0.3),
-                                            Colors.grey.withOpacity(0.1),
+                                            LightModeColors.dashboardTextSecondary.withOpacity(0.1),
+                                            LightModeColors.dashboardTextSecondary.withOpacity(0.3),
+                                            LightModeColors.dashboardTextSecondary.withOpacity(0.1),
                                           ],
                                         ),
                                       ),
@@ -402,7 +405,7 @@ class _PluxeeHistoryScreenState extends State<PluxeeHistoryScreen> {
                               Icons.card_giftcard_rounded,
                               l10n.pluxeeCredits,
                               '${request.pluxeeCreditsEquivalent.toStringAsFixed(2)}',
-                              const Color(0xFF10B981),
+                              LightModeColors.success,
                             ),
                           ],
                         ),
@@ -421,15 +424,13 @@ class _PluxeeHistoryScreenState extends State<PluxeeHistoryScreen> {
                                   decoration: BoxDecoration(
                                     gradient: LinearGradient(
                                       colors: [
-                                        const Color(0xFFFEF2F2),
-                                        const Color(0xFFFEE2E2),
+                                        LightModeColors.warningContainer,
+                                        LightModeColors.warningContainer,
                                       ],
                                     ),
                                     borderRadius: BorderRadius.circular(16),
                                     border: Border.all(
-                                      color: const Color(
-                                        0xFFFCA5A5,
-                                      ).withOpacity(0.5),
+                                      color: LightModeColors.lightError.withOpacity(0.5),
                                       width: 1.5,
                                     ),
                                   ),
@@ -442,15 +443,13 @@ class _PluxeeHistoryScreenState extends State<PluxeeHistoryScreen> {
                                           Container(
                                             padding: const EdgeInsets.all(8),
                                             decoration: BoxDecoration(
-                                              color: const Color(
-                                                0xFFEF4444,
-                                              ).withOpacity(0.1),
+                                              color: LightModeColors.lightError.withOpacity(0.1),
                                               borderRadius:
                                                   BorderRadius.circular(10),
                                             ),
                                             child: const Icon(
                                               Icons.error_outline,
-                                              color: Color(0xFFEF4444),
+                                              color: LightModeColors.lightError,
                                               size: 20,
                                             ),
                                           ),
@@ -461,7 +460,7 @@ class _PluxeeHistoryScreenState extends State<PluxeeHistoryScreen> {
                                               style: GoogleFonts.montserrat(
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w700,
-                                                color: const Color(0xFFEF4444),
+                                                color: LightModeColors.lightError,
                                               ),
                                             ),
                                           ),
@@ -472,7 +471,7 @@ class _PluxeeHistoryScreenState extends State<PluxeeHistoryScreen> {
                                         request.rejectionReason!,
                                         style: GoogleFonts.inter(
                                           fontSize: 13,
-                                          color: const Color(0xFF991B1B),
+                                          color: LightModeColors.lightError,
                                           height: 1.5,
                                         ),
                                       ),
@@ -486,12 +485,10 @@ class _PluxeeHistoryScreenState extends State<PluxeeHistoryScreen> {
                                     vertical: 12,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: const Color(0xFFFEF2F2),
+                                    color: LightModeColors.warningContainer,
                                     borderRadius: BorderRadius.circular(12),
                                     border: Border.all(
-                                      color: const Color(
-                                        0xFFFCA5A5,
-                                      ).withOpacity(0.3),
+                                      color: LightModeColors.lightError.withOpacity(0.3),
                                       width: 1.5,
                                     ),
                                   ),
@@ -500,7 +497,7 @@ class _PluxeeHistoryScreenState extends State<PluxeeHistoryScreen> {
                                       Icon(
                                         Icons.info_outline,
                                         size: 18,
-                                        color: const Color(0xFFEF4444),
+                                        color: LightModeColors.lightError,
                                       ),
                                       const SizedBox(width: 8),
                                       Expanded(
@@ -508,14 +505,14 @@ class _PluxeeHistoryScreenState extends State<PluxeeHistoryScreen> {
                                           l10n.tapToViewReason,
                                           style: GoogleFonts.inter(
                                             fontSize: 12,
-                                            color: const Color(0xFFEF4444),
+                                            color: LightModeColors.lightError,
                                             fontWeight: FontWeight.w500,
                                           ),
                                         ),
                                       ),
                                       Icon(
                                         Icons.arrow_drop_down,
-                                        color: const Color(0xFFEF4444),
+                                        color: LightModeColors.lightError,
                                       ),
                                     ],
                                   ),
@@ -546,21 +543,21 @@ class _PluxeeHistoryScreenState extends State<PluxeeHistoryScreen> {
     String text;
 
     if (request.isPending) {
-      bgColor = const Color(0xFFFFF7ED);
-      iconColor = const Color(0xFFF59E0B);
-      textColor = const Color(0xFFF59E0B);
+      bgColor = LightModeColors.warningContainer;
+      iconColor = LightModeColors.warning;
+      textColor = LightModeColors.warning;
       icon = Icons.schedule_rounded;
       text = l10n.statusPending;
     } else if (request.isApproved) {
-      bgColor = const Color(0xFFECFDF5);
-      iconColor = const Color(0xFF10B981);
-      textColor = const Color(0xFF10B981);
+      bgColor = LightModeColors.successContainer;
+      iconColor = LightModeColors.success;
+      textColor = LightModeColors.success;
       icon = Icons.check_circle_rounded;
       text = l10n.statusApproved;
     } else {
-      bgColor = const Color(0xFFFEF2F2);
-      iconColor = const Color(0xFFEF4444);
-      textColor = const Color(0xFFEF4444);
+      bgColor = LightModeColors.warningContainer;
+      iconColor = LightModeColors.lightError;
+      textColor = LightModeColors.lightError;
       icon = Icons.cancel_rounded;
       text = l10n.statusRejected;
     }
@@ -636,124 +633,4 @@ class _PluxeeHistoryScreenState extends State<PluxeeHistoryScreen> {
     );
   }
 
-  void _showRejectionReasonDialog(
-    BuildContext context,
-    PluxeeRedemptionRequest request,
-  ) {
-    final l10n = AppLocalizations.of(context)!;
-
-    showDialog(
-      context: context,
-      builder: (ctx) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-        elevation: 10,
-        child: Container(
-          padding: const EdgeInsets.all(24),
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Color(0xFFFEF2F2), Colors.white],
-            ),
-            borderRadius: BorderRadius.circular(24),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFEF4444).withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: const Icon(
-                      Icons.error_outline_rounded,
-                      color: Color(0xFFEF4444),
-                      size: 28,
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Text(
-                      l10n.rejectionReason,
-                      style: GoogleFonts.montserrat(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                        color: const Color(0xFFEF4444),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-
-              // Divider
-              Container(
-                height: 1,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Colors.grey.withOpacity(0.0),
-                      Colors.grey.withOpacity(0.3),
-                      Colors.grey.withOpacity(0.0),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              // Rejection reason content
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: const Color(0xFFFCA5A5).withOpacity(0.3),
-                  ),
-                ),
-                child: Text(
-                  request.rejectionReason ?? l10n.noReasonProvided,
-                  style: GoogleFonts.inter(
-                    fontSize: 14,
-                    color: const Color(0xFF991B1B),
-                    height: 1.6,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 24),
-
-              // Close button
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () => Navigator.pop(ctx),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFEF4444),
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    elevation: 0,
-                  ),
-                  child: Text(
-                    l10n.close,
-                    style: GoogleFonts.montserrat(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 }

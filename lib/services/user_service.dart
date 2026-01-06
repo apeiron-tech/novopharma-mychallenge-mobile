@@ -30,6 +30,7 @@ class UserService {
     required String pharmacyName,
     required String phone,
     required String avatarUrl,
+    required String role,
     required String position,
     required String? city,
   }) async {
@@ -40,7 +41,7 @@ class UserService {
         'avatarUrl': avatarUrl,
         'dateOfBirth': Timestamp.fromDate(dateOfBirth),
         'phone': phone,
-        'role': 'user',
+        'role': role,
         'pharmacy': pharmacyName,
         'pharmacyId': pharmacyId,
         'position': position,

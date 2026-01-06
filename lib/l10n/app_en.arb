@@ -89,7 +89,7 @@
     "preparateur": "Pharmacy Technician",
     "responsableParapharmacie": "Parapharmacy Manager",
     "scanBarcodeHere": "Scan barcode here",
-    "scannedProduct": "Scanned Product",
+    "scannedProduct": "Product",
     "productDetailsAppearHere": "Product details will appear here.",
     "saleDetails": "Sale Details",
     "availableStock": "Available Stock",
@@ -306,5 +306,10 @@
     "badgeRewardPoints": "Points Rewarded",
     "showLess": "Show Less",
     "noBadgesAvailable": "No badges available.",
-    "noBadgesInCategory": "No badges in this category yet."
+    "noBadgesInCategory": "No badges in this category yet.",
+    "pointsLabel": "Points awarded",
+    "rewardLabel": "Reward",
+    "customRewardLabel": "Custom Reward",
+    "manualSale": "Manual Sale",
+    "searchProducts": "Search products..."
 }

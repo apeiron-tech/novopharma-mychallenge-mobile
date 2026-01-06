@@ -293,7 +293,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get scanBarcodeHere => 'Scannez le code-barres ici';
 
   @override
-  String get scannedProduct => 'Produit scanné';
+  String get scannedProduct => 'Produit';
 
   @override
   String get productDetailsAppearHere =>
@@ -726,4 +726,19 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get noBadgesInCategory =>
       'Aucun badge dans cette catégorie pour le moment.';
+
+  @override
+  String get pointsLabel => 'Points accordées';
+
+  @override
+  String get rewardLabel => 'Récompense';
+
+  @override
+  String get customRewardLabel => 'Récompense personnalisée';
+
+  @override
+  String get manualSale => 'Vente manuelle';
+
+  @override
+  String get searchProducts => 'Rechercher des produits...';
 }

@@ -2,56 +2,120 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LightModeColors {
-  static const lightPrimary = Color(0xFF3B82F6);
+  // Primary color palette based on novoPharmaBlue (#3A39EE)
+  static const lightPrimary = Color(0xFF3A39EE); // novoPharmaBlue
   static const lightOnPrimary = Color(0xFFFFFFFF);
-  static const lightPrimaryContainer = Color(0xFFDEEDFF);
-  static const lightOnPrimaryContainer = Color(0xFF001B3D);
-  static const lightSecondary = Color(0xFF7DD3FC);
-  static const lightOnSecondary = Color(0xFF003B52);
-  static const lightTertiary = Color(0xFF00BCD4);
+  static const lightPrimaryContainer = Color(0xFFE6E6FF); // Lighter version of primary
+  static const lightOnPrimaryContainer = Color(0xFF0A0A26); // Darker version of primary
+  static const lightSecondary = Color(0xFF5B5AE4); // Slightly lighter than primary
+  static const lightOnSecondary = Color(0xFFFFFFFF);
+  static const lightTertiary = Color(0xFF7B7BFF); // Lighter version of primary
   static const lightOnTertiary = Color(0xFFFFFFFF);
-  static const lightError = Color(0xFFEF4444);
+  
+  // Error colors
+  static const lightError = Color(0xFFD93025); // Google red
   static const lightOnError = Color(0xFFFFFFFF);
-  static const lightErrorContainer = Color(0xFFFFDAD6);
+  static const lightErrorContainer = Color(0xFFFCEEEE);
   static const lightOnErrorContainer = Color(0xFF410002);
-  static const lightInversePrimary = Color(0xFFBBE1FF);
-  static const lightShadow = Color(0xFF000000);
-  static const lightSurface = Color(0xFFFAFAFA);
+  
+  // Surface and background colors
+  static const lightSurface = Color(0xFFFFFFFF);
   static const lightOnSurface = Color(0xFF1C1C1C);
-  static const lightAppBarBackground = Color(0xFFDEEDFF);
-  static const novoPharmaBlue = Color(0xFF1F9BD1);
-  static const novoPharmaLightBlue = Color(0xFFF6F8FB);
-  static const novoPharmaGray = Color(0xFF64748B);
-
+  static const lightSurfaceVariant = Color(0xFFF5F5F5);
+  static const lightOnSurfaceVariant = Color(0xFF444444);
+  
+  // Background colors
+  static const lightBackground = Color(0xFFF8FAFC);
+  static const lightOnBackground = Color(0xFF1C1C1C);
+  
+  // Outline and border colors
+  static const lightOutline = Color(0xFFD1D5DA);
+  static const lightOutlineVariant = Color(0xFFE5E7EB);
+  
+  // App bar and navigation colors
+  static const lightAppBarBackground = Color(0xFFFFFFFF);
+  static const lightAppBarForeground = Color(0xFF1C1C1C);
+  static const lightNavigationBar = Color(0xFFFFFFFF);
+  static const lightNavigationOnItem = Color(0xFF3A39EE);
+  static const lightNavigationItem = Color(0xFF9CA3AF);
+  
+  // Specific brand colors
+  static const novoPharmaBlue = Color(0xFF3A39EE); // Primary brand color
+  static const novoPharmaLightBlue = Color(0xFFE6E6FF); // Light background
+  static const novoPharmaDarkBlue = Color(0xFF2A29A0); // Darker accent
+  static const novoPharmaGray = Color(0xFF6B7280); // Neutral gray
+  static const novoPharmaLightGray = Color(0xFFF3F4F6); // Light gray background
+  
   // Dashboard specific colors
-  static const dashboardTextPrimary = Color(0xFF102132);
-  static const dashboardTextSecondary = Color(0xFF4A5568);
-  static const dashboardTextTertiary = Color(0xFF94A3B8);
-  static const dashboardTealBlue = Color(0xFF074F75);
-  static const dashboardLightCyan = Color(0xFF97E1E8);
-  static const dashboardTurquoise = Color(0xFF6CCDBF);
-  static const dashboardNavy = Color(0xFF0C2E51);
-  static const dashboardRoyalBlue = Color(0xFF3F82F6);
+  static const dashboardTextPrimary = Color(0xFF111827); // Dark text
+  static const dashboardTextSecondary = Color(0xFF6B7280); // Medium text
+  static const dashboardTextTertiary = Color(0xFF9CA3AF); // Light text
+  
+  // Success and warning colors
+  static const success = Color(0xFF10B981);
+  static const successContainer = Color(0xFFD1FAE5);
+  static const warning = Color(0xFFF59F00);
+  static const warningContainer = Color(0xFFFFF3CD);
+  
+  // Card and container colors
+  static const cardBackground = Color(0xFFFFFFFF);
+  static const cardElevated = Color(0xFFFFFFFF);
+  static const cardBorder = Color(0xFFE5E7EB);
 }
 
 class DarkModeColors {
-  static const darkPrimary = Color(0xFFD4BCCF);
-  static const darkOnPrimary = Color(0xFF38265C);
-  static const darkPrimaryContainer = Color(0xFF4F3D74);
-  static const darkOnPrimaryContainer = Color(0xFFEAE0FF);
-  static const darkSecondary = Color(0xFFCDC3DC);
-  static const darkOnSecondary = Color(0xFF34313F);
-  static const darkTertiary = Color(0xFFF0B6C5);
-  static const darkOnTertiary = Color(0xFF4A2530);
+  // Primary color palette for dark mode
+  static const darkPrimary = Color(0xFFB0B0FF); // Lighter version of primary for dark mode
+  static const darkOnPrimary = Color(0xFF1A1A40);
+  static const darkPrimaryContainer = Color(0xFF2A2A60); // Darker container
+  static const darkOnPrimaryContainer = Color(0xFFD0D0FF);
+  static const darkSecondary = Color(0xFF9090E0);
+  static const darkOnSecondary = Color(0xFF0A0A26);
+  static const darkTertiary = Color(0xFFA0A0FF);
+  static const darkOnTertiary = Color(0xFF0A0A26);
+  
+  // Error colors for dark mode
   static const darkError = Color(0xFFFFB4AB);
   static const darkOnError = Color(0xFF690005);
   static const darkErrorContainer = Color(0xFF93000A);
   static const darkOnErrorContainer = Color(0xFFFFDAD6);
-  static const darkInversePrimary = Color(0xFF684F8E);
-  static const darkShadow = Color(0xFF000000);
+  
+  // Surface and background colors for dark mode
   static const darkSurface = Color(0xFF121212);
   static const darkOnSurface = Color(0xFFE0E0E0);
-  static const darkAppBarBackground = Color(0xFF4F3D74);
+  static const darkSurfaceVariant = Color(0xFF1E1E1E);
+  static const darkOnSurfaceVariant = Color(0xFFC9C9C9);
+  
+  // Background colors for dark mode
+  static const darkBackground = Color(0xFF0F0F0F);
+  static const darkOnBackground = Color(0xFFE0E0E0);
+  
+  // Outline and border colors for dark mode
+  static const darkOutline = Color(0xFF4B5563);
+  static const darkOutlineVariant = Color(0xFF374151);
+  
+  // App bar and navigation colors for dark mode
+  static const darkAppBarBackground = Color(0xFF1F1F1F);
+  static const darkAppBarForeground = Color(0xFFE0E0E0);
+  static const darkNavigationBar = Color(0xFF1F1F1F);
+  static const darkNavigationOnItem = Color(0xFFB0B0FF);
+  static const darkNavigationItem = Color(0xFF9CA3AF);
+  
+  // Brand colors for dark mode
+  static const darkNovoPharmaBlue = Color(0xFFB0B0FF);
+  static const darkNovoPharmaGray = Color(0xFF9CA3AF);
+  static const darkNovoPharmaLightGray = Color(0xFF1F2937);
+  
+  // Success and warning colors for dark mode
+  static const darkSuccess = Color(0xFF34D399);
+  static const darkSuccessContainer = Color(0xFF064E3B);
+  static const darkWarning = Color(0xFFFBBF24);
+  static const darkWarningContainer = Color(0xFF78350F);
+  
+  // Card and container colors for dark mode
+  static const darkCardBackground = Color(0xFF1F1F1F);
+  static const darkCardElevated = Color(0xFF252525);
+  static const darkCardBorder = Color(0xFF374151);
 }
 
 class FontSizes {
@@ -87,77 +151,148 @@ ThemeData get lightTheme => ThemeData(
     onError: LightModeColors.lightOnError,
     errorContainer: LightModeColors.lightErrorContainer,
     onErrorContainer: LightModeColors.lightOnErrorContainer,
-    inversePrimary: LightModeColors.lightInversePrimary,
-    shadow: LightModeColors.lightShadow,
     surface: LightModeColors.lightSurface,
     onSurface: LightModeColors.lightOnSurface,
+    surfaceVariant: LightModeColors.lightSurfaceVariant,
+    onSurfaceVariant: LightModeColors.lightOnSurfaceVariant,
+    outline: LightModeColors.lightOutline,
+    outlineVariant: LightModeColors.lightOutlineVariant,
+    background: LightModeColors.lightBackground,
+    onBackground: LightModeColors.lightOnBackground,
   ),
   brightness: Brightness.light,
-  appBarTheme: AppBarTheme(
+  appBarTheme: const AppBarTheme(
     backgroundColor: LightModeColors.lightAppBarBackground,
-    foregroundColor: LightModeColors.lightOnPrimaryContainer,
+    foregroundColor: LightModeColors.lightAppBarForeground,
     elevation: 0,
+  ),
+
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      backgroundColor: LightModeColors.lightPrimary,
+      foregroundColor: LightModeColors.lightOnPrimary,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: LightModeColors.lightPrimary),
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+    ),
+  ),
+  outlinedButtonTheme: OutlinedButtonThemeData(
+    style: OutlinedButton.styleFrom(
+      foregroundColor: LightModeColors.lightPrimary,
+      side: BorderSide(color: LightModeColors.lightPrimary, width: 1),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+    ),
+  ),
+  inputDecorationTheme: InputDecorationTheme(
+    filled: true,
+    fillColor: LightModeColors.lightSurface,
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: BorderSide(color: LightModeColors.lightOutline),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: BorderSide(color: LightModeColors.lightOutline),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: BorderSide(color: LightModeColors.lightPrimary, width: 2),
+    ),
+    errorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: BorderSide(color: LightModeColors.lightError),
+    ),
+    focusedErrorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: BorderSide(color: LightModeColors.lightError, width: 2),
+    ),
+    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+  ),
+  textButtonTheme: TextButtonThemeData(
+    style: TextButton.styleFrom(
+      foregroundColor: LightModeColors.lightPrimary,
+    ),
   ),
   textTheme: TextTheme(
     displayLarge: GoogleFonts.inter(
       fontSize: FontSizes.displayLarge,
-      fontWeight: FontWeight.normal,
+      fontWeight: FontWeight.w300,
+      color: LightModeColors.dashboardTextPrimary,
     ),
     displayMedium: GoogleFonts.inter(
       fontSize: FontSizes.displayMedium,
-      fontWeight: FontWeight.normal,
+      fontWeight: FontWeight.w300,
+      color: LightModeColors.dashboardTextPrimary,
     ),
     displaySmall: GoogleFonts.inter(
       fontSize: FontSizes.displaySmall,
-      fontWeight: FontWeight.w600,
+      fontWeight: FontWeight.w400,
+      color: LightModeColors.dashboardTextPrimary,
     ),
     headlineLarge: GoogleFonts.inter(
       fontSize: FontSizes.headlineLarge,
-      fontWeight: FontWeight.normal,
+      fontWeight: FontWeight.w400,
+      color: LightModeColors.dashboardTextPrimary,
     ),
     headlineMedium: GoogleFonts.inter(
       fontSize: FontSizes.headlineMedium,
       fontWeight: FontWeight.w500,
+      color: LightModeColors.dashboardTextPrimary,
     ),
     headlineSmall: GoogleFonts.inter(
       fontSize: FontSizes.headlineSmall,
-      fontWeight: FontWeight.bold,
+      fontWeight: FontWeight.w600,
+      color: LightModeColors.dashboardTextPrimary,
     ),
     titleLarge: GoogleFonts.inter(
       fontSize: FontSizes.titleLarge,
       fontWeight: FontWeight.w500,
+      color: LightModeColors.dashboardTextPrimary,
     ),
     titleMedium: GoogleFonts.inter(
       fontSize: FontSizes.titleMedium,
       fontWeight: FontWeight.w500,
+      color: LightModeColors.dashboardTextPrimary,
     ),
     titleSmall: GoogleFonts.inter(
       fontSize: FontSizes.titleSmall,
       fontWeight: FontWeight.w500,
+      color: LightModeColors.dashboardTextSecondary,
     ),
     labelLarge: GoogleFonts.inter(
       fontSize: FontSizes.labelLarge,
       fontWeight: FontWeight.w500,
+      color: LightModeColors.dashboardTextPrimary,
     ),
     labelMedium: GoogleFonts.inter(
       fontSize: FontSizes.labelMedium,
       fontWeight: FontWeight.w500,
+      color: LightModeColors.dashboardTextPrimary,
     ),
     labelSmall: GoogleFonts.inter(
       fontSize: FontSizes.labelSmall,
       fontWeight: FontWeight.w500,
+      color: LightModeColors.dashboardTextSecondary,
     ),
     bodyLarge: GoogleFonts.inter(
       fontSize: FontSizes.bodyLarge,
-      fontWeight: FontWeight.normal,
+      fontWeight: FontWeight.w400,
+      color: LightModeColors.dashboardTextPrimary,
     ),
     bodyMedium: GoogleFonts.inter(
       fontSize: FontSizes.bodyMedium,
-      fontWeight: FontWeight.normal,
+      fontWeight: FontWeight.w400,
+      color: LightModeColors.dashboardTextPrimary,
     ),
     bodySmall: GoogleFonts.inter(
       fontSize: FontSizes.bodySmall,
-      fontWeight: FontWeight.normal,
+      fontWeight: FontWeight.w400,
+      color: LightModeColors.dashboardTextSecondary,
     ),
   ),
 );
@@ -177,77 +312,148 @@ ThemeData get darkTheme => ThemeData(
     onError: DarkModeColors.darkOnError,
     errorContainer: DarkModeColors.darkErrorContainer,
     onErrorContainer: DarkModeColors.darkOnErrorContainer,
-    inversePrimary: DarkModeColors.darkInversePrimary,
-    shadow: DarkModeColors.darkShadow,
     surface: DarkModeColors.darkSurface,
     onSurface: DarkModeColors.darkOnSurface,
+    surfaceVariant: DarkModeColors.darkSurfaceVariant,
+    onSurfaceVariant: DarkModeColors.darkOnSurfaceVariant,
+    outline: DarkModeColors.darkOutline,
+    outlineVariant: DarkModeColors.darkOutlineVariant,
+    background: DarkModeColors.darkBackground,
+    onBackground: DarkModeColors.darkOnBackground,
   ),
   brightness: Brightness.dark,
-  appBarTheme: AppBarTheme(
+  appBarTheme: const AppBarTheme(
     backgroundColor: DarkModeColors.darkAppBarBackground,
-    foregroundColor: DarkModeColors.darkOnPrimaryContainer,
+    foregroundColor: DarkModeColors.darkAppBarForeground,
     elevation: 0,
+  ),
+
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      backgroundColor: DarkModeColors.darkPrimary,
+      foregroundColor: DarkModeColors.darkOnPrimary,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: DarkModeColors.darkPrimary),
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+    ),
+  ),
+  outlinedButtonTheme: OutlinedButtonThemeData(
+    style: OutlinedButton.styleFrom(
+      foregroundColor: DarkModeColors.darkPrimary,
+      side: BorderSide(color: DarkModeColors.darkPrimary, width: 1),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+    ),
+  ),
+  inputDecorationTheme: InputDecorationTheme(
+    filled: true,
+    fillColor: DarkModeColors.darkSurface,
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: BorderSide(color: DarkModeColors.darkOutline),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: BorderSide(color: DarkModeColors.darkOutline),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: BorderSide(color: DarkModeColors.darkPrimary, width: 2),
+    ),
+    errorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: BorderSide(color: DarkModeColors.darkError),
+    ),
+    focusedErrorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: BorderSide(color: DarkModeColors.darkError, width: 2),
+    ),
+    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+  ),
+  textButtonTheme: TextButtonThemeData(
+    style: TextButton.styleFrom(
+      foregroundColor: DarkModeColors.darkPrimary,
+    ),
   ),
   textTheme: TextTheme(
     displayLarge: GoogleFonts.inter(
       fontSize: FontSizes.displayLarge,
-      fontWeight: FontWeight.normal,
+      fontWeight: FontWeight.w300,
+      color: DarkModeColors.darkOnSurface,
     ),
     displayMedium: GoogleFonts.inter(
       fontSize: FontSizes.displayMedium,
-      fontWeight: FontWeight.normal,
+      fontWeight: FontWeight.w300,
+      color: DarkModeColors.darkOnSurface,
     ),
     displaySmall: GoogleFonts.inter(
       fontSize: FontSizes.displaySmall,
-      fontWeight: FontWeight.w600,
+      fontWeight: FontWeight.w400,
+      color: DarkModeColors.darkOnSurface,
     ),
     headlineLarge: GoogleFonts.inter(
       fontSize: FontSizes.headlineLarge,
-      fontWeight: FontWeight.normal,
+      fontWeight: FontWeight.w400,
+      color: DarkModeColors.darkOnSurface,
     ),
     headlineMedium: GoogleFonts.inter(
       fontSize: FontSizes.headlineMedium,
       fontWeight: FontWeight.w500,
+      color: DarkModeColors.darkOnSurface,
     ),
     headlineSmall: GoogleFonts.inter(
       fontSize: FontSizes.headlineSmall,
-      fontWeight: FontWeight.bold,
+      fontWeight: FontWeight.w600,
+      color: DarkModeColors.darkOnSurface,
     ),
     titleLarge: GoogleFonts.inter(
       fontSize: FontSizes.titleLarge,
       fontWeight: FontWeight.w500,
+      color: DarkModeColors.darkOnSurface,
     ),
     titleMedium: GoogleFonts.inter(
       fontSize: FontSizes.titleMedium,
       fontWeight: FontWeight.w500,
+      color: DarkModeColors.darkOnSurface,
     ),
     titleSmall: GoogleFonts.inter(
       fontSize: FontSizes.titleSmall,
       fontWeight: FontWeight.w500,
+      color: DarkModeColors.darkOnSurfaceVariant,
     ),
     labelLarge: GoogleFonts.inter(
       fontSize: FontSizes.labelLarge,
       fontWeight: FontWeight.w500,
+      color: DarkModeColors.darkOnSurface,
     ),
     labelMedium: GoogleFonts.inter(
       fontSize: FontSizes.labelMedium,
       fontWeight: FontWeight.w500,
+      color: DarkModeColors.darkOnSurface,
     ),
     labelSmall: GoogleFonts.inter(
       fontSize: FontSizes.labelSmall,
       fontWeight: FontWeight.w500,
+      color: DarkModeColors.darkOnSurfaceVariant,
     ),
     bodyLarge: GoogleFonts.inter(
       fontSize: FontSizes.bodyLarge,
-      fontWeight: FontWeight.normal,
+      fontWeight: FontWeight.w400,
+      color: DarkModeColors.darkOnSurface,
     ),
     bodyMedium: GoogleFonts.inter(
       fontSize: FontSizes.bodyMedium,
-      fontWeight: FontWeight.normal,
+      fontWeight: FontWeight.w400,
+      color: DarkModeColors.darkOnSurface,
     ),
     bodySmall: GoogleFonts.inter(
       fontSize: FontSizes.bodySmall,
-      fontWeight: FontWeight.normal,
+      fontWeight: FontWeight.w400,
+      color: DarkModeColors.darkOnSurfaceVariant,
     ),
   ),
 );

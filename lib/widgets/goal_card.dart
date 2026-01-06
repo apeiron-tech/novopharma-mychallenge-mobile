@@ -3,6 +3,7 @@ import 'package:novopharma/generated/l10n/app_localizations.dart';
 import 'package:novopharma/models/user_goal_progress.dart';
 import 'package:novopharma/widgets/progress_ring.dart';
 import '../models/goal.dart';
+import '../theme.dart';
 
 class GoalCard extends StatelessWidget {
   final Goal goal;
@@ -21,8 +22,8 @@ class GoalCard extends StatelessWidget {
         : 0.0;
 
     final Color progressColor = isCompleted
-        ? const Color(0xFF22C55E)
-        : const Color(0xFF1F9BD1);
+        ? LightModeColors.success
+        : LightModeColors.lightPrimary;
 
     return GestureDetector(
       onTap: onTap,
@@ -34,29 +35,29 @@ class GoalCard extends StatelessWidget {
             end: Alignment.bottomRight,
             colors: isCompleted
                 ? [
-                    Colors.white,
-                    const Color(0xFF22C55E).withValues(alpha: 0.05),
+                    LightModeColors.lightSurface,
+                    LightModeColors.success.withOpacity(0.05),
                   ]
-                : [Colors.white, Colors.grey.shade50],
+                : [Colors.white, LightModeColors.lightSurfaceVariant],
           ),
           borderRadius: BorderRadius.circular(24),
           border: Border.all(
             color: isCompleted
-                ? progressColor.withValues(alpha: 0.3)
-                : Colors.grey.shade200,
+                ? progressColor.withOpacity(0.3)
+                : LightModeColors.lightOutline,
             width: 1.5,
           ),
           boxShadow: [
             BoxShadow(
               color: isCompleted
-                  ? progressColor.withValues(alpha: 0.15)
-                  : Colors.black.withValues(alpha: 0.05),
+                  ? progressColor.withOpacity(0.15)
+                  : LightModeColors.lightSurfaceVariant.withOpacity(0.05),
               blurRadius: 16,
               offset: const Offset(0, 4),
               spreadRadius: 0,
             ),
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.03),
+              color: LightModeColors.lightSurfaceVariant.withOpacity(0.03),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -74,7 +75,7 @@ class GoalCard extends StatelessWidget {
                   height: 100,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: progressColor.withValues(alpha: 0.05),
+                    color: progressColor.withOpacity(0.05),
                   ),
                 ),
               ),
@@ -95,16 +96,12 @@ class GoalCard extends StatelessWidget {
                             gradient: LinearGradient(
                               colors: isCompleted
                                   ? [
-                                      progressColor.withValues(alpha: 0.2),
-                                      progressColor.withValues(alpha: 0.1),
+                                      progressColor.withOpacity(0.2),
+                                      progressColor.withOpacity(0.1),
                                     ]
                                   : [
-                                      const Color(
-                                        0xFF1F9BD1,
-                                      ).withValues(alpha: 0.1),
-                                      const Color(
-                                        0xFF1F9BD1,
-                                      ).withValues(alpha: 0.05),
+                                      LightModeColors.lightPrimary.withOpacity(0.1),
+                                      LightModeColors.lightPrimary.withOpacity(0.05),
                                     ],
                             ),
                             borderRadius: BorderRadius.circular(14),
@@ -115,7 +112,7 @@ class GoalCard extends StatelessWidget {
                                 : Icons.inventory_2_rounded,
                             color: isCompleted
                                 ? progressColor
-                                : const Color(0xFF1F9BD1),
+                                : LightModeColors.lightPrimary,
                             size: 24,
                           ),
                         ),
@@ -126,7 +123,7 @@ class GoalCard extends StatelessWidget {
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w700,
-                            color: Color(0xFF1F2937),
+                            color: LightModeColors.dashboardTextPrimary,
                             height: 1.3,
                             letterSpacing: -0.3,
                           ),
@@ -135,38 +132,43 @@ class GoalCard extends StatelessWidget {
                         ),
                         const Spacer(),
                         // Progress Text
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 8,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade100,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.grey.shade200),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                goal.metric == 'revenue'
-                                    ? Icons.payments_rounded
-                                    : Icons.inventory_rounded,
-                                size: 16,
-                                color: Colors.grey.shade700,
-                              ),
-                              const SizedBox(width: 6),
-                              Text(
-                                goal.metric == 'revenue'
-                                    ? '$currentProgress / ${goal.targetValue.toInt()} TND'
-                                    : '$currentProgress / ${goal.targetValue.toInt()}',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.grey.shade700,
+                        Flexible(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade100,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: LightModeColors.lightOutline),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  goal.metric == 'revenue'
+                                      ? Icons.payments_rounded
+                                      : Icons.inventory_rounded,
+                                  size: 16,
+                                  color: LightModeColors.dashboardTextSecondary,
                                 ),
-                              ),
-                            ],
+                                const SizedBox(width: 6),
+                                Flexible(
+                                  child: Text(
+                                    goal.metric == 'revenue'
+                                        ? '$currentProgress / ${goal.targetValue.toInt()} TND'
+                                        : '$currentProgress / ${goal.targetValue.toInt()}',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w700,
+                                      color: LightModeColors.dashboardTextSecondary,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         const SizedBox(height: 8),
@@ -176,7 +178,7 @@ class GoalCard extends StatelessWidget {
                           text: goal.getTimeRemaining(l10n),
                           color: isCompleted
                               ? progressColor
-                              : const Color(0xFF1F9BD1),
+                              : LightModeColors.lightPrimary,
                         ),
                       ],
                     ),
@@ -188,7 +190,7 @@ class GoalCard extends StatelessWidget {
                     size: 90,
                     strokeWidth: 9,
                     progressColor: progressColor,
-                    trackColor: Colors.grey.shade200,
+                    trackColor: LightModeColors.lightOutline,
                     textStyle: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
@@ -211,7 +213,7 @@ class GoalCard extends StatelessWidget {
     required Color color,
   }) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),

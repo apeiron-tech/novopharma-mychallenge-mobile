@@ -92,7 +92,7 @@ class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: LightModeColors.lightSurface,
       body: Stack(
         children: [
           // Video Player
@@ -119,19 +119,19 @@ class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
 
   Widget _buildLoadingWidget() {
     return Container(
-      color: Colors.black,
+      color: LightModeColors.lightSurface,
       child: const Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CircularProgressIndicator(
-            color: LightModeColors.novoPharmaBlue,
+            color: LightModeColors.lightPrimary,
             strokeWidth: 3,
           ),
           SizedBox(height: 20),
           Text(
             'Chargement de la vidéo...',
             style: TextStyle(
-              color: Colors.white,
+              color: LightModeColors.lightOnPrimary,
               fontSize: 16,
               fontWeight: FontWeight.w500,
             ),
@@ -143,18 +143,18 @@ class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
 
   Widget _buildErrorWidget() {
     return Container(
-      color: Colors.black,
+      color: LightModeColors.lightSurface,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.error_outline, color: Colors.red, size: 64),
+          const Icon(Icons.error_outline, color: LightModeColors.lightError, size: 64),
           const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 40),
             child: Text(
               _errorMessage,
               style: const TextStyle(
-                color: Colors.white,
+                color: LightModeColors.lightOnPrimary,
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
@@ -174,7 +174,7 @@ class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
             label: const Text('Réessayer'),
             style: ElevatedButton.styleFrom(
               backgroundColor: LightModeColors.novoPharmaBlue,
-              foregroundColor: Colors.white,
+              foregroundColor: LightModeColors.lightOnPrimary,
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
             ),
           ),
@@ -190,10 +190,10 @@ class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            Colors.black.withValues(alpha: 0.7),
+            LightModeColors.lightSurface.withOpacity(0.7),
             Colors.transparent,
             Colors.transparent,
-            Colors.black.withValues(alpha: 0.7),
+            LightModeColors.lightSurface.withOpacity(0.7),
           ],
         ),
       ),
@@ -209,7 +209,7 @@ class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
                     child: Text(
                       widget.videoTitle,
                       style: const TextStyle(
-                        color: Colors.white,
+                        color: LightModeColors.lightOnPrimary,
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
                       ),
@@ -221,7 +221,7 @@ class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
                     onPressed: widget.onClose,
                     icon: const Icon(
                       Icons.close,
-                      color: Colors.white,
+                      color: LightModeColors.lightOnPrimary,
                       size: 28,
                     ),
                   ),
@@ -241,7 +241,7 @@ class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
                   // Play/Pause button
                   Container(
                     decoration: BoxDecoration(
-                      color: Colors.black.withValues(alpha: 0.5),
+                      color: LightModeColors.lightSurface.withOpacity(0.5),
                       borderRadius: BorderRadius.circular(40),
                     ),
                     child: IconButton(
@@ -250,7 +250,7 @@ class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
                         _controller.value.isPlaying
                             ? Icons.pause
                             : Icons.play_arrow,
-                        color: Colors.white,
+                        color: LightModeColors.lightOnPrimary,
                         size: 40,
                       ),
                     ),
@@ -261,10 +261,10 @@ class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
                   VideoProgressIndicator(
                     _controller,
                     allowScrubbing: true,
-                    colors: const VideoProgressColors(
-                      playedColor: LightModeColors.novoPharmaBlue,
-                      bufferedColor: Colors.grey,
-                      backgroundColor: Colors.white24,
+                    colors: VideoProgressColors(
+                      playedColor: LightModeColors.lightPrimary,
+                      bufferedColor: LightModeColors.lightOutline,
+                      backgroundColor: LightModeColors.lightSurface.withOpacity(0.15),
                     ),
                   ),
 
@@ -277,14 +277,14 @@ class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
                       Text(
                         _formatDuration(_controller.value.position),
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: LightModeColors.lightOnPrimary,
                           fontSize: 12,
                         ),
                       ),
                       Text(
                         _formatDuration(_controller.value.duration),
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: LightModeColors.lightOnPrimary,
                           fontSize: 12,
                         ),
                       ),

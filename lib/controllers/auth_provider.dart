@@ -110,6 +110,7 @@ class AuthProvider with ChangeNotifier {
     required String pharmacyName,
     required String phone,
     required String avatarUrl,
+    required String role,
     required String position,
     required String? city,
   }) async {
@@ -126,6 +127,7 @@ class AuthProvider with ChangeNotifier {
         pharmacyName: pharmacyName,
         phone: phone,
         avatarUrl: avatarUrl,
+        role: role,
         position: position,
         city: city,
       );

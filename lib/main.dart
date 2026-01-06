@@ -21,7 +21,6 @@ import 'package:novopharma/services/notification_service.dart';
 import 'package:novopharma/firebase_options.dart';
 import 'package:novopharma/navigation.dart';
 import 'package:novopharma/navigation_observer.dart';
-import 'package:novopharma/screens/auth_wrapper.dart';
 import 'package:novopharma/theme.dart';
 import 'package:novopharma/screens/dashboard_home_screen.dart';
 import 'package:novopharma/screens/leaderboard_screen.dart';
@@ -31,6 +30,9 @@ import 'package:novopharma/screens/barcode_scanner_screen.dart';
 import 'package:novopharma/screens/login_screen.dart';
 import 'package:novopharma/screens/pluxee_redemption_screen.dart';
 import 'package:novopharma/screens/formation_details_screen.dart';
+import 'package:novopharma/screens/splash_screen.dart';
+import 'package:novopharma/screens/manual_sale_screen.dart';
+import 'package:novopharma/screens/product_screen.dart';
 import 'package:novopharma/models/blog_post.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -99,7 +101,7 @@ class NovoPharmaApp extends StatelessWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       locale: localeProvider.locale,
-      home: const AuthWrapper(),
+      home: const SplashScreen(),
       navigatorObservers: [routeObserver],
       onGenerateRoute: (settings) {
         // Handle dynamic routes for formations from notifications
@@ -141,6 +143,12 @@ class NovoPharmaApp extends StatelessWidget {
         '/scanner': (context) => const BarcodeScannerScreen(),
         '/login': (context) => const LoginScreen(),
         '/rewards': (context) => const PluxeeRedemptionScreen(),
+        '/manual-sale': (context) => const ManualSaleScreen(),
+        '/product': (context) {
+          final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+          final sku = args?['sku'] as String?;
+          return ProductScreen(sku: sku);
+        },
       },
     );
   }

@@ -23,7 +23,7 @@ class PendingApprovalScreen extends StatelessWidget {
               children: [
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.8,
-                  child: Image.asset('assets/images/logo.png'),
+                  child: Image.asset('assets/logo/fullLogoBlue.png'),
                 ),
                 const SizedBox(height: 32),
                 Text(

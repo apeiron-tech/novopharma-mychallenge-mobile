@@ -26,9 +26,9 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              LightModeColors.novoPharmaBlue,
-              LightModeColors.novoPharmaBlue.withValues(alpha: 0.8),
-              Colors.white,
+              LightModeColors.lightPrimary,
+              LightModeColors.lightSecondary,
+              LightModeColors.lightTertiary,
             ],
             stops: const [0.0, 0.3, 1.0],
           ),
@@ -52,15 +52,15 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
         children: [
           Container(
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.2),
+              color: LightModeColors.lightOnPrimary.withOpacity(0.2),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.3)),
+              border: Border.all(color: LightModeColors.lightOnPrimary.withOpacity(0.3)),
             ),
             child: IconButton(
               onPressed: () => Navigator.of(context).pop(),
               icon: const Icon(
                 Icons.arrow_back_ios_new_rounded,
-                color: Colors.white,
+                color: LightModeColors.lightOnPrimary,
                 size: 20,
               ),
             ),
@@ -73,7 +73,7 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
                 Text(
                   'Actualité',
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    color: Colors.white,
+                    color: LightModeColors.lightOnPrimary,
                     fontWeight: FontWeight.w800,
                     fontSize: 28,
                   ),
@@ -81,7 +81,7 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
                 Text(
                   widget.actualite.actualiteCategory ?? 'Actualité',
                   style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.9),
+                    color: LightModeColors.lightOnPrimary.withOpacity(0.9),
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
                   ),
@@ -98,14 +98,14 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: LightModeColors.lightOnPrimary,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(30),
           topRight: Radius.circular(30),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
+            color: LightModeColors.lightSurfaceVariant.withOpacity(0.1),
             blurRadius: 20,
             offset: const Offset(0, -4),
           ),
@@ -130,7 +130,7 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
                     imageUrl: widget.actualite.coverImageUrl!,
                     fit: BoxFit.cover,
                     placeholder: (context, url) => Container(
-                      color: Colors.grey[100],
+                      color: LightModeColors.lightSurfaceVariant.withOpacity(0.1),
                       child: const Center(
                         child: CircularProgressIndicator(
                           color: LightModeColors.novoPharmaBlue,
@@ -139,10 +139,10 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
                       ),
                     ),
                     errorWidget: (context, url, error) => Container(
-                      color: Colors.grey[100],
+                      color: LightModeColors.lightSurfaceVariant.withOpacity(0.1),
                       child: Icon(
                         Icons.image_not_supported_outlined,
-                        color: Colors.grey[400],
+                        color: LightModeColors.dashboardTextTertiary,
                         size: 60,
                       ),
                     ),
@@ -197,7 +197,7 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
                       style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w800,
-                        color: Colors.black87,
+                        color: LightModeColors.dashboardTextPrimary,
                         height: 1.3,
                       ),
                     ),
@@ -234,13 +234,13 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
                         Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: Colors.grey.withValues(alpha: 0.1),
+                            color: LightModeColors.lightSurfaceVariant.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Icon(
                             Icons.access_time_rounded,
                             size: 16,
-                            color: Colors.grey[600],
+                            color: LightModeColors.dashboardTextSecondary,
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -248,7 +248,7 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
                           _formatDate(widget.actualite.createdAt),
                           style: TextStyle(
                             fontSize: 14,
-                            color: Colors.grey[600],
+                            color: LightModeColors.dashboardTextSecondary,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -277,7 +277,7 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
                           widget.actualite.excerpt!,
                           style: TextStyle(
                             fontSize: 16,
-                            color: Colors.grey[700],
+                            color: LightModeColors.dashboardTextSecondary,
                             height: 1.5,
                             fontStyle: FontStyle.italic,
                           ),
@@ -293,7 +293,7 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
                       widget.actualite.content,
                       style: const TextStyle(
                         fontSize: 16,
-                        color: Colors.black87,
+                        color: LightModeColors.dashboardTextPrimary,
                         height: 1.6,
                       ),
                     ),
@@ -310,7 +310,7 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w700,
-                              color: Colors.grey[800],
+                              color: LightModeColors.dashboardTextPrimary,
                             ),
                           ),
                           const SizedBox(height: 16),
@@ -333,7 +333,7 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
-                              color: Colors.grey[800],
+                              color: LightModeColors.dashboardTextPrimary,
                             ),
                           ),
                           const SizedBox(height: 8),
@@ -347,15 +347,15 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
                                   vertical: 6,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: Colors.grey[100],
+                                  color: LightModeColors.lightSurfaceVariant.withOpacity(0.1),
                                   borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(color: Colors.grey[300]!),
+                                  border: Border.all(color: LightModeColors.lightOutline,),
                                 ),
                                 child: Text(
                                   tag,
                                   style: TextStyle(
                                     fontSize: 12,
-                                    color: Colors.grey[700],
+                                    color: LightModeColors.dashboardTextSecondary,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
@@ -437,24 +437,24 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
 
     if (isVideo) {
       iconData = Icons.play_circle_filled;
-      iconColor = Colors.red[600]!;
+      iconColor = LightModeColors.lightError;
     } else if (isPdf) {
       iconData = Icons.picture_as_pdf;
-      iconColor = Colors.red[700]!;
+      iconColor = LightModeColors.lightError;
     } else if (isImage) {
       iconData = Icons.image;
-      iconColor = Colors.blue[600]!;
+      iconColor = LightModeColors.lightPrimary;
     } else {
       iconData = Icons.insert_drive_file;
-      iconColor = Colors.grey[600]!;
+      iconColor = LightModeColors.dashboardTextSecondary;
     }
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: Colors.grey[50],
+        color: LightModeColors.lightSurfaceVariant.withOpacity(0.05),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey[200]!),
+        border: Border.all(color: LightModeColors.lightOutline,),
       ),
       child: Material(
         color: Colors.transparent,
@@ -485,7 +485,7 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
-                          color: Colors.black87,
+                          color: LightModeColors.dashboardTextPrimary,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -517,7 +517,7 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
                               _formatFileSize(fileSize),
                               style: TextStyle(
                                 fontSize: 12,
-                                color: Colors.grey[600],
+                                color: LightModeColors.dashboardTextSecondary,
                               ),
                             ),
                           ],
@@ -589,10 +589,10 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
               minScale: PhotoViewComputedScale.contained,
               maxScale: PhotoViewComputedScale.covered * 2.0,
               loadingBuilder: (context, event) => const Center(
-                child: CircularProgressIndicator(color: Colors.white),
+                child: CircularProgressIndicator(color: LightModeColors.lightOnPrimary),
               ),
               errorBuilder: (context, error, stackTrace) => const Center(
-                child: Icon(Icons.error, color: Colors.white, size: 64),
+                child: Icon(Icons.error, color: LightModeColors.lightOnPrimary, size: 64),
               ),
             ),
             Positioned(
@@ -600,7 +600,7 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
               right: 20,
               child: IconButton(
                 onPressed: () => Navigator.of(dialogContext).pop(),
-                icon: const Icon(Icons.close, color: Colors.white, size: 30),
+                icon: const Icon(Icons.close, color: LightModeColors.lightOnPrimary, size: 30),
               ),
             ),
             Positioned(
@@ -610,13 +610,13 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
               child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha: 0.7),
+                  color: LightModeColors.lightSurfaceVariant.withOpacity(0.7),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
                   imageName,
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: LightModeColors.lightOnPrimary,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),

@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:novopharma/controllers/quiz_provider.dart';
 import 'package:novopharma/models/quiz.dart';

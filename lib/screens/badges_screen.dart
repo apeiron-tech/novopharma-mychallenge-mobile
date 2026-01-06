@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:novopharma/controllers/badge_provider.dart';
 import 'package:novopharma/models/badge.dart' as models;
+import 'package:novopharma/models/reward.dart' as models_reward;
 import 'package:novopharma/widgets/badge_card.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -360,85 +361,9 @@ class BadgesScreen extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 12),
-        // Badge Points Card
-        if (badge.points != null && badge.points! > 0)
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [Color(0xFF8B5CF6), Color(0xFF7C3AED)],
-              ),
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF8B5CF6).withValues(alpha: 0.4),
-                  blurRadius: 20,
-                  offset: const Offset(0, 8),
-                ),
-              ],
-            ),
-            child: Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Icon(
-                    Icons.stars_rounded,
-                    color: Colors.white,
-                    size: 32,
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        l10n.badgeRewardPoints,
-                        style: GoogleFonts.inter(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white.withValues(alpha: 0.9),
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        '+${badge.points} pts',
-                        style: GoogleFonts.inter(
-                          fontSize: 28,
-                          fontWeight: FontWeight.w800,
-                          color: Colors.white,
-                          height: 1,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: const Icon(
-                    Icons.trending_up_rounded,
-                    color: Colors.white,
-                    size: 24,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        if (badge.points != null && badge.points! > 0)
-          const SizedBox(height: 12),
+        // Reward Card - handles different reward types
+        if (badge.rewardType != null)
+          _buildRewardCard(badge, context, l10n),
         _buildDateRangeCard(startDate, endDate, context),
       ],
     );
@@ -482,6 +407,176 @@ class BadgesScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget _buildRewardCard(
+    models.Badge badge,
+    BuildContext context,
+    AppLocalizations l10n,
+  ) {
+    if (badge.rewardType == 'reward' && badge.rewardId != null) {
+      // For 'reward' type, we need to fetch the reward details
+      return FutureBuilder<models_reward.Reward?>(
+        future: _getRewardById(badge.rewardId!),
+        builder: (context, snapshot) {
+          if (snapshot.hasData && snapshot.data != null) {
+            final reward = snapshot.data!;
+            return _buildRewardCardContent(
+              const Color(0xFF4CAF50), // Green color for rewards
+              Icons.card_giftcard_outlined,
+              l10n.rewardLabel,
+              reward.name, // Display the reward name
+              context,
+            );
+          } else {
+            // If reward data is not available, show a loading state or fallback
+            return _buildRewardCardContent(
+              const Color(0xFF4CAF50), // Green color for rewards
+              Icons.card_giftcard_outlined,
+              l10n.rewardLabel,
+              'Loading...',
+              context,
+            );
+          }
+        },
+      );
+    } else {
+      // For 'points' and 'custom' types, use the direct approach
+      Color cardColor;
+      IconData iconData;
+      String title;
+      String value;
+
+      switch (badge.rewardType) {
+        case 'points':
+          if (badge.points != null && badge.points! > 0) {
+            cardColor = const Color(0xFF8B5CF6);
+            iconData = Icons.stars_rounded;
+            title = l10n.pointsLabel;
+            value = '+${badge.points} pts';
+          } else {
+            // If rewardType is 'points' but no points, return empty container
+            return const SizedBox.shrink();
+          }
+          break;
+        case 'custom':
+          cardColor = const Color(0xFFFF9800); // Orange color for custom rewards
+          iconData = Icons.card_giftcard_outlined;
+          title = l10n.customRewardLabel;
+          value = badge.customReward ?? 'Custom Reward';
+          break;
+        default:
+          // If rewardType is not recognized, return empty container
+          return const SizedBox.shrink();
+      }
+
+      return _buildRewardCardContent(cardColor, iconData, title, value, context);
+    }
+  }
+
+  Widget _buildRewardCardContent(
+    Color cardColor,
+    IconData iconData,
+    String title,
+    String value,
+    BuildContext context,
+  ) {
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [cardColor, cardColor.withValues(alpha: 0.8)],
+            ),
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: cardColor.withValues(alpha: 0.4),
+                blurRadius: 20,
+                offset: const Offset(0, 8),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  iconData,
+                  color: Colors.white,
+                  size: 32,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: GoogleFonts.inter(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white.withValues(alpha: 0.9),
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      value,
+                      style: GoogleFonts.inter(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                        height: 1,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Icon(
+                  Icons.emoji_events_rounded,
+                  color: Colors.white,
+                  size: 24,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 12),
+      ],
+    );
+  }
+
+  // Helper method to fetch reward by ID
+  Future<models_reward.Reward?> _getRewardById(String rewardId) async {
+    try {
+      final rewardRef = FirebaseFirestore.instance.collection('rewards').doc(rewardId);
+      final rewardDoc = await rewardRef.get();
+      
+      if (rewardDoc.exists) {
+        return models_reward.Reward.fromFirestore(rewardDoc);
+      }
+      return null;
+    } catch (e) {
+      print('Error fetching reward: $e');
+      return null;
+    }
   }
 
   Widget _buildDateRangeCard(

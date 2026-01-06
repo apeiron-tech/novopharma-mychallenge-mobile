@@ -80,7 +80,7 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
+      backgroundColor: LightModeColors.lightBackground,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -89,7 +89,7 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
             gradient: LinearGradient(
               colors: [
                 LightModeColors.novoPharmaBlue,
-                LightModeColors.novoPharmaBlue.withValues(alpha: 0.8),
+                LightModeColors.novoPharmaBlue.withOpacity(0.8),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -99,11 +99,11 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
         leading: Container(
           margin: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.2),
+            color: LightModeColors.lightOnPrimary.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
+                color: Colors.black.withOpacity(0.1),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -121,7 +121,7 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
         title: Text(
           'Formation',
           style: const TextStyle(
-            color: Colors.white,
+            color: LightModeColors.lightOnPrimary,
             fontSize: 20,
             fontWeight: FontWeight.w700,
             letterSpacing: 0.5,
@@ -131,13 +131,13 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
           Container(
             margin: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.2),
+              color: LightModeColors.lightOnPrimary.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(12),
             ),
             child: IconButton(
               icon: const Icon(
                 Icons.share_outlined,
-                color: Colors.white,
+                color: LightModeColors.lightOnPrimary,
                 size: 20,
               ),
               onPressed: () => _shareFormation(),
@@ -173,25 +173,25 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
       margin: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [Colors.white, Colors.white.withValues(alpha: 0.95)],
+          colors: [LightModeColors.lightSurface, LightModeColors.lightSurface.withValues(alpha: 0.95)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
+            color: Colors.black.withOpacity(0.08),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
           BoxShadow(
-            color: LightModeColors.novoPharmaBlue.withValues(alpha: 0.05),
+            color: LightModeColors.novoPharmaBlue.withOpacity(0.05),
             blurRadius: 30,
             offset: const Offset(0, 4),
           ),
         ],
         border: Border.all(
-          color: Colors.white.withValues(alpha: 0.2),
+          color: LightModeColors.lightOnPrimary.withValues(alpha: 0.2),
           width: 1.5,
         ),
       ),
@@ -210,8 +210,8 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
-                        color: LightModeColors.novoPharmaBlue.withValues(
-                          alpha: 0.2,
+                        color: LightModeColors.novoPharmaBlue.withOpacity(
+                          0.2,
                         ),
                         blurRadius: 15,
                         offset: const Offset(0, 8),
@@ -271,7 +271,7 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
                             gradient: LinearGradient(
                               colors: [
                                 Colors.transparent,
-                                Colors.black.withValues(alpha: 0.1),
+                                Colors.black.withOpacity(0.1),
                               ],
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter,
@@ -308,7 +308,7 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
                 style: const TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.w800,
-                  color: Color(0xFF1A1A1A),
+                  color: LightModeColors.dashboardTextPrimary,
                   letterSpacing: -0.5,
                   height: 1.2,
                 ),
@@ -329,8 +329,8 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
                     Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: LightModeColors.novoPharmaBlue.withValues(
-                          alpha: 0.1,
+                        color: LightModeColors.novoPharmaBlue.withOpacity(
+                          0.1,
                         ),
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -347,7 +347,7 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
-                          color: Color(0xFF4A5568),
+                          color: LightModeColors.dashboardTextSecondary,
                         ),
                       ),
                     ),
@@ -358,7 +358,7 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
                           vertical: 6,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.green.withValues(alpha: 0.1),
+                          color: LightModeColors.success.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Row(
@@ -367,7 +367,7 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
                             Icon(
                               Icons.calendar_today_outlined,
                               size: 14,
-                              color: Colors.green.shade700,
+                              color: LightModeColors.success,
                             ),
                             const SizedBox(width: 6),
                             Text(
@@ -375,7 +375,7 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
                               style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,
-                                color: Colors.green.shade700,
+                                color: LightModeColors.success,
                               ),
                             ),
                           ],
@@ -400,7 +400,7 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
                       'Fin: ${widget.formation.formattedEndDate}',
                       style: TextStyle(
                         fontSize: 14,
-                        color: Colors.grey.shade600,
+                        color: LightModeColors.dashboardTextSecondary,
                       ),
                     ),
                   ],
@@ -415,7 +415,7 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF2D3748),
+                    color: LightModeColors.dashboardTextPrimary,
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -446,7 +446,7 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
                         borderRadius: BorderRadius.circular(25),
                         boxShadow: [
                           BoxShadow(
-                            color: colors[colorIndex][0].withValues(alpha: 0.3),
+                            color: colors[colorIndex][0].withOpacity(0.3),
                             blurRadius: 8,
                             offset: const Offset(0, 4),
                           ),
@@ -456,7 +456,7 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
                         tag,
                         style: const TextStyle(
                           fontSize: 13,
-                          color: Colors.white,
+                          color: LightModeColors.lightOnPrimary,
                           fontWeight: FontWeight.w600,
                           letterSpacing: 0.3,
                         ),
@@ -484,19 +484,19 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
       margin: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [Colors.white, Colors.white.withValues(alpha: 0.9)],
+          colors: [LightModeColors.lightSurface, LightModeColors.lightSurface.withValues(alpha: 0.9)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.06),
+            color: Colors.black.withOpacity(0.06),
             blurRadius: 16,
             offset: const Offset(0, 4),
           ),
         ],
-        border: Border.all(color: Colors.grey.shade100, width: 1),
+        border: Border.all(color: LightModeColors.lightSurfaceVariant, width: 1),
       ),
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -554,7 +554,7 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
                   valueColor: AlwaysStoppedAnimation<Color>(
                     progress < 1.0
                         ? LightModeColors.novoPharmaBlue
-                        : Colors.green,
+                        : LightModeColors.success,
                   ),
                   minHeight: 12,
                 ),
@@ -569,8 +569,8 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
                 color: progress == 1.0
-                    ? Colors.green.shade600
-                    : Colors.grey.shade600,
+                    ? LightModeColors.success
+                    : LightModeColors.dashboardTextSecondary,
               ),
             ),
           ],
@@ -658,33 +658,33 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
                         gradient: isActive
                             ? LinearGradient(
                                 colors: [
-                                  LightModeColors.novoPharmaBlue.withValues(
-                                    alpha: 0.1,
+                                  LightModeColors.novoPharmaBlue.withOpacity(
+                                    0.1,
                                   ),
-                                  LightModeColors.novoPharmaBlue.withValues(
-                                    alpha: 0.05,
+                                  LightModeColors.novoPharmaBlue.withOpacity(
+                                    0.05,
                                   ),
                                 ],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                               )
                             : LinearGradient(
-                                colors: [Colors.grey.shade50, Colors.white],
+                                colors: [LightModeColors.lightSurfaceVariant, LightModeColors.lightSurface],
                               ),
                         border: Border.all(
                           color: isActive
-                              ? LightModeColors.novoPharmaBlue.withValues(
-                                  alpha: 0.3,
+                              ? LightModeColors.novoPharmaBlue.withOpacity(
+                                  0.3,
                                 )
-                              : Colors.grey.shade200,
+                              : LightModeColors.lightSurfaceVariant,
                           width: 1.5,
                         ),
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           if (isActive)
                             BoxShadow(
-                              color: LightModeColors.novoPharmaBlue.withValues(
-                                alpha: 0.1,
+                              color: LightModeColors.novoPharmaBlue.withOpacity(
+                                0.1,
                               ),
                               blurRadius: 12,
                               offset: const Offset(0, 4),

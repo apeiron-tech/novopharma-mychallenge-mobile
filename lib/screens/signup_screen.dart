@@ -12,6 +12,7 @@ import 'package:novopharma/services/storage_service.dart';
 import 'package:provider/provider.dart';
 import 'package:novopharma/generated/l10n/app_localizations.dart';
 import 'package:novopharma/widgets/terms_conditions_modal.dart';
+import 'package:novopharma/theme.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -38,16 +39,16 @@ class _SignupScreenState extends State<SignupScreen> {
 
   DateTime? _selectedDate;
   Pharmacy? _selectedPharmacy;
-  String? _selectedPosition;
+  String? _selectedRole;
   String? _selectedCity;
   late Future<List<Pharmacy>> _pharmaciesFuture;
   File? _profileImage;
   final ImagePicker _picker = ImagePicker();
 
   final List<Map<String, String>> _positions = [
-    {'value': 'pharmacien_titulaire', 'key': 'pharmacienTitulaire'},
-    {'value': 'pharmacien_assistant', 'key': 'pharmacienAssistant'},
-    {'value': 'preparateur', 'key': 'preparateur'},
+    {'value': 'Pharmacien titulaire', 'key': 'pharmacienTitulaire'},
+    {'value': 'Pharmacien assistant', 'key': 'pharmacienAssistant'},
+    {'value': 'Responsable para', 'key': 'responsablePara'},
   ];
 
   final List<String> _cities = [
@@ -120,9 +121,8 @@ class _SignupScreenState extends State<SignupScreen> {
         _phoneController.text.isNotEmpty &&
         _selectedDate != null &&
         _selectedPharmacy != null &&
-        _selectedPosition != null &&
+        _selectedRole != null &&
         _selectedCity != null;
-    _profileImage != null;
 
     final bool shouldBeEnabled =
         isFormValid && isPasswordMatching && allFieldsFilled && _agreeToTerms;
@@ -143,9 +143,9 @@ class _SignupScreenState extends State<SignupScreen> {
         uiSettings: [
           AndroidUiSettings(
             toolbarTitle: 'Recadrer la photo',
-            toolbarColor: const Color(0xFF1F9BD1),
+            toolbarColor: LightModeColors.lightPrimary,
             toolbarWidgetColor: Colors.white,
-            activeControlsWidgetColor: const Color(0xFF1F9BD1),
+            activeControlsWidgetColor: LightModeColors.lightPrimary,
             initAspectRatio: CropAspectRatioPreset.square,
             lockAspectRatio: true,
             aspectRatioPresets: [CropAspectRatioPreset.square],
@@ -194,10 +194,13 @@ class _SignupScreenState extends State<SignupScreen> {
 
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final tempUserId = DateTime.now().millisecondsSinceEpoch.toString();
-    final downloadUrl = await StorageService().uploadProfilePicture(
-      tempUserId,
-      _profileImage!,
-    );
+    String? downloadUrl;
+    if (_profileImage != null) {
+      downloadUrl = await StorageService().uploadProfilePicture(
+        tempUserId,
+        _profileImage!,
+      );
+    }
 
     final error = await authProvider.signUp(
       name:
@@ -209,7 +212,8 @@ class _SignupScreenState extends State<SignupScreen> {
       pharmacyName: _selectedPharmacy!.name,
       phone: _phoneController.text.trim(),
       avatarUrl: downloadUrl ?? '',
-      position: _selectedPosition!,
+      role: _selectedRole!,
+      position: '',
       city: _selectedCity,
     );
 
@@ -218,7 +222,14 @@ class _SignupScreenState extends State<SignupScreen> {
       if (error != null) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text('Sign up failed: $error')));
+        ).showSnackBar(
+          SnackBar(
+            content: Text('Sign up failed: $error'),
+            backgroundColor: LightModeColors.lightError,
+            behavior: SnackBarBehavior.floating,
+            margin: const EdgeInsets.all(16),
+          ),
+        );
       } else {
         // Pop the screen to let the AuthWrapper handle redirection
         Navigator.of(context).pop();
@@ -231,7 +242,7 @@ class _SignupScreenState extends State<SignupScreen> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF6F8FB),
+      backgroundColor: LightModeColors.novoPharmaLightBlue,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -251,7 +262,7 @@ class _SignupScreenState extends State<SignupScreen> {
             ),
             child: const Icon(
               Icons.arrow_back_ios_new,
-              color: Color(0xFF102132),
+              color: LightModeColors.dashboardTextPrimary,
               size: 16,
             ),
           ),
@@ -275,12 +286,12 @@ class _SignupScreenState extends State<SignupScreen> {
                     gradient: const LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
-                      colors: [Color(0xFF1F9BD1), Color(0xFF1887B8)],
+                      colors: [LightModeColors.novoPharmaBlue, LightModeColors.lightPrimary],
                     ),
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFF1F9BD1).withOpacity(0.3),
+                        color: LightModeColors.novoPharmaBlue.withOpacity(0.3),
                         blurRadius: 20,
                         offset: const Offset(0, 10),
                       ),
@@ -384,7 +395,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   hintText: 'John',
                                 ),
                                 validator: (value) => (value?.isEmpty ?? true)
-                                    ? 'Required'
+                                    ? 'This field is required'
                                     : null,
                               ),
                             ],
@@ -403,7 +414,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   hintText: 'Doe',
                                 ),
                                 validator: (value) => (value?.isEmpty ?? true)
-                                    ? 'Required'
+                                    ? 'This field is required'
                                     : null,
                               ),
                             ],
@@ -431,7 +442,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       validator: (value) {
                         if (value?.isEmpty ?? true) return 'Email is required';
                         if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value!))
-                          return 'Enter a valid email';
+                          return 'Please enter a valid email address';
                         return null;
                       },
                     ),
@@ -478,7 +489,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     const SizedBox(height: 16),
                     _buildModernLabel(l10n.yourPosition),
                     const SizedBox(height: 8),
-                    _buildPositionDropdown(),
+                    _buildRoleDropdown(),
                     const SizedBox(height: 16),
                     _buildModernLabel(l10n.city),
                     const SizedBox(height: 8),
@@ -562,7 +573,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: const Color(0xFFE5E7EB)),
+                    border: Border.all(color: Colors.grey.shade200),
                   ),
                   child: Row(
                     children: [
@@ -572,7 +583,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           setState(() => _agreeToTerms = value ?? false);
                           _updateButtonState();
                         },
-                        activeColor: const Color(0xFF1F9BD1),
+                        activeColor: LightModeColors.novoPharmaBlue,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(4),
                         ),
@@ -582,14 +593,14 @@ class _SignupScreenState extends State<SignupScreen> {
                           text: TextSpan(
                             style: const TextStyle(
                               fontSize: 13,
-                              color: Color(0xFF6B7280),
+                              color: LightModeColors.novoPharmaGray,
                             ),
                             children: [
                               TextSpan(text: l10n.iAccept),
                               TextSpan(
                                 text: l10n.termsAndPrivacy,
                                 style: const TextStyle(
-                                  color: Color(0xFF1F9BD1),
+                                  color: LightModeColors.novoPharmaBlue,
                                   decoration: TextDecoration.underline,
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -613,15 +624,15 @@ class _SignupScreenState extends State<SignupScreen> {
                   decoration: BoxDecoration(
                     gradient: _isButtonEnabled
                         ? const LinearGradient(
-                            colors: [Color(0xFF1F9BD1), Color(0xFF1887B8)],
+                            colors: [LightModeColors.novoPharmaBlue, LightModeColors.lightPrimary],
                           )
                         : null,
-                    color: _isButtonEnabled ? null : const Color(0xFFE5E7EB),
+                    color: _isButtonEnabled ? null : Colors.grey.shade200,
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: _isButtonEnabled
                         ? [
                             BoxShadow(
-                              color: const Color(0xFF1F9BD1).withOpacity(0.3),
+                              color: LightModeColors.novoPharmaBlue.withOpacity(0.3),
                               blurRadius: 12,
                               offset: const Offset(0, 6),
                             ),
@@ -633,7 +644,9 @@ class _SignupScreenState extends State<SignupScreen> {
                         ? _handleSignUp
                         : null,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.transparent,
+                      backgroundColor: _isButtonEnabled && !_isLoading 
+                          ? null // Use the gradient defined in the container
+                          : Colors.grey.shade300,
                       foregroundColor: Colors.white,
                       shadowColor: Colors.transparent,
                       shape: RoundedRectangleBorder(
@@ -647,6 +660,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             child: CircularProgressIndicator(
                               color: Colors.white,
                               strokeWidth: 2.5,
+                              value: null,
                             ),
                           )
                         : Row(
@@ -673,7 +687,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: const Color(0xFFE5E7EB)),
+                      border: Border.all(color: Colors.grey.shade200),
                     ),
                     child: TextButton(
                       onPressed: () => Navigator.pushReplacement(
@@ -690,7 +704,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       child: RichText(
                         text: TextSpan(
                           style: const TextStyle(
-                            color: Color(0xFF6B7280),
+                            color: LightModeColors.novoPharmaGray,
                             fontSize: 14,
                           ),
                           children: [
@@ -699,7 +713,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             TextSpan(
                               text: l10n.signIn,
                               style: const TextStyle(
-                                color: Color(0xFF1F9BD1),
+                                color: LightModeColors.novoPharmaBlue,
                                 fontWeight: FontWeight.w600,
                                 decoration: TextDecoration.underline,
                               ),
@@ -727,23 +741,23 @@ class _SignupScreenState extends State<SignupScreen> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color: const Color(0xFFE3F2FD),
+              color: LightModeColors.novoPharmaLightBlue,
               borderRadius: BorderRadius.circular(20),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(
+                Icon(
                   Icons.cloud_upload_outlined,
-                  color: Color(0xFF1F9BD1),
+                  color: LightModeColors.novoPharmaBlue,
                   size: 18,
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  l10n.uploadProfilePicture,
-                  style: const TextStyle(
+                  '${l10n.uploadProfilePicture}',
+                  style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF1F9BD1),
+                    color: LightModeColors.novoPharmaBlue,
                     fontSize: 14,
                   ),
                 ),
@@ -758,7 +772,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF1F9BD1).withOpacity(0.2),
+                    color: LightModeColors.novoPharmaBlue.withOpacity(0.2),
                     blurRadius: 20,
                     offset: const Offset(0, 10),
                   ),
@@ -771,14 +785,14 @@ class _SignupScreenState extends State<SignupScreen> {
                     backgroundColor: Colors.white,
                     child: CircleAvatar(
                       radius: 56,
-                      backgroundColor: const Color(0xFFF6F8FB),
+                      backgroundColor: LightModeColors.novoPharmaLightBlue,
                       backgroundImage: _profileImage != null
                           ? FileImage(_profileImage!)
                           : null,
                       child: _profileImage == null
-                          ? const Icon(
+                          ? Icon(
                               Icons.person_outline,
-                              color: Color(0xFF9CA3AF),
+                              color: LightModeColors.novoPharmaGray,
                               size: 50,
                             )
                           : null,
@@ -790,13 +804,13 @@ class _SignupScreenState extends State<SignupScreen> {
                     child: Container(
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFF1F9BD1), Color(0xFF1887B8)],
+                        gradient: LinearGradient(
+                          colors: [LightModeColors.novoPharmaBlue, LightModeColors.lightPrimary],
                         ),
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFF1F9BD1).withOpacity(0.3),
+                            color: LightModeColors.novoPharmaBlue.withOpacity(0.3),
                             blurRadius: 8,
                             offset: const Offset(0, 4),
                           ),
@@ -824,7 +838,7 @@ class _SignupScreenState extends State<SignupScreen> {
       style: const TextStyle(
         fontSize: 13,
         fontWeight: FontWeight.w600,
-        color: Color(0xFF6B7280),
+        color: LightModeColors.novoPharmaGray,
       ),
     );
   }
@@ -884,31 +898,31 @@ class _SignupScreenState extends State<SignupScreen> {
   }) {
     return InputDecoration(
       hintText: hintText,
-      hintStyle: const TextStyle(color: Color(0xFF9CA3AF)),
+      hintStyle: TextStyle(color: Colors.grey.shade500),
       prefixIcon: prefixIcon != null
-          ? Icon(prefixIcon, color: const Color(0xFF9CA3AF), size: 20)
+          ? Icon(prefixIcon, color: LightModeColors.novoPharmaBlue, size: 20)
           : null,
       filled: true,
-      fillColor: const Color(0xFFF9FAFB),
+      fillColor: Colors.white,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: Colors.grey.shade200),
+        borderSide: BorderSide(color: Colors.grey.shade300),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
+        borderSide: BorderSide(color: Colors.grey.shade300),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Color(0xFF1F9BD1), width: 2),
+        borderSide: BorderSide(color: LightModeColors.novoPharmaBlue, width: 2),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Color(0xFFEF4444)),
+        borderSide: BorderSide(color: LightModeColors.lightError),
       ),
       focusedErrorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Color(0xFFEF4444), width: 2),
+        borderSide: BorderSide(color: LightModeColors.lightError, width: 2),
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
     );
@@ -968,10 +982,10 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 
-  Widget _buildPositionDropdown() {
+  Widget _buildRoleDropdown() {
     final l10n = AppLocalizations.of(context)!;
     return DropdownButtonFormField<String>(
-      value: _selectedPosition,
+      value: _selectedRole,
       isExpanded: true,
       decoration: _buildInputDecoration(
         hintText: l10n.selectPosition,
@@ -986,8 +1000,8 @@ class _SignupScreenState extends State<SignupScreen> {
           case 'pharmacienAssistant':
             labelText = l10n.pharmacienAssistant;
             break;
-          case 'preparateur':
-            labelText = l10n.preparateur;
+          case 'responsablePara':
+            labelText = l10n.responsableParapharmacie;
             break;
           default:
             labelText = position['key']!;
@@ -1000,7 +1014,7 @@ class _SignupScreenState extends State<SignupScreen> {
       }).toList(),
       onChanged: (String? newValue) {
         setState(() {
-          _selectedPosition = newValue;
+          _selectedRole = newValue;
         });
         _updateButtonState();
       },

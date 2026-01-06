@@ -8,6 +8,7 @@ import 'package:novopharma/screens/formation_details_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../theme.dart';
 
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
@@ -27,20 +28,22 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: LightModeColors.lightBackground,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: LightModeColors.lightBackground,
         elevation: 0,
+        surfaceTintColor: Colors.transparent,
+        scrolledUnderElevation: 4,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF1F2937)),
+          icon: const Icon(Icons.arrow_back, color: LightModeColors.dashboardTextPrimary),
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
           'Notifications',
           style: TextStyle(
-            color: Color(0xFF1F2937),
+            color: LightModeColors.dashboardTextPrimary,
             fontSize: 20,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
           ),
         ),
         actions: [
@@ -56,16 +59,20 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     notificationProvider.markAllAsRead(userId);
                   }
                 },
+                style: TextButton.styleFrom(
+                  foregroundColor: LightModeColors.lightPrimary,
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                ),
                 child: const Text(
                   'Tout marquer lu',
                   style: TextStyle(
-                    color: Color(0xFF1F9BD1),
                     fontWeight: FontWeight.w600,
                   ),
                 ),
               );
             },
           ),
+          const SizedBox(width: 8),
         ],
       ),
       body: Consumer2<NotificationProvider, AuthProvider>(
@@ -83,14 +90,14 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 children: [
                   Container(
                     padding: const EdgeInsets.all(24),
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFF3F4F6),
+                    decoration: BoxDecoration(
+                      color: LightModeColors.lightSurfaceVariant,
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
                       Icons.notifications_none_rounded,
                       size: 64,
-                      color: Color(0xFF9CA3AF),
+                      color: LightModeColors.lightOnSurfaceVariant,
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -99,14 +106,14 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF1F2937),
+                      color: LightModeColors.dashboardTextPrimary,
                     ),
                   ),
                   const SizedBox(height: 8),
                   const Text(
                     'Vous serez notifié des nouvelles formations\net badges disponibles',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 14, color: Color(0xFF6B7280)),
+                    style: TextStyle(fontSize: 14, color: LightModeColors.dashboardTextSecondary),
                   ),
                 ],
               ),
@@ -161,18 +168,18 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: notification.isRead ? Colors.white : const Color(0xFFF0F9FF),
+          color: notification.isRead ? LightModeColors.lightSurface : LightModeColors.lightPrimaryContainer,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: notification.isRead
-                ? const Color(0xFFE5E7EB)
-                : const Color(0xFF93C5FD),
+                ? LightModeColors.lightOutline
+                : LightModeColors.lightPrimary,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
+              color: Colors.black.withOpacity(0.08),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
             ),
           ],
         ),
@@ -236,7 +243,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             },
             borderRadius: BorderRadius.circular(12),
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -272,7 +279,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                   fontWeight: notification.isRead
                                       ? FontWeight.w600
                                       : FontWeight.bold,
-                                  color: const Color(0xFF1F2937),
+                                  color: LightModeColors.dashboardTextPrimary,
                                 ),
                               ),
                             ),
@@ -292,7 +299,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                           notification.body,
                           style: const TextStyle(
                             fontSize: 14,
-                            color: Color(0xFF6B7280),
+                            color: LightModeColors.dashboardTextSecondary,
                           ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
@@ -302,7 +309,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                           timeago.format(notification.createdAt, locale: 'fr'),
                           style: const TextStyle(
                             fontSize: 12,
-                            color: Color(0xFF9CA3AF),
+                            color: LightModeColors.lightOnSurfaceVariant,
                           ),
                         ),
                       ],
@@ -333,13 +340,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   Color _getNotificationColor(NotificationType type) {
     switch (type) {
       case NotificationType.newTraining:
-        return const Color(0xFF3B82F6);
+        return LightModeColors.lightPrimary;
       case NotificationType.newBadge:
-        return const Color(0xFFF59E0B);
+        return LightModeColors.warning;
       case NotificationType.achievement:
-        return const Color(0xFF10B981);
+        return LightModeColors.success;
       case NotificationType.reminder:
-        return const Color(0xFF6366F1);
+        return LightModeColors.lightSecondary;
     }
   }
 }

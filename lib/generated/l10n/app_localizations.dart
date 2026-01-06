@@ -641,7 +641,7 @@ abstract class AppLocalizations {
   /// No description provided for @scannedProduct.
   ///
   /// In en, this message translates to:
-  /// **'Scanned Product'**
+  /// **'Product'**
   String get scannedProduct;
 
   /// No description provided for @productDetailsAppearHere.
@@ -1411,6 +1411,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No badges in this category yet.'**
   String get noBadgesInCategory;
+
+  /// No description provided for @pointsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Points awarded'**
+  String get pointsLabel;
+
+  /// No description provided for @rewardLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Reward'**
+  String get rewardLabel;
+
+  /// No description provided for @customRewardLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom Reward'**
+  String get customRewardLabel;
+
+  /// No description provided for @manualSale.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual Sale'**
+  String get manualSale;
+
+  /// No description provided for @searchProducts.
+  ///
+  /// In en, this message translates to:
+  /// **'Search products...'**
+  String get searchProducts;
 }
 
 class _AppLocalizationsDelegate

@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:novopharma/models/user_model.dart';
 
 class LeaderboardService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
