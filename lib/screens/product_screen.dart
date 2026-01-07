@@ -392,9 +392,7 @@ class _ProductScreenState extends State<ProductScreen> {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [LightModeColors.lightPrimary, LightModeColors.lightSecondary],
-                      ),
+                      color: LightModeColors.warning,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: const Icon(
@@ -428,7 +426,7 @@ class _ProductScreenState extends State<ProductScreen> {
                           icon: Icon(
                             Icons.remove_circle,
                             color: quantity > 1
-                                ? LightModeColors.lightPrimary
+                                ? LightModeColors.warning
                                 : LightModeColors.lightOnSurfaceVariant,
                           ),
                           onPressed: () {
@@ -456,7 +454,7 @@ class _ProductScreenState extends State<ProductScreen> {
                         IconButton(
                           icon: const Icon(
                             Icons.add_circle,
-                            color: LightModeColors.lightPrimary,
+                            color: LightModeColors.warning,
                           ),
                           onPressed: () {
                             _quantityNotifier.value++;
@@ -481,12 +479,12 @@ class _ProductScreenState extends State<ProductScreen> {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: LightModeColors.warningContainer,
+                      color: LightModeColors.success.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: const Icon(
                       Icons.stars_rounded,
-                      color: Color(0xFFF59E0B),
+                      color: LightModeColors.success,
                       size: 20,
                     ),
                   ),
@@ -514,7 +512,7 @@ class _ProductScreenState extends State<ProductScreen> {
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFFF59E0B),
+                      color: LightModeColors.success,
                     ),
                   );
                 },
@@ -531,11 +529,7 @@ class _ProductScreenState extends State<ProductScreen> {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [LightModeColors.lightPrimary, LightModeColors.lightSecondary],
-        ),
+        color: LightModeColors.warning,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -577,19 +571,9 @@ class _ProductScreenState extends State<ProductScreen> {
           margin: const EdgeInsets.only(bottom: 12),
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [LightModeColors.lightPrimary, LightModeColors.lightSecondary],
-            ),
+            color: LightModeColors.warning,
             borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: LightModeColors.lightPrimary.withOpacity(0.3),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
-              ),
-            ],
+            
           ),
           child: Row(
             children: [

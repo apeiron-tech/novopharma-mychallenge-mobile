@@ -45,157 +45,154 @@ class _ActualitesScreenState extends State<ActualitesScreen>
     return BottomNavigationScaffoldWrapper(
       currentIndex: 3, // Actualites tab index
       onTap: (index) {},
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              LightModeColors.lightPrimary,
-              LightModeColors.lightSecondary,
-              LightModeColors.lightTertiary,
-            ],
-            stops: const [0.0, 0.3, 1.0],
-          ),
-        ),
-        child: SafeArea(
-          child: Column(
-            children: [
-              _buildHeader(),
-              _buildTabBar(),
-              Expanded(
-                child: TabBarView(
-                  controller: _tabController,
+      child: Consumer<ActualiteProvider>(
+        builder: (context, actualiteProvider, child) {
+          return Scaffold(
+            body: Container(
+              decoration: BoxDecoration(
+                color: LightModeColors.lightSurfaceVariant,
+              ),
+              child: SafeArea(
+                child: Column(
                   children: [
-                    _buildActualiteTab('Actualités produits'),
-                    _buildActualiteTab('Actualités scientifiques'),
-                    _buildActualiteTab('Vie de l\'entreprise - evenements'),
+                    _buildHeader(),
+                    _buildTabBar(),
+                    Expanded(
+                      child: TabBarView(
+                        controller: _tabController,
+                        children: [
+                          _buildActualiteTab('Actualités produits', actualiteProvider),
+                          _buildActualiteTab('Actualités scientifiques', actualiteProvider),
+                          _buildActualiteTab('Vie de l\'entreprise - evenements', actualiteProvider),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }
 
   Widget _buildHeader() {
     return Container(
-      padding: const EdgeInsets.all(20),
-      child: Column(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            LightModeColors.novoPharmaBlue,
+            LightModeColors.novoPharmaBlue.withValues(alpha: 0.8),
+            LightModeColors.lightSecondary,
+          ],
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: LightModeColors.novoPharmaBlue.withValues(alpha: 0.3),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Stack(
         children: [
-          Row(
+          // Main content
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: LightModeColors.lightOnPrimary.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: LightModeColors.lightOnPrimary.withOpacity(0.3),
+                        width: 1,
+                      ),
+                    ),
+                    child: const Icon(
+                      Icons.article_rounded,
+                      color: LightModeColors.lightOnPrimary,
+                      size: 24,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Actualités',
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.w800,
+                            color: LightModeColors.lightOnPrimary,
+                            letterSpacing: -0.5,
+                          ),
+                        ),
+                        Text(
+                          'Restez informé des dernières actualités',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: LightModeColors.lightOnPrimary.withOpacity(0.7), // 70% opacity of white
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
               Container(
                 decoration: BoxDecoration(
-                  color: LightModeColors.lightOnPrimary.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(12),
+                  color: LightModeColors.lightOnPrimary.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(16),
                   border: Border.all(
                     color: LightModeColors.lightOnPrimary.withOpacity(0.3),
+                    width: 1,
                   ),
-                ),
-                child: IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) => const DashboardHomeScreen(),
-                      ),
-                    );
-                  },
-                  icon: const Icon(
-                    Icons.arrow_back_ios_new_rounded,
-                    color: LightModeColors.lightOnPrimary,
-                    size: 20,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Actualités',
-                      style: Theme.of(context).textTheme.headlineMedium
-                          ?.copyWith(
-                            color: LightModeColors.lightOnPrimary,
-                            fontWeight: FontWeight.w800,
-                            fontSize: 28,
-                          ),
-                    ),
-                    Text(
-                      'Restez informé des dernières actualités',
-                      style: TextStyle(
-                        color: LightModeColors.lightOnPrimary.withOpacity(0.9),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 20,
+                      offset: const Offset(0, 4),
                     ),
                   ],
                 ),
-              ),
-              // Decorative elements
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: LightModeColors.lightOnPrimary.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: LightModeColors.lightOnPrimary.withOpacity(0.2),
+                child: TextField(
+                  controller: _searchController,
+                  style: TextStyle(color: LightModeColors.lightOnPrimaryContainer),
+                  onChanged: (value) {
+                    Provider.of<ActualiteProvider>(
+                      context,
+                      listen: false,
+                    ).searchActualites(value);
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'Rechercher une actualité...',
+                    hintStyle: TextStyle(
+                      color: LightModeColors.lightOnPrimaryContainer.withOpacity(0.7), // 70% opacity of white
+                    ),
+                    prefixIcon: Icon(
+                      Icons.search_rounded,
+                      color: LightModeColors.lightOnPrimaryContainer.withOpacity(0.8), // 80% opacity of white
+                    ),
+                    border: InputBorder.none,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 16,
+                    ),
                   ),
-                ),
-                child: const Icon(
-                  Icons.article_rounded,
-                  size: 20,
-                  color: LightModeColors.lightOnPrimary,
                 ),
               ),
             ],
-          ),
-          const SizedBox(height: 20),
-          Container(
-            decoration: BoxDecoration(
-              color: LightModeColors.lightOnPrimary.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: LightModeColors.lightOnPrimary.withOpacity(0.3),
-                width: 1,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: LightModeColors.lightSurfaceVariant.withOpacity(0.1),
-                  blurRadius: 20,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: TextField(
-              controller: _searchController,
-              style: const TextStyle(color: LightModeColors.lightOnPrimary),
-              onChanged: (value) {
-                Provider.of<ActualiteProvider>(
-                  context,
-                  listen: false,
-                ).searchActualites(value);
-              },
-              decoration: InputDecoration(
-                hintText: 'Rechercher une actualité...',
-                hintStyle: TextStyle(
-                  color: LightModeColors.lightOnPrimary.withOpacity(0.7),
-                ),
-                prefixIcon: Icon(
-                  Icons.search_rounded,
-                  color: LightModeColors.lightOnPrimary.withOpacity(0.8),
-                ),
-                border: InputBorder.none,
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 16,
-                ),
-              ),
-            ),
           ),
         ],
       ),
@@ -221,14 +218,9 @@ class _ActualitesScreenState extends State<ActualitesScreen>
         child: TabBar(
           controller: _tabController,
           labelColor: LightModeColors.lightOnPrimary,
-          unselectedLabelColor: LightModeColors.lightPrimary,
+          unselectedLabelColor: LightModeColors.lightError,
           indicator: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                LightModeColors.lightPrimary,
-                LightModeColors.lightSecondary,
-              ],
-            ),
+            color: LightModeColors.lightError,
             borderRadius: BorderRadius.circular(20),
           ),
           indicatorSize: TabBarIndicatorSize.tab,
@@ -281,52 +273,48 @@ class _ActualitesScreenState extends State<ActualitesScreen>
     );
   }
 
-  Widget _buildActualiteTab(String category) {
-    return Consumer<ActualiteProvider>(
-      builder: (context, provider, child) {
-        print('[ActualitesScreen] Building tab for category: $category');
-        print(
-          '[ActualitesScreen] Provider state - loading: ${provider.isLoading}, hasError: ${provider.hasError}',
-        );
+  Widget _buildActualiteTab(String category, ActualiteProvider provider) {
+    print('[ActualitesScreen] Building tab for category: $category');
+    print(
+      '[ActualitesScreen] Provider state - loading: ${provider.isLoading}, hasError: ${provider.hasError}',
+    );
 
-        if (provider.isLoading) {
-          print('[ActualitesScreen] Showing loading indicator');
-          return const Center(
-            child: CircularProgressIndicator(
-              color: LightModeColors.lightPrimary,
-            ),
-          );
-        }
-
-        if (provider.hasError) {
-          print('[ActualitesScreen] Showing error state: ${provider.error}');
-          return _buildErrorState(provider);
-        }
-
-        final actualites = provider.getActualitesByCategory(category);
-        print(
-          '[ActualitesScreen] Got ${actualites.length} actualites for category $category',
-        );
-
-        if (actualites.isEmpty) {
-          print(
-            '[ActualitesScreen] Showing empty state for category $category',
-          );
-          return _buildEmptyState(category);
-        }
-
-        return RefreshIndicator(
-          onRefresh: provider.refresh,
+    if (provider.isLoading) {
+      print('[ActualitesScreen] Showing loading indicator');
+      return const Center(
+        child: CircularProgressIndicator(
           color: LightModeColors.lightPrimary,
-          child: ListView.builder(
-            padding: const EdgeInsets.all(16),
-            itemCount: actualites.length,
-            itemBuilder: (context, index) {
-              return _buildActualiteCard(actualites[index]);
-            },
-          ),
-        );
-      },
+        ),
+      );
+    }
+
+    if (provider.hasError) {
+      print('[ActualitesScreen] Showing error state: ${provider.error}');
+      return _buildErrorState(provider);
+    }
+
+    final actualites = provider.getActualitesByCategory(category);
+    print(
+      '[ActualitesScreen] Got ${actualites.length} actualites for category $category',
+    );
+
+    if (actualites.isEmpty) {
+      print(
+        '[ActualitesScreen] Showing empty state for category $category',
+      );
+      return _buildEmptyState(category);
+    }
+
+    return RefreshIndicator(
+      onRefresh: provider.refresh,
+      color: LightModeColors.lightPrimary,
+      child: ListView.builder(
+        padding: const EdgeInsets.all(16),
+        itemCount: actualites.length,
+        itemBuilder: (context, index) {
+          return _buildActualiteCard(actualites[index]);
+        },
+      ),
     );
   }
 
@@ -336,6 +324,10 @@ class _ActualitesScreenState extends State<ActualitesScreen>
       decoration: BoxDecoration(
         color: LightModeColors.lightSurface,
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: LightModeColors.lightOnPrimary.withOpacity(0.6),
+          width: 1.5,
+        ),
         boxShadow: [
           BoxShadow(
             color: LightModeColors.lightSurfaceVariant.withOpacity(0.08),
@@ -420,17 +412,17 @@ class _ActualitesScreenState extends State<ActualitesScreen>
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            LightModeColors.lightPrimary.withOpacity(
+                            LightModeColors.success.withOpacity(
                               0.1,
                             ),
-                            LightModeColors.lightPrimary.withOpacity(
+                            LightModeColors.success.withOpacity(
                               0.05,
                             ),
                           ],
                         ),
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
-                          color: LightModeColors.lightPrimary.withOpacity(
+                          color: LightModeColors.success.withOpacity(
                             0.2,
                           ),
                         ),
@@ -438,7 +430,7 @@ class _ActualitesScreenState extends State<ActualitesScreen>
                       child: Text(
                         actualite.actualiteCategory ?? 'Actualité',
                         style: const TextStyle(
-                          color: LightModeColors.lightPrimary,
+                          color: LightModeColors.success,
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
                         ),
@@ -482,7 +474,7 @@ class _ActualitesScreenState extends State<ActualitesScreen>
                         Container(
                           padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
-                            color: LightModeColors.lightPrimary.withOpacity(
+                            color: LightModeColors.warning.withOpacity(
                               0.1,
                             ),
                             borderRadius: BorderRadius.circular(8),
@@ -490,7 +482,7 @@ class _ActualitesScreenState extends State<ActualitesScreen>
                           child: Icon(
                             Icons.person_outline,
                             size: 14,
-                            color: LightModeColors.lightPrimary,
+                            color: LightModeColors.warning,
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -498,7 +490,7 @@ class _ActualitesScreenState extends State<ActualitesScreen>
                           actualite.author ?? 'Admin',
                           style: const TextStyle(
                             fontSize: 12,
-                            color: LightModeColors.lightPrimary,
+                            color: LightModeColors.warning,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -631,13 +623,13 @@ class _ActualitesScreenState extends State<ActualitesScreen>
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: LightModeColors.lightPrimary.withOpacity(0.1),
+                color: LightModeColors.warning.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(50),
               ),
               child: Icon(
                 Icons.article_outlined,
                 size: 48,
-                color: LightModeColors.lightPrimary,
+                color: LightModeColors.warning,
               ),
             ),
             const SizedBox(height: 16),
@@ -670,8 +662,8 @@ class _ActualitesScreenState extends State<ActualitesScreen>
               icon: const Icon(Icons.refresh_rounded),
               label: const Text('Actualiser'),
               style: OutlinedButton.styleFrom(
-                foregroundColor: LightModeColors.lightPrimary,
-                side: const BorderSide(color: LightModeColors.lightPrimary),
+                foregroundColor: LightModeColors.warning,
+                side: const BorderSide(color: LightModeColors.warning),
                 padding: const EdgeInsets.symmetric(
                   horizontal: 24,
                   vertical: 12,

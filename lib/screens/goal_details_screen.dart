@@ -50,13 +50,13 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
         title: Text(
           l10n.goalDetails,
           style: const TextStyle(
-            color: LightModeColors.dashboardTextPrimary,
+            color: LightModeColors.lightPrimaryContainer,
             fontWeight: FontWeight.w700,
           ),
         ),
-        backgroundColor: LightModeColors.lightBackground,
+        backgroundColor: LightModeColors.lightPrimary,
         elevation: 0,
-        iconTheme: const IconThemeData(color: LightModeColors.dashboardTextPrimary),
+        iconTheme: const IconThemeData(color: LightModeColors.lightPrimaryContainer),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(20.0, 16.0, 20.0, 24.0),
@@ -225,7 +225,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
         children: [
           Row(
             children: [
-              Icon(icon, color: LightModeColors.lightPrimary, size: 24),
+              Icon(icon, color: LightModeColors.warning, size: 24),
               const SizedBox(width: 12),
               Text(
                 title,
@@ -251,9 +251,9 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
                       .map(
                         (item) => Chip(
                           label: Text(item, overflow: TextOverflow.ellipsis),
-                          backgroundColor: LightModeColors.lightPrimary.withOpacity(0.1),
+                          backgroundColor: LightModeColors.warning.withOpacity(0.1),
                           labelStyle: const TextStyle(
-                            color: LightModeColors.lightPrimary,
+                            color: LightModeColors.warning,
                             fontWeight: FontWeight.w500,
                           ),
                           side: BorderSide.none,

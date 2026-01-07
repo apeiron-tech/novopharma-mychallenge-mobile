@@ -733,4 +733,41 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get searchProducts => 'Search products...';
+
+  @override
+  String get quizResults => 'Quiz Results';
+
+  @override
+  String get congratulations => 'Congratulations!';
+
+  @override
+  String get goodEffort => 'Good Effort!';
+
+  @override
+  String get reviewYourAnswers => 'Review Your Answers';
+
+  @override
+  String get done => 'Done';
+
+  @override
+  String youEarnedPoints(Object points) {
+    return 'You earned $points points!';
+  }
+
+  @override
+  String questionNumber(Object number, Object text) {
+    return 'Question $number: $text';
+  }
+
+  @override
+  String get correctAnswer => 'Correct Answer';
+
+  @override
+  String get incorrectAnswer => 'Incorrect Answer';
+
+  @override
+  String get yourAnswer => 'Your Answer';
+
+  @override
+  String get explanation => 'Explanation';
 }

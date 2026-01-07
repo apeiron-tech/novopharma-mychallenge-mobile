@@ -22,16 +22,7 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              LightModeColors.lightPrimary,
-              LightModeColors.lightSecondary,
-              LightModeColors.lightTertiary,
-            ],
-            stops: const [0.0, 0.3, 1.0],
-          ),
+          color: LightModeColors.lightSurfaceVariant,
         ),
         child: SafeArea(
           child: Column(
@@ -47,47 +38,72 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
 
   Widget _buildHeader(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
-      child: Row(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: LightModeColors.lightOnPrimary.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: LightModeColors.lightOnPrimary.withOpacity(0.3)),
-            ),
-            child: IconButton(
-              onPressed: () => Navigator.of(context).pop(),
-              icon: const Icon(
-                Icons.arrow_back_ios_new_rounded,
-                color: LightModeColors.lightOnPrimary,
-                size: 20,
-              ),
-            ),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            LightModeColors.novoPharmaBlue,
+            LightModeColors.novoPharmaBlue.withValues(alpha: 0.8),
+            LightModeColors.lightSecondary,
+          ],
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: LightModeColors.novoPharmaBlue.withValues(alpha: 0.3),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
           ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Actualité',
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    color: LightModeColors.lightOnPrimary,
-                    fontWeight: FontWeight.w800,
-                    fontSize: 28,
+        ],
+      ),
+      child: Stack(
+        children: [
+          // Main content
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: LightModeColors.lightOnPrimary.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: LightModeColors.lightOnPrimary.withOpacity(0.2),
+                        width: 1,
+                      ),
+                    ),
+                    child: IconButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      icon: const Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        color: LightModeColors.lightOnPrimary,
+                        size: 18,
+                      ),
+                    ),
                   ),
-                ),
-                Text(
-                  widget.actualite.actualiteCategory ?? 'Actualité',
-                  style: TextStyle(
-                    color: LightModeColors.lightOnPrimary.withOpacity(0.9),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Détails Actualité',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w800,
+                            color: LightModeColors.lightOnPrimary,
+                            letterSpacing: -0.5,
+                          ),
+                        ),
+                        
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
+            ],
           ),
         ],
       ),
@@ -96,26 +112,24 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
 
   Widget _buildContent(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20),
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       decoration: BoxDecoration(
-        color: LightModeColors.lightOnPrimary,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
+        color: LightModeColors.lightSurface,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: LightModeColors.lightOnPrimary.withOpacity(0.6),
+          width: 1.5,
         ),
         boxShadow: [
           BoxShadow(
-            color: LightModeColors.lightSurfaceVariant.withOpacity(0.1),
+            color: LightModeColors.lightSurfaceVariant.withOpacity(0.08),
             blurRadius: 20,
-            offset: const Offset(0, -4),
+            offset: const Offset(0, 4),
           ),
         ],
       ),
       child: ClipRRect(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
-        ),
+        borderRadius: BorderRadius.circular(20),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -126,77 +140,85 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
                 Container(
                   height: 250,
                   width: double.infinity,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        LightModeColors.lightPrimary.withOpacity(0.1),
+                        Colors.transparent,
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                  ),
                   child: CachedNetworkImage(
                     imageUrl: widget.actualite.coverImageUrl!,
                     fit: BoxFit.cover,
                     placeholder: (context, url) => Container(
-                      color: LightModeColors.lightSurfaceVariant.withOpacity(0.1),
+                      color: LightModeColors.lightSurfaceVariant,
                       child: const Center(
                         child: CircularProgressIndicator(
-                          color: LightModeColors.novoPharmaBlue,
+                          color: LightModeColors.lightPrimary,
                           strokeWidth: 2,
                         ),
                       ),
                     ),
                     errorWidget: (context, url, error) => Container(
-                      color: LightModeColors.lightSurfaceVariant.withOpacity(0.1),
+                      color: LightModeColors.lightSurfaceVariant,
                       child: Icon(
                         Icons.image_not_supported_outlined,
                         color: LightModeColors.dashboardTextTertiary,
-                        size: 60,
+                        size: 40,
                       ),
                     ),
                   ),
                 ),
 
               Padding(
-                padding: const EdgeInsets.all(24),
+                padding: const EdgeInsets.all(20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Category Badge
-                    if (widget.actualite.actualiteCategory != null)
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              LightModeColors.novoPharmaBlue.withValues(
-                                alpha: 0.1,
-                              ),
-                              LightModeColors.novoPharmaBlue.withValues(
-                                alpha: 0.05,
-                              ),
-                            ],
-                          ),
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: LightModeColors.novoPharmaBlue.withValues(
-                              alpha: 0.2,
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            LightModeColors.success.withOpacity(
+                              0.1,
                             ),
-                          ),
+                            LightModeColors.success.withOpacity(
+                              0.05,
+                            ),
+                          ],
                         ),
-                        child: Text(
-                          widget.actualite.actualiteCategory!,
-                          style: const TextStyle(
-                            color: LightModeColors.novoPharmaBlue,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: LightModeColors.success.withOpacity(
+                            0.2,
                           ),
                         ),
                       ),
-
-                    const SizedBox(height: 16),
+                      child: Text(
+                        widget.actualite.actualiteCategory ?? 'Actualité',
+                        style: const TextStyle(
+                          color: LightModeColors.success,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
 
                     // Title
                     Text(
                       widget.actualite.title,
                       style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w800,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
                         color: LightModeColors.dashboardTextPrimary,
                         height: 1.3,
                       ),
@@ -208,38 +230,38 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
                     Row(
                       children: [
                         Container(
-                          padding: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
-                            color: LightModeColors.novoPharmaBlue.withValues(
-                              alpha: 0.1,
+                            color: LightModeColors.warning.withOpacity(
+                              0.1,
                             ),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Icon(
                             Icons.person_outline,
-                            size: 16,
-                            color: LightModeColors.novoPharmaBlue,
+                            size: 14,
+                            color: LightModeColors.warning,
                           ),
                         ),
                         const SizedBox(width: 8),
                         Text(
                           widget.actualite.author ?? 'Admin',
                           style: const TextStyle(
-                            fontSize: 14,
-                            color: LightModeColors.novoPharmaBlue,
+                            fontSize: 12,
+                            color: LightModeColors.warning,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        const SizedBox(width: 16),
+                        const Spacer(),
                         Container(
-                          padding: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
                             color: LightModeColors.lightSurfaceVariant.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Icon(
                             Icons.access_time_rounded,
-                            size: 16,
+                            size: 14,
                             color: LightModeColors.dashboardTextSecondary,
                           ),
                         ),
@@ -247,7 +269,7 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
                         Text(
                           _formatDate(widget.actualite.createdAt),
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 12,
                             color: LightModeColors.dashboardTextSecondary,
                             fontWeight: FontWeight.w500,
                           ),
@@ -276,9 +298,9 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
                         child: Text(
                           widget.actualite.excerpt!,
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 14,
                             color: LightModeColors.dashboardTextSecondary,
-                            height: 1.5,
+                            height: 1.4,
                             fontStyle: FontStyle.italic,
                           ),
                         ),
@@ -292,7 +314,7 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
                     Text(
                       widget.actualite.content,
                       style: const TextStyle(
-                        fontSize: 16,
+                        fontSize: 14,
                         color: LightModeColors.dashboardTextPrimary,
                         height: 1.6,
                       ),
@@ -308,7 +330,7 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
                           Text(
                             'Fichiers & Médias',
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 16,
                               fontWeight: FontWeight.w700,
                               color: LightModeColors.dashboardTextPrimary,
                             ),
@@ -331,7 +353,7 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
                           Text(
                             'Tags',
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 14,
                               fontWeight: FontWeight.w600,
                               color: LightModeColors.dashboardTextPrimary,
                             ),
@@ -365,7 +387,7 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
                         ],
                       ),
 
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),
@@ -443,7 +465,7 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
       iconColor = LightModeColors.lightError;
     } else if (isImage) {
       iconData = Icons.image;
-      iconColor = LightModeColors.lightPrimary;
+      iconColor = LightModeColors.warning;
     } else {
       iconData = Icons.insert_drive_file;
       iconColor = LightModeColors.dashboardTextSecondary;

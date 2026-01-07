@@ -23,7 +23,7 @@ class GoalCard extends StatelessWidget {
 
     final Color progressColor = isCompleted
         ? LightModeColors.success
-        : LightModeColors.lightPrimary;
+        : LightModeColors.warning;
 
     return GestureDetector(
       onTap: onTap,
@@ -93,17 +93,7 @@ class GoalCard extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: isCompleted
-                                  ? [
-                                      progressColor.withOpacity(0.2),
-                                      progressColor.withOpacity(0.1),
-                                    ]
-                                  : [
-                                      LightModeColors.lightPrimary.withOpacity(0.1),
-                                      LightModeColors.lightPrimary.withOpacity(0.05),
-                                    ],
-                            ),
+                            color: LightModeColors.lightError.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(14),
                           ),
                           child: Icon(
@@ -112,7 +102,7 @@ class GoalCard extends StatelessWidget {
                                 : Icons.inventory_2_rounded,
                             color: isCompleted
                                 ? progressColor
-                                : LightModeColors.lightPrimary,
+                                : LightModeColors.lightError,
                             size: 24,
                           ),
                         ),
@@ -178,7 +168,7 @@ class GoalCard extends StatelessWidget {
                           text: goal.getTimeRemaining(l10n),
                           color: isCompleted
                               ? progressColor
-                              : LightModeColors.lightPrimary,
+                              : LightModeColors.warning,
                         ),
                       ],
                     ),

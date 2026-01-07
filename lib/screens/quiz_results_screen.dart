@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:novopharma/generated/l10n/app_localizations.dart';
 import 'package:novopharma/models/quiz.dart';
 import 'package:novopharma/theme.dart';
 
@@ -28,7 +29,7 @@ class QuizResultsScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF6F8FB),
       appBar: AppBar(
-        title: const Text('Quiz Results'),
+        title: Text(AppLocalizations.of(context)!.quizResults),
         backgroundColor: Colors.white,
         elevation: 1,
         automaticallyImplyLeading: false,
@@ -40,7 +41,7 @@ class QuizResultsScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Text(
-              'Review Your Answers',
+              AppLocalizations.of(context)!.reviewYourAnswers,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -66,8 +67,8 @@ class QuizResultsScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-          child: const Text(
-            'Done',
+          child: Text(
+            AppLocalizations.of(context)!.done,
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ),
@@ -82,7 +83,7 @@ class QuizResultsScreen extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            scorePercentage > 0.7 ? 'Congratulations!' : 'Good Effort!',
+            scorePercentage > 0.7 ? AppLocalizations.of(context)!.congratulations : AppLocalizations.of(context)!.goodEffort,
             style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -116,7 +117,7 @@ class QuizResultsScreen extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            'You earned $pointsEarned points!',
+            AppLocalizations.of(context)!.youEarnedPoints(pointsEarned),
             style: const TextStyle(fontSize: 18, color: Colors.grey),
           ),
         ],
@@ -178,7 +179,7 @@ class _AnswerReviewCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Question $questionNumber: ${question.text}',
+              AppLocalizations.of(context)!.questionNumber(questionNumber, question.text),
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
