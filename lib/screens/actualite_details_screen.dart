@@ -322,6 +322,10 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
 
                     const SizedBox(height: 24),
 
+                    // Video Section
+                    if (widget.actualite.hasVideo && widget.actualite.youtubeVideoUrl != null && widget.actualite.youtubeVideoUrl!.isNotEmpty)
+                      _buildVideoSection(),
+
                     // Media Section
                     if (widget.actualite.media.isNotEmpty)
                       Column(
@@ -763,5 +767,114 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
     ];
 
     return '${date.day} ${months[date.month - 1]} ${date.year}';
+  }
+
+  Widget _buildVideoSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Vidéo associée',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+            color: LightModeColors.dashboardTextPrimary,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Container(
+          decoration: BoxDecoration(
+            color: LightModeColors.lightSurfaceVariant.withOpacity(0.05),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: LightModeColors.lightOutline,),
+          ),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(12),
+              onTap: () => _showVideo(),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: LightModeColors.lightError.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(Icons.play_circle_filled, color: LightModeColors.lightError, size: 24),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Vidéo explicative',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: LightModeColors.dashboardTextPrimary,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 4),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 2,
+                            ),
+                            decoration: BoxDecoration(
+                              color: LightModeColors.lightError.withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: Text(
+                              'YOUTUBE',
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w600,
+                                color: LightModeColors.lightError,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Icon(
+                      Icons.play_arrow,
+                      color: LightModeColors.lightError,
+                      size: 20,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 24),
+      ],
+    );
+  }
+
+  void _showVideo() async {
+    if (widget.actualite.youtubeVideoUrl != null &&
+        widget.actualite.youtubeVideoUrl!.isNotEmpty) {
+      try {
+        final Uri url = Uri.parse(widget.actualite.youtubeVideoUrl!);
+        final launched = await launchUrl(
+          url,
+          mode: LaunchMode.externalApplication,
+        );
+
+        if (!launched) {
+          await launchUrl(url, mode: LaunchMode.inAppBrowserView);
+        }
+      } catch (e) {
+        _showSnackBar('Erreur lors de l\'ouverture de la vidéo');
+      }
+    }
   }
 }

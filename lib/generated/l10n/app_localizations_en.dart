@@ -142,6 +142,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get points => 'Points';
 
   @override
+  String get usablePoints => 'Usable points';
+
+  @override
   String get rank => 'RANK';
 
   @override
@@ -566,6 +569,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String minimumRedemptionAmount(Object amount) {
+    return 'Minimum redemption amount: $amount pts';
+  }
+
+  @override
   String get submitRequest => 'Submit Request';
 
   @override
@@ -711,6 +719,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get badgeRewardPoints => 'Points Rewarded';
 
   @override
+  String get badgeAwarded => 'Awarded';
+
+  @override
+  String get badgeLocked => 'Locked';
+
+  @override
   String get showLess => 'Show Less';
 
   @override
@@ -741,7 +755,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get congratulations => 'Congratulations!';
 
   @override
-  String get goodEffort => 'Good Effort!';
+  String get goodEffort => 'Thank you for your participation!';
 
   @override
   String get reviewYourAnswers => 'Review Your Answers';
@@ -751,7 +765,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String youEarnedPoints(Object points) {
-    return 'You earned $points points!';
+    return 'Score obtained $points points!';
   }
 
   @override
@@ -770,4 +784,109 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get explanation => 'Explanation';
+
+  @override
+  String get chooseCorrectAnswer => 'Choose the correct answer';
+
+  @override
+  String get chooseCorrectAnswers => 'Choose the correct answers';
+
+  @override
+  String get myInformation => 'My Information';
+
+  @override
+  String get securityCardTitle => 'Security';
+
+  @override
+  String get firstNameHint => 'John';
+
+  @override
+  String get lastNameHint => 'Doe';
+
+  @override
+  String get emailHint => 'john.doe@email.com';
+
+  @override
+  String get phoneHint => 'Enter your phone number';
+
+  @override
+  String get dateOfBirthHint => 'Select your birthdate';
+
+  @override
+  String get passwordHint => 'At least 8 characters';
+
+  @override
+  String get confirmPasswordHint => 'Re-enter your password';
+
+  @override
+  String get firstNameRequiredError => 'This field is required';
+
+  @override
+  String get lastNameRequiredError => 'This field is required';
+
+  @override
+  String get emailRequiredError => 'Email is required';
+
+  @override
+  String get emailValidError => 'Please enter a valid email address';
+
+  @override
+  String get phoneRequiredError => 'Phone number is required';
+
+  @override
+  String get dobRequiredError => 'Date of birth is required';
+
+  @override
+  String get passwordRequiredError => 'Password is required';
+
+  @override
+  String get passwordLengthError => 'Password must be at least 8 characters';
+
+  @override
+  String get confirmPasswordRequiredError => 'Please confirm your password';
+
+  @override
+  String get passwordMatchError => 'Passwords do not match';
+
+  @override
+  String get cityRequiredError => 'Please select a city';
+
+  @override
+  String pharmacyLoadError(String error) {
+    return 'Error loading pharmacies: $error';
+  }
+
+  @override
+  String get noPharmaciesError => 'No pharmacies available.';
+
+  @override
+  String salesRecorded(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count sales recorded',
+      one: '1 sale recorded',
+      zero: 'No sales recorded',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notifications => 'Notifications';
+
+  @override
+  String get markAsRead => 'Mark as read';
+
+  @override
+  String get noNotifications => 'No notifications';
+
+  @override
+  String get notificationsDescription =>
+      'You will be notified of new trainings and available badges';
+
+  @override
+  String get notificationDeleted => 'Notification deleted';
+
+  @override
+  String get formationNotFound => 'Training not found';
 }

@@ -356,6 +356,12 @@ abstract class AppLocalizations {
   /// **'Points'**
   String get points;
 
+  /// No description provided for @usablePoints.
+  ///
+  /// In en, this message translates to:
+  /// **'Usable points'**
+  String get usablePoints;
+
   /// No description provided for @rank.
   ///
   /// In en, this message translates to:
@@ -1136,6 +1142,12 @@ abstract class AppLocalizations {
   /// **'{amount} Pluxee Credits'**
   String pluxeeCreditsAmount(String amount);
 
+  /// No description provided for @minimumRedemptionAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum redemption amount: {amount} pts'**
+  String minimumRedemptionAmount(Object amount);
+
   /// No description provided for @submitRequest.
   ///
   /// In en, this message translates to:
@@ -1394,6 +1406,18 @@ abstract class AppLocalizations {
   /// **'Points Rewarded'**
   String get badgeRewardPoints;
 
+  /// No description provided for @badgeAwarded.
+  ///
+  /// In en, this message translates to:
+  /// **'Awarded'**
+  String get badgeAwarded;
+
+  /// No description provided for @badgeLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Locked'**
+  String get badgeLocked;
+
   /// No description provided for @showLess.
   ///
   /// In en, this message translates to:
@@ -1457,7 +1481,7 @@ abstract class AppLocalizations {
   /// No description provided for @goodEffort.
   ///
   /// In en, this message translates to:
-  /// **'Good Effort!'**
+  /// **'Thank you for your participation!'**
   String get goodEffort;
 
   /// No description provided for @reviewYourAnswers.
@@ -1475,7 +1499,7 @@ abstract class AppLocalizations {
   /// No description provided for @youEarnedPoints.
   ///
   /// In en, this message translates to:
-  /// **'You earned {points} points!'**
+  /// **'Score obtained {points} points!'**
   String youEarnedPoints(Object points);
 
   /// No description provided for @questionNumber.
@@ -1507,6 +1531,192 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Explanation'**
   String get explanation;
+
+  /// No description provided for @chooseCorrectAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose the correct answer'**
+  String get chooseCorrectAnswer;
+
+  /// No description provided for @chooseCorrectAnswers.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose the correct answers'**
+  String get chooseCorrectAnswers;
+
+  /// No description provided for @myInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'My Information'**
+  String get myInformation;
+
+  /// No description provided for @securityCardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Security'**
+  String get securityCardTitle;
+
+  /// No description provided for @firstNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'John'**
+  String get firstNameHint;
+
+  /// No description provided for @lastNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Doe'**
+  String get lastNameHint;
+
+  /// No description provided for @emailHint.
+  ///
+  /// In en, this message translates to:
+  /// **'john.doe@email.com'**
+  String get emailHint;
+
+  /// No description provided for @phoneHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your phone number'**
+  String get phoneHint;
+
+  /// No description provided for @dateOfBirthHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Select your birthdate'**
+  String get dateOfBirthHint;
+
+  /// No description provided for @passwordHint.
+  ///
+  /// In en, this message translates to:
+  /// **'At least 8 characters'**
+  String get passwordHint;
+
+  /// No description provided for @confirmPasswordHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Re-enter your password'**
+  String get confirmPasswordHint;
+
+  /// No description provided for @firstNameRequiredError.
+  ///
+  /// In en, this message translates to:
+  /// **'This field is required'**
+  String get firstNameRequiredError;
+
+  /// No description provided for @lastNameRequiredError.
+  ///
+  /// In en, this message translates to:
+  /// **'This field is required'**
+  String get lastNameRequiredError;
+
+  /// No description provided for @emailRequiredError.
+  ///
+  /// In en, this message translates to:
+  /// **'Email is required'**
+  String get emailRequiredError;
+
+  /// No description provided for @emailValidError.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid email address'**
+  String get emailValidError;
+
+  /// No description provided for @phoneRequiredError.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number is required'**
+  String get phoneRequiredError;
+
+  /// No description provided for @dobRequiredError.
+  ///
+  /// In en, this message translates to:
+  /// **'Date of birth is required'**
+  String get dobRequiredError;
+
+  /// No description provided for @passwordRequiredError.
+  ///
+  /// In en, this message translates to:
+  /// **'Password is required'**
+  String get passwordRequiredError;
+
+  /// No description provided for @passwordLengthError.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 8 characters'**
+  String get passwordLengthError;
+
+  /// No description provided for @confirmPasswordRequiredError.
+  ///
+  /// In en, this message translates to:
+  /// **'Please confirm your password'**
+  String get confirmPasswordRequiredError;
+
+  /// No description provided for @passwordMatchError.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match'**
+  String get passwordMatchError;
+
+  /// No description provided for @cityRequiredError.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a city'**
+  String get cityRequiredError;
+
+  /// No description provided for @pharmacyLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading pharmacies: {error}'**
+  String pharmacyLoadError(String error);
+
+  /// No description provided for @noPharmaciesError.
+  ///
+  /// In en, this message translates to:
+  /// **'No pharmacies available.'**
+  String get noPharmaciesError;
+
+  /// Display the number of sales recorded with proper pluralization
+  ///
+  /// In en, this message translates to:
+  /// **'{count,plural, =0{No sales recorded} =1{1 sale recorded} other{{count} sales recorded}}'**
+  String salesRecorded(int count);
+
+  /// No description provided for @notifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notifications;
+
+  /// No description provided for @markAsRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as read'**
+  String get markAsRead;
+
+  /// No description provided for @noNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'No notifications'**
+  String get noNotifications;
+
+  /// No description provided for @notificationsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You will be notified of new trainings and available badges'**
+  String get notificationsDescription;
+
+  /// No description provided for @notificationDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification deleted'**
+  String get notificationDeleted;
+
+  /// No description provided for @formationNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Training not found'**
+  String get formationNotFound;
 }
 
 class _AppLocalizationsDelegate

@@ -85,7 +85,7 @@ class QuizResultsScreen extends StatelessWidget {
           Text(
             scorePercentage > 0.7 ? AppLocalizations.of(context)!.congratulations : AppLocalizations.of(context)!.goodEffort,
             style: const TextStyle(
-              fontSize: 24,
+              fontSize: 22,
               fontWeight: FontWeight.bold,
               color: LightModeColors.dashboardTextPrimary,
             ),
