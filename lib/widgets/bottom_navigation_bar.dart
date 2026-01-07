@@ -6,6 +6,7 @@ import 'package:novopharma/screens/actualites_screen.dart';
 import 'package:novopharma/screens/sales_history_screen.dart';
 import 'package:novopharma/screens/barcode_scanner_screen.dart';
 import 'package:novopharma/generated/l10n/app_localizations.dart';
+import '../theme.dart';
 
 // Constants for consistent positioning
 const double kNavBarHeight = 64.0;
@@ -42,7 +43,7 @@ class SharedBottomNavigationBar extends StatelessWidget {
     return AnimatedBottomNavigationBar.builder(
       itemCount: iconList.length,
       tabBuilder: (int index, bool isActive) {
-        final color = isActive ? const Color(0xFF1F9BD1) : Colors.grey.shade500;
+        final color = isActive ? LightModeColors.lightPrimary : LightModeColors.dashboardTextSecondary;
         return Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -60,7 +61,7 @@ class SharedBottomNavigationBar extends StatelessWidget {
           ],
         );
       },
-      backgroundColor: Colors.white,
+      backgroundColor: LightModeColors.lightSurface,
       activeIndex: currentIndex >= 2
           ? currentIndex - 1
           : currentIndex, // Adjust index for missing center button
@@ -112,7 +113,7 @@ class SharedBottomNavigationBar extends StatelessWidget {
       },
       hideAnimationController: null,
       shadow: BoxShadow(
-        color: Colors.black.withValues(alpha: 0.1),
+        color: LightModeColors.lightSurfaceVariant.withOpacity(0.1),
         blurRadius: 10,
         offset: const Offset(0, -5),
       ),
@@ -157,10 +158,10 @@ class _BottomNavigationScaffoldWrapperState
       body: widget.child, // Use widget.child instead of child
       floatingActionButton: FloatingActionButton(
         onPressed: () => _openScanner(context),
-        backgroundColor: Colors.cyan,
+        backgroundColor: LightModeColors.lightPrimary,
         elevation: 10,
         shape: const CircleBorder(),
-        child: const Icon(Icons.qr_code_scanner, color: Colors.white, size: 30),
+        child: const Icon(Icons.qr_code_scanner, color: LightModeColors.lightOnPrimary, size: 30),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: SharedBottomNavigationBar(

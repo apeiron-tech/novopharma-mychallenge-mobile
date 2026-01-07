@@ -51,9 +51,9 @@ class _ActualitesScreenState extends State<ActualitesScreen>
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              LightModeColors.novoPharmaBlue,
-              LightModeColors.novoPharmaBlue.withValues(alpha: 0.8),
-              Colors.white,
+              LightModeColors.lightPrimary,
+              LightModeColors.lightSecondary,
+              LightModeColors.lightTertiary,
             ],
             stops: const [0.0, 0.3, 1.0],
           ),
@@ -89,10 +89,10 @@ class _ActualitesScreenState extends State<ActualitesScreen>
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.2),
+                  color: LightModeColors.lightOnPrimary.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.3),
+                    color: LightModeColors.lightOnPrimary.withOpacity(0.3),
                   ),
                 ),
                 child: IconButton(
@@ -105,7 +105,7 @@ class _ActualitesScreenState extends State<ActualitesScreen>
                   },
                   icon: const Icon(
                     Icons.arrow_back_ios_new_rounded,
-                    color: Colors.white,
+                    color: LightModeColors.lightOnPrimary,
                     size: 20,
                   ),
                 ),
@@ -119,7 +119,7 @@ class _ActualitesScreenState extends State<ActualitesScreen>
                       'Actualités',
                       style: Theme.of(context).textTheme.headlineMedium
                           ?.copyWith(
-                            color: Colors.white,
+                            color: LightModeColors.lightOnPrimary,
                             fontWeight: FontWeight.w800,
                             fontSize: 28,
                           ),
@@ -127,7 +127,7 @@ class _ActualitesScreenState extends State<ActualitesScreen>
                     Text(
                       'Restez informé des dernières actualités',
                       style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.9),
+                        color: LightModeColors.lightOnPrimary.withOpacity(0.9),
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                       ),
@@ -140,16 +140,16 @@ class _ActualitesScreenState extends State<ActualitesScreen>
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.1),
+                  color: LightModeColors.lightOnPrimary.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.2),
+                    color: LightModeColors.lightOnPrimary.withOpacity(0.2),
                   ),
                 ),
                 child: const Icon(
                   Icons.article_rounded,
                   size: 20,
-                  color: Colors.white,
+                  color: LightModeColors.lightOnPrimary,
                 ),
               ),
             ],
@@ -157,15 +157,15 @@ class _ActualitesScreenState extends State<ActualitesScreen>
           const SizedBox(height: 20),
           Container(
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.2),
+              color: LightModeColors.lightOnPrimary.withOpacity(0.2),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: Colors.white.withValues(alpha: 0.3),
+                color: LightModeColors.lightOnPrimary.withOpacity(0.3),
                 width: 1,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
+                  color: LightModeColors.lightSurfaceVariant.withOpacity(0.1),
                   blurRadius: 20,
                   offset: const Offset(0, 4),
                 ),
@@ -173,7 +173,7 @@ class _ActualitesScreenState extends State<ActualitesScreen>
             ),
             child: TextField(
               controller: _searchController,
-              style: const TextStyle(color: Colors.white),
+              style: const TextStyle(color: LightModeColors.lightOnPrimary),
               onChanged: (value) {
                 Provider.of<ActualiteProvider>(
                   context,
@@ -183,11 +183,11 @@ class _ActualitesScreenState extends State<ActualitesScreen>
               decoration: InputDecoration(
                 hintText: 'Rechercher une actualité...',
                 hintStyle: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.7),
+                  color: LightModeColors.lightOnPrimary.withOpacity(0.7),
                 ),
                 prefixIcon: Icon(
                   Icons.search_rounded,
-                  color: Colors.white.withValues(alpha: 0.8),
+                  color: LightModeColors.lightOnPrimary.withOpacity(0.8),
                 ),
                 border: InputBorder.none,
                 contentPadding: const EdgeInsets.symmetric(
@@ -206,11 +206,11 @@ class _ActualitesScreenState extends State<ActualitesScreen>
     return Container(
       margin: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: LightModeColors.lightSurface,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
+            color: LightModeColors.lightSurfaceVariant.withOpacity(0.1),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -220,13 +220,13 @@ class _ActualitesScreenState extends State<ActualitesScreen>
         borderRadius: BorderRadius.circular(20),
         child: TabBar(
           controller: _tabController,
-          labelColor: Colors.white,
-          unselectedLabelColor: LightModeColors.novoPharmaBlue,
+          labelColor: LightModeColors.lightOnPrimary,
+          unselectedLabelColor: LightModeColors.lightPrimary,
           indicator: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                LightModeColors.novoPharmaBlue,
-                LightModeColors.novoPharmaBlue.withValues(alpha: 0.8),
+                LightModeColors.lightPrimary,
+                LightModeColors.lightSecondary,
               ],
             ),
             borderRadius: BorderRadius.circular(20),
@@ -293,7 +293,7 @@ class _ActualitesScreenState extends State<ActualitesScreen>
           print('[ActualitesScreen] Showing loading indicator');
           return const Center(
             child: CircularProgressIndicator(
-              color: LightModeColors.novoPharmaBlue,
+              color: LightModeColors.lightPrimary,
             ),
           );
         }
@@ -317,7 +317,7 @@ class _ActualitesScreenState extends State<ActualitesScreen>
 
         return RefreshIndicator(
           onRefresh: provider.refresh,
-          color: LightModeColors.novoPharmaBlue,
+          color: LightModeColors.lightPrimary,
           child: ListView.builder(
             padding: const EdgeInsets.all(16),
             itemCount: actualites.length,
@@ -334,11 +334,11 @@ class _ActualitesScreenState extends State<ActualitesScreen>
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: LightModeColors.lightSurface,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
+            color: LightModeColors.lightSurfaceVariant.withOpacity(0.08),
             blurRadius: 20,
             offset: const Offset(0, 4),
           ),
@@ -374,7 +374,7 @@ class _ActualitesScreenState extends State<ActualitesScreen>
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
-                          LightModeColors.novoPharmaBlue.withValues(alpha: 0.1),
+                          LightModeColors.lightPrimary.withOpacity(0.1),
                           Colors.transparent,
                         ],
                         begin: Alignment.topCenter,
@@ -385,19 +385,19 @@ class _ActualitesScreenState extends State<ActualitesScreen>
                       imageUrl: actualite.coverImageUrl!,
                       fit: BoxFit.cover,
                       placeholder: (context, url) => Container(
-                        color: Colors.grey[100],
+                        color: LightModeColors.lightSurfaceVariant,
                         child: const Center(
                           child: CircularProgressIndicator(
-                            color: LightModeColors.novoPharmaBlue,
+                            color: LightModeColors.lightPrimary,
                             strokeWidth: 2,
                           ),
                         ),
                       ),
                       errorWidget: (context, url, error) => Container(
-                        color: Colors.grey[100],
+                        color: LightModeColors.lightSurfaceVariant,
                         child: Icon(
                           Icons.image_not_supported_outlined,
-                          color: Colors.grey[400],
+                          color: LightModeColors.dashboardTextTertiary,
                           size: 40,
                         ),
                       ),
@@ -420,25 +420,25 @@ class _ActualitesScreenState extends State<ActualitesScreen>
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            LightModeColors.novoPharmaBlue.withValues(
-                              alpha: 0.1,
+                            LightModeColors.lightPrimary.withOpacity(
+                              0.1,
                             ),
-                            LightModeColors.novoPharmaBlue.withValues(
-                              alpha: 0.05,
+                            LightModeColors.lightPrimary.withOpacity(
+                              0.05,
                             ),
                           ],
                         ),
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
-                          color: LightModeColors.novoPharmaBlue.withValues(
-                            alpha: 0.2,
+                          color: LightModeColors.lightPrimary.withOpacity(
+                            0.2,
                           ),
                         ),
                       ),
                       child: Text(
                         actualite.actualiteCategory ?? 'Actualité',
                         style: const TextStyle(
-                          color: LightModeColors.novoPharmaBlue,
+                          color: LightModeColors.lightPrimary,
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
                         ),
@@ -452,7 +452,7 @@ class _ActualitesScreenState extends State<ActualitesScreen>
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
-                        color: Colors.black87,
+                        color: LightModeColors.dashboardTextPrimary,
                         height: 1.3,
                       ),
                       maxLines: 2,
@@ -467,7 +467,7 @@ class _ActualitesScreenState extends State<ActualitesScreen>
                         actualite.excerpt!,
                         style: TextStyle(
                           fontSize: 14,
-                          color: Colors.grey[600],
+                          color: LightModeColors.dashboardTextSecondary,
                           height: 1.4,
                         ),
                         maxLines: 3,
@@ -482,15 +482,15 @@ class _ActualitesScreenState extends State<ActualitesScreen>
                         Container(
                           padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
-                            color: LightModeColors.novoPharmaBlue.withValues(
-                              alpha: 0.1,
+                            color: LightModeColors.lightPrimary.withOpacity(
+                              0.1,
                             ),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Icon(
                             Icons.person_outline,
                             size: 14,
-                            color: LightModeColors.novoPharmaBlue,
+                            color: LightModeColors.lightPrimary,
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -498,7 +498,7 @@ class _ActualitesScreenState extends State<ActualitesScreen>
                           actualite.author ?? 'Admin',
                           style: const TextStyle(
                             fontSize: 12,
-                            color: LightModeColors.novoPharmaBlue,
+                            color: LightModeColors.lightPrimary,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -506,21 +506,21 @@ class _ActualitesScreenState extends State<ActualitesScreen>
                         Container(
                           padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
-                            color: Colors.grey.withValues(alpha: 0.1),
+                            color: LightModeColors.lightSurfaceVariant.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Icon(
                             Icons.access_time_rounded,
                             size: 14,
-                            color: Colors.grey[600],
-                          ),
+                            color: LightModeColors.dashboardTextSecondary,
+                          )
                         ),
                         const SizedBox(width: 8),
                         Text(
                           _formatDate(actualite.createdAt),
                           style: TextStyle(
                             fontSize: 12,
-                            color: Colors.grey[600],
+                            color: LightModeColors.dashboardTextSecondary,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -542,11 +542,11 @@ class _ActualitesScreenState extends State<ActualitesScreen>
         margin: const EdgeInsets.all(32),
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: LightModeColors.lightSurface,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
+              color: LightModeColors.lightSurfaceVariant.withOpacity(0.1),
               blurRadius: 20,
               offset: const Offset(0, 4),
             ),
@@ -558,13 +558,13 @@ class _ActualitesScreenState extends State<ActualitesScreen>
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.red.withValues(alpha: 0.1),
+                color: LightModeColors.lightError.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(50),
               ),
               child: Icon(
                 Icons.error_outline_rounded,
                 size: 48,
-                color: Colors.red[400],
+                color: LightModeColors.lightError,
               ),
             ),
             const SizedBox(height: 16),
@@ -573,7 +573,7 @@ class _ActualitesScreenState extends State<ActualitesScreen>
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
-                color: Colors.grey[800],
+                color: LightModeColors.dashboardTextPrimary,
               ),
             ),
             const SizedBox(height: 8),
@@ -582,7 +582,7 @@ class _ActualitesScreenState extends State<ActualitesScreen>
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.grey[600],
+                color: LightModeColors.dashboardTextSecondary,
                 height: 1.4,
               ),
             ),
@@ -592,8 +592,8 @@ class _ActualitesScreenState extends State<ActualitesScreen>
               icon: const Icon(Icons.refresh_rounded),
               label: const Text('Réessayer'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: LightModeColors.novoPharmaBlue,
-                foregroundColor: Colors.white,
+                backgroundColor: LightModeColors.lightPrimary,
+                foregroundColor: LightModeColors.lightSecondary,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 24,
                   vertical: 12,
@@ -615,11 +615,11 @@ class _ActualitesScreenState extends State<ActualitesScreen>
         margin: const EdgeInsets.all(32),
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: LightModeColors.lightSurface,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
+              color: LightModeColors.lightSurfaceVariant.withOpacity(0.1),
               blurRadius: 20,
               offset: const Offset(0, 4),
             ),
@@ -631,13 +631,13 @@ class _ActualitesScreenState extends State<ActualitesScreen>
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: LightModeColors.novoPharmaBlue.withValues(alpha: 0.1),
+                color: LightModeColors.lightPrimary.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(50),
               ),
               child: Icon(
                 Icons.article_outlined,
                 size: 48,
-                color: LightModeColors.novoPharmaBlue,
+                color: LightModeColors.lightPrimary,
               ),
             ),
             const SizedBox(height: 16),
@@ -646,7 +646,7 @@ class _ActualitesScreenState extends State<ActualitesScreen>
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
-                color: Colors.grey[800],
+                color: LightModeColors.dashboardTextPrimary,
               ),
             ),
             const SizedBox(height: 8),
@@ -655,7 +655,7 @@ class _ActualitesScreenState extends State<ActualitesScreen>
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.grey[600],
+                color: LightModeColors.dashboardTextSecondary,
                 height: 1.4,
               ),
             ),
@@ -670,8 +670,8 @@ class _ActualitesScreenState extends State<ActualitesScreen>
               icon: const Icon(Icons.refresh_rounded),
               label: const Text('Actualiser'),
               style: OutlinedButton.styleFrom(
-                foregroundColor: LightModeColors.novoPharmaBlue,
-                side: const BorderSide(color: LightModeColors.novoPharmaBlue),
+                foregroundColor: LightModeColors.lightPrimary,
+                side: const BorderSide(color: LightModeColors.lightPrimary),
                 padding: const EdgeInsets.symmetric(
                   horizontal: 24,
                   vertical: 12,

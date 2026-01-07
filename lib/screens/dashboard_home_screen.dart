@@ -11,11 +11,11 @@ import 'package:novopharma/screens/badges_screen.dart';
 import 'package:novopharma/screens/goals_screen.dart';
 import 'package:novopharma/screens/leaderboard_screen.dart';
 import 'package:novopharma/screens/notifications_screen.dart';
-import 'package:novopharma/screens/product_screen.dart';
 import 'package:novopharma/widgets/dashboard_header.dart';
 import 'package:novopharma/widgets/bottom_navigation_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:novopharma/generated/l10n/app_localizations.dart';
+import 'package:novopharma/theme.dart';
 
 class DashboardHomeScreen extends StatefulWidget {
   const DashboardHomeScreen({super.key});
@@ -431,12 +431,12 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
             gradient: const LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [Color(0xFF1F9BD1), Color(0xFF1887B8)],
+              colors: [LightModeColors.lightPrimary, LightModeColors.lightSecondary],
             ),
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF1F9BD1).withOpacity(0.3),
+                color: LightModeColors.lightPrimary.withOpacity(0.3),
                 blurRadius: 20,
                 offset: const Offset(0, 10),
               ),
@@ -639,7 +639,7 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: const Color(0xFFE5E7EB)),
+              border: Border.all(color: LightModeColors.lightOutlineVariant),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.05),
@@ -679,7 +679,7 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
                       Text(
                         '$pendingPoints points',
                         style: const TextStyle(
-                          color: Color(0xFF1F2937),
+                          color: LightModeColors.dashboardTextPrimary,
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
@@ -700,11 +700,11 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
       width: double.infinity,
       height: 56,
       decoration: BoxDecoration(
-        color: const Color(0xFFEF4444),
+        color: LightModeColors.lightError,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFFEF4444).withOpacity(0.3),
+            color: LightModeColors.lightError.withOpacity(0.3),
             blurRadius: 12,
             offset: const Offset(0, 6),
           ),
@@ -759,7 +759,7 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
       mainAxisSpacing: 16,
       childAspectRatio: 1.0,
       children: [
-        _buildYearlyRankCard(context, l10n, user, leaderboard),
+        _buildManualSaleCard(context, l10n),
         _buildLeaderboardCard(context, l10n),
         _buildGoalsCard(context, l10n),
         _buildBadgesCard(context, l10n),
@@ -767,27 +767,12 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
     );
   }
 
-  Widget _buildYearlyRankCard(
-    BuildContext context,
-    AppLocalizations l10n,
-    UserModel user,
-    LeaderboardProvider leaderboard,
-  ) {
-    final totalUsers = leaderboard.leaderboardData.length;
-    final currentUserData = leaderboard.leaderboardData.firstWhere(
-      (userData) => userData['userId'] == user.uid,
-      orElse: () => {'rank': null, 'userId': user.uid},
-    );
-
-    // Get rank as string, handle null case
-    final rankValue = currentUserData['rank'];
-    final rankDisplay = rankValue != null ? '#$rankValue' : 'N/A';
-
+  Widget _buildManualSaleCard(BuildContext context, AppLocalizations l10n) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE5E7EB)),
+        border: Border.all(color: LightModeColors.lightOutlineVariant),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
@@ -800,6 +785,9 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(16),
         child: InkWell(
+          onTap: () {
+            Navigator.pushNamed(context, '/manual-sale');
+          },
           borderRadius: BorderRadius.circular(16),
           child: Padding(
             padding: const EdgeInsets.all(20),
@@ -807,53 +795,27 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 28,
-                    vertical: 14,
+                  padding: const EdgeInsets.all(16),
+                  decoration: const BoxDecoration(
+                    color: LightModeColors.lightPrimary,
+                    shape: BoxShape.circle,
                   ),
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [Color(0xFF1F9BD1), Color(0xFF1887B8)],
-                    ),
-                    borderRadius: BorderRadius.circular(26),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFF1F9BD1).withOpacity(0.3),
-                        blurRadius: 12,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(
-                        Icons.star,
-                        color: Color(0xFFF59E0B),
-                        size: 32,
-                      ),
-                      const SizedBox(width: 12),
-                      Text(
-                        rankDisplay,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
+                  child: const Icon(
+                    Icons.shopping_cart,
+                    color: Colors.white,
+                    size: 40,
                   ),
                 ),
-                const SizedBox(height: 16),
-                Text(
-                  'Classement sur $totalUsers inscrits',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF1F2937),
+                const SizedBox(height: 12),
+                Expanded(
+                  child: Text(
+                    l10n.manualSale,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: LightModeColors.dashboardTextPrimary,
+                    ),
                   ),
                 ),
               ],
@@ -869,7 +831,7 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE5E7EB)),
+        border: Border.all(color: LightModeColors.lightOutlineVariant),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
@@ -895,7 +857,7 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: const BoxDecoration(
-                    color: Color(0xFFEF4444),
+                    color: LightModeColors.lightError,
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
@@ -904,14 +866,16 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
                     size: 40,
                   ),
                 ),
-                const SizedBox(height: 16),
-                Text(
-                  l10n.performanceTracking,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF1F2937),
+                const SizedBox(height: 12),
+                Expanded(
+                  child: Text(
+                    l10n.performanceTracking,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: LightModeColors.dashboardTextPrimary,
+                    ),
                   ),
                 ),
               ],
@@ -927,7 +891,7 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE5E7EB)),
+        border: Border.all(color: LightModeColors.lightOutlineVariant),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
@@ -952,8 +916,8 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
               children: [
                 Container(
                   padding: const EdgeInsets.all(16),
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF1E293B),
+                  decoration: BoxDecoration(
+                    color: LightModeColors.lightSecondary,
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
@@ -962,14 +926,16 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
                     size: 40,
                   ),
                 ),
-                const SizedBox(height: 16),
-                Text(
-                  l10n.objectives,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF1F2937),
+                const SizedBox(height: 12),
+                Expanded(
+                  child: Text(
+                    l10n.objectives,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: LightModeColors.dashboardTextPrimary,
+                    ),
                   ),
                 ),
               ],
@@ -985,7 +951,7 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE5E7EB)),
+        border: Border.all(color: LightModeColors.lightOutlineVariant),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
@@ -1011,7 +977,7 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: const BoxDecoration(
-                    color: Color(0xFF3B82F6),
+                    color: LightModeColors.lightPrimary,
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
@@ -1020,14 +986,16 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
                     size: 40,
                   ),
                 ),
-                const SizedBox(height: 16),
-                Text(
-                  l10n.lastBadge,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF1F2937),
+                const SizedBox(height: 12),
+                Expanded(
+                  child: Text(
+                    l10n.lastBadge,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: LightModeColors.dashboardTextPrimary,
+                    ),
                   ),
                 ),
               ],

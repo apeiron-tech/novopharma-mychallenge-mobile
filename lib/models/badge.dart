@@ -83,6 +83,9 @@ class Badge {
   final DateTime createdAt;
   final DateTime updatedAt;
   final int? points; // Points awarded when badge is earned
+  final String? rewardType; // Type of reward: 'points', 'custom', or 'reward'
+  final String? customReward; // Custom reward description when rewardType is 'custom'
+  final String? rewardId; // ID of the reward when rewardType is 'reward'
 
   // Old structure fields (for backward compatibility)
   final String? progressMetric;
@@ -100,6 +103,9 @@ class Badge {
     required this.createdAt,
     required this.updatedAt,
     this.points,
+    this.rewardType,
+    this.customReward,
+    this.rewardId,
     // Old (optional for backward compatibility)
     this.progressMetric,
     this.criteria,
@@ -133,6 +139,9 @@ class Badge {
       createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
       updatedAt: (data['updatedAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
       points: data['points'] as int?,
+      rewardType: data['rewardType'] as String?,
+      customReward: data['customReward'] as String?,
+      rewardId: data['rewardId'] as String?,
       // Old structure fields
       progressMetric: data['progressMetric'],
       criteria: data['criteria'] as Map<String, dynamic>?,

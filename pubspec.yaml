@@ -60,6 +60,8 @@ dependencies:
   permission_handler: ^11.3.0
   photo_view: ^0.14.0
   image_cropper: ^8.0.2
+  flutter_native_splash: ^2.4.3
+  flutter_launcher_icons: ^0.13.1
   
 dev_dependencies:
   flutter_test:
@@ -80,3 +82,20 @@ flutter:
   assets:
     - assets/images/
     - assets/flags/
+    - assets/logo/
+
+flutter_native_splash:
+  color: "#3A39EE"
+  image: assets/logo/splashLogo.png
+  
+  # Android 12+ parameters
+  android_12:
+    color: "#3A39EE"
+    image: assets/logo/splashLogo.png
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/logo/logo.png"
+  remove_alpha_ios: true
+  min_sdk_android: 21

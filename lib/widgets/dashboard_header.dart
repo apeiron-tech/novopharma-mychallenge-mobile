@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:novopharma/controllers/auth_provider.dart';
 import 'package:novopharma/models/user_model.dart';
-import 'package:novopharma/screens/notifications_screen.dart';
 import 'package:novopharma/screens/profile_screen.dart';
 import 'package:novopharma/theme.dart';
-import 'package:provider/provider.dart';
 import 'package:novopharma/generated/l10n/app_localizations.dart';
 
 class DashboardHeader extends StatelessWidget {
@@ -65,7 +62,7 @@ class DashboardHeader extends StatelessWidget {
                     width: 10,
                     height: 10,
                     decoration: const BoxDecoration(
-                      color: Colors.red,
+                      color: LightModeColors.lightError,
                       shape: BoxShape.circle,
                     ),
                   ),

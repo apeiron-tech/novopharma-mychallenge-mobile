@@ -288,7 +288,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get scanBarcodeHere => 'Scan barcode here';
 
   @override
-  String get scannedProduct => 'Scanned Product';
+  String get scannedProduct => 'Product';
 
   @override
   String get productDetailsAppearHere => 'Product details will appear here.';
@@ -718,4 +718,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noBadgesInCategory => 'No badges in this category yet.';
+
+  @override
+  String get pointsLabel => 'Points awarded';
+
+  @override
+  String get rewardLabel => 'Reward';
+
+  @override
+  String get customRewardLabel => 'Custom Reward';
+
+  @override
+  String get manualSale => 'Manual Sale';
+
+  @override
+  String get searchProducts => 'Search products...';
 }

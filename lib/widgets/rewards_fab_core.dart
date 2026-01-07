@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:novopharma/screens/rewards_screen.dart';
+import '../theme.dart';
 
 /// Standalone animated circular Rewards FAB button (56x56) with red background,
 /// white gift icon, soft shadow, and tiny press scale animation
@@ -67,11 +67,11 @@ class _RewardsFABCoreState extends State<RewardsFABCore>
                 width: 65,
                 height: 65,
                 decoration: BoxDecoration(
-                  color: Colors.red.shade600,
+                  color: LightModeColors.lightError,
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.red.shade600.withOpacity(0.3),
+                      color: LightModeColors.lightError.withOpacity(0.3),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),
@@ -79,7 +79,7 @@ class _RewardsFABCoreState extends State<RewardsFABCore>
                 ),
                 child: const Icon(
                   Icons.card_giftcard,
-                  color: Colors.white,
+                  color: LightModeColors.lightOnPrimary,
                   size: 28,
                 ),
               ),

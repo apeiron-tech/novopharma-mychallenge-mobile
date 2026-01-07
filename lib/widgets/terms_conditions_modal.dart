@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:novopharma/theme.dart';
 
 class TermsConditionsModal extends StatelessWidget {
   const TermsConditionsModal({super.key});
@@ -20,7 +21,7 @@ class TermsConditionsModal extends StatelessWidget {
     return Container(
       height: MediaQuery.of(context).size.height * 0.9,
       decoration: const BoxDecoration(
-        color: Colors.white,
+        color: LightModeColors.lightSurface,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: Column(
@@ -31,7 +32,7 @@ class TermsConditionsModal extends StatelessWidget {
             width: 40,
             height: 4,
             decoration: BoxDecoration(
-              color: Colors.grey[300],
+              color: LightModeColors.lightOutline,
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -40,13 +41,13 @@ class TermsConditionsModal extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: LightModeColors.lightSurface,
               borderRadius: const BorderRadius.vertical(
                 top: Radius.circular(24),
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: LightModeColors.lightSurfaceVariant.withOpacity(0.05),
                   blurRadius: 10,
                   offset: const Offset(0, 2),
                 ),
@@ -60,13 +61,13 @@ class TermsConditionsModal extends StatelessWidget {
                     gradient: const LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
-                      colors: [Color(0xFF1F9BD1), Color(0xFF1887B8)],
+                      colors: [LightModeColors.lightPrimary, LightModeColors.lightPrimaryContainer],
                     ),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Icon(
                     Icons.description_rounded,
-                    color: Colors.white,
+                    color: LightModeColors.lightOnPrimary,
                     size: 20,
                   ),
                 ),
@@ -80,14 +81,14 @@ class TermsConditionsModal extends StatelessWidget {
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w700,
-                          color: Color(0xFF102132),
+                          color: LightModeColors.dashboardTextPrimary,
                         ),
                       ),
                       Text(
                         'Application MyChallenge',
                         style: TextStyle(
                           fontSize: 14,
-                          color: Colors.grey[600],
+                          color: LightModeColors.dashboardTextSecondary,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -99,12 +100,12 @@ class TermsConditionsModal extends StatelessWidget {
                   icon: Container(
                     padding: const EdgeInsets.all(6),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF1F5F9),
+                      color: LightModeColors.lightSurfaceVariant,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: const Icon(
                       Icons.close,
-                      color: Color(0xFF102132),
+                      color: LightModeColors.dashboardTextPrimary,
                       size: 18,
                     ),
                   ),
@@ -123,7 +124,11 @@ class TermsConditionsModal extends StatelessWidget {
                 children: [
                   _buildSection(
                     '1. Objet',
-                    'Les présentes Conditions Générales d\'Utilisation (ci-après les « CGU ») ont pour objet de définir les modalités d\'accès et d\'utilisation de l\'application d\'incentive MyChallenge (ci-après l\'« Application »), mise à disposition par Novopharma ou sa filiale Medsource (ci-après « l\'Entreprise »), au profit des préparateurs et préparatrices en pharmacie participant au programme de motivation commerciale.\n\nL\'Application MyChallenge permet aux utilisateurs de suivre leurs performances, cumuler des points, consulter leurs récompenses et accéder à diverses informations commerciales dans le cadre des campagnes d\'incentive organisées par l\'Entreprise.\n\nElle leur offre également la possibilité de bénéficier de formations régulières pour améliorer leurs connaissances et de renforcer leur expertise pour mieux conseiller nos marques.',
+                    '''Les présentes Conditions Générales d'Utilisation (ci-après les « CGU ») ont pour objet de définir les modalités d'accès et d'utilisation de l'application d'incentive MyChallenge (ci-après l'« Application »), mise à disposition par Novopharma ou sa filiale Medsource (ci-après « l'Entreprise »), au profit des préparateurs et préparatrices en pharmacie participant au programme de motivation commerciale.
+
+L'Application MyChallenge permet aux utilisateurs de suivre leurs performances, cumuler des points, consulter leurs récompenses et accéder à diverses informations commerciales dans le cadre des campagnes d'incentive organisées par l'Entreprise.
+
+Elle leur offre également la possibilité de bénéficier de formations régulières pour améliorer leurs connaissances et de renforcer leur expertise pour mieux conseiller nos marques.''',
                   ),
 
                   _buildSection(
@@ -133,7 +138,13 @@ class TermsConditionsModal extends StatelessWidget {
 
                   _buildSection(
                     '3. Accès à l\'Application',
-                    'L\'accès à MyChallenge est réservé aux personnes autorisées par Novopharma ou Medsource, dans le cadre d\'un partenariat ou d\'une activité professionnelle avec une pharmacie participante.\n\nL\'inscription et l\'utilisation de l\'Application par un préparateur ou une préparatrice sont soumises à l\'accord préalable du pharmacien titulaire ou du pharmacien responsable de la pharmacie concernée, formalisé par une signature.\n\nL\'accès peut être retiré à tout moment :\n- en cas de non-respect des présentes CGU ou des règles du programme,\n- ou à la demande du pharmacien titulaire ou responsable de la pharmacie participante.',
+                    '''L'Accès à MyChallenge est réservé aux personnes autorisées par Novopharma ou Medsource, dans le cadre d'un partenariat ou d'une activité professionnelle avec une pharmacie participante.
+
+L'inscription et l'utilisation de l'Application par un préparateur ou une préparatrice sont soumises à l'accord préalable du pharmacien titulaire ou du pharmacien responsable de la pharmacie concernée, formalisé par une signature.
+
+L'accès peut être retiré à tout moment :
+- en cas de non-respect des présentes CGU ou des règles du programme,
+- ou à la demande du pharmacien titulaire ou responsable de la pharmacie participante.''',
                   ),
 
                   _buildSection(
@@ -183,9 +194,9 @@ class TermsConditionsModal extends StatelessWidget {
                     width: double.infinity,
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF8FAFC),
+                      color: LightModeColors.lightBackground,
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: const Color(0xFFE5E7EB)),
+                      border: Border.all(color: LightModeColors.lightOutline),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -195,12 +206,12 @@ class TermsConditionsModal extends StatelessWidget {
                             Container(
                               padding: const EdgeInsets.all(6),
                               decoration: BoxDecoration(
-                                color: const Color(0xFF1F9BD1).withOpacity(0.1),
+                                color: LightModeColors.lightPrimary.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(6),
                               ),
                               child: const Icon(
                                 Icons.update,
-                                color: Color(0xFF1F9BD1),
+                                color: LightModeColors.lightPrimary,
                                 size: 16,
                               ),
                             ),
@@ -210,7 +221,7 @@ class TermsConditionsModal extends StatelessWidget {
                               style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
-                                color: Color(0xFF102132),
+                                color: LightModeColors.dashboardTextPrimary,
                               ),
                             ),
                           ],
@@ -220,7 +231,7 @@ class TermsConditionsModal extends StatelessWidget {
                           'Ces conditions générales d\'utilisation ont été mises à jour le 12 novembre 2025.',
                           style: TextStyle(
                             fontSize: 13,
-                            color: Colors.grey[600],
+                            color: LightModeColors.dashboardTextSecondary,
                             height: 1.4,
                           ),
                         ),
@@ -236,9 +247,9 @@ class TermsConditionsModal extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: LightModeColors.lightSurface,
               border: Border(
-                top: BorderSide(color: Colors.grey[200]!, width: 1),
+                top: BorderSide(color: LightModeColors.lightOutline, width: 1),
               ),
             ),
             child: SafeArea(
@@ -248,8 +259,8 @@ class TermsConditionsModal extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () => Navigator.pop(context),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF1F9BD1),
-                    foregroundColor: Colors.white,
+                    backgroundColor: LightModeColors.lightPrimary,
+                    foregroundColor: LightModeColors.lightOnPrimary,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
@@ -290,7 +301,7 @@ class TermsConditionsModal extends StatelessWidget {
               gradient: const LinearGradient(
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
-                colors: [Color(0xFF1F9BD1), Color(0xFF1887B8)],
+                colors: [LightModeColors.lightPrimary, LightModeColors.lightPrimaryContainer],
               ),
               borderRadius: BorderRadius.circular(8),
             ),
@@ -299,7 +310,7 @@ class TermsConditionsModal extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
-                color: Colors.white,
+                color: LightModeColors.lightOnPrimary,
                 letterSpacing: 0.5,
               ),
             ),
@@ -310,7 +321,7 @@ class TermsConditionsModal extends StatelessWidget {
             style: const TextStyle(
               fontSize: 14,
               height: 1.6,
-              color: Color(0xFF374151),
+              color: LightModeColors.dashboardTextPrimary,
             ),
           ),
         ],

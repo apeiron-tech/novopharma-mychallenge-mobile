@@ -47,9 +47,9 @@ class _FormationsScreenState extends State<FormationsScreen>
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Colors.grey.shade50,
-                    Colors.white,
-                    Colors.grey.shade100,
+                    LightModeColors.lightBackground,
+                    LightModeColors.lightSurface,
+                    LightModeColors.lightSurfaceVariant,
                   ],
                 ),
               ),
@@ -87,7 +87,7 @@ class _FormationsScreenState extends State<FormationsScreen>
           colors: [
             LightModeColors.novoPharmaBlue,
             LightModeColors.novoPharmaBlue.withValues(alpha: 0.8),
-            const Color(0xFF1887B8),
+            LightModeColors.lightSecondary,
           ],
         ),
         boxShadow: [
@@ -109,7 +109,7 @@ class _FormationsScreenState extends State<FormationsScreen>
               height: 120,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white.withValues(alpha: 0.1),
+                color: LightModeColors.lightOnPrimary.withValues(alpha: 0.1),
               ),
             ),
           ),
@@ -121,7 +121,7 @@ class _FormationsScreenState extends State<FormationsScreen>
               height: 80,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white.withValues(alpha: 0.05),
+                color: LightModeColors.lightOnPrimary.withValues(alpha: 0.05),
               ),
             ),
           ),
@@ -134,21 +134,21 @@ class _FormationsScreenState extends State<FormationsScreen>
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.2),
+                      color: LightModeColors.lightOnPrimary.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: Colors.white.withValues(alpha: 0.3),
+                        color: LightModeColors.lightOnPrimary.withOpacity(0.3),
                         width: 1,
                       ),
                     ),
                     child: const Icon(
                       Icons.school_rounded,
-                      color: Colors.white,
+                      color: LightModeColors.lightOnPrimary,
                       size: 24,
                     ),
                   ),
                   const SizedBox(width: 16),
-                  const Expanded(
+                  Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -157,7 +157,7 @@ class _FormationsScreenState extends State<FormationsScreen>
                           style: TextStyle(
                             fontSize: 28,
                             fontWeight: FontWeight.w800,
-                            color: Colors.white,
+                            color: LightModeColors.lightOnPrimary,
                             letterSpacing: -0.5,
                           ),
                         ),
@@ -165,7 +165,7 @@ class _FormationsScreenState extends State<FormationsScreen>
                           'Développez vos compétences',
                           style: TextStyle(
                             fontSize: 14,
-                            color: Colors.white70,
+                            color: LightModeColors.lightOnPrimary.withOpacity(0.7), // 70% opacity of white
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -175,13 +175,13 @@ class _FormationsScreenState extends State<FormationsScreen>
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.2),
+                      color: LightModeColors.lightOnPrimary.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: const Icon(
                       Icons.notifications_none_rounded,
                       size: 20,
-                      color: Colors.white,
+                      color: LightModeColors.lightOnPrimary,
                     ),
                   ),
                 ],
@@ -189,15 +189,15 @@ class _FormationsScreenState extends State<FormationsScreen>
               const SizedBox(height: 20),
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.2),
+                  color: LightModeColors.lightOnPrimary.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.3),
+                    color: LightModeColors.lightOnPrimary.withOpacity(0.3),
                     width: 1,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.1),
+                      color: Colors.black.withOpacity(0.1),
                       blurRadius: 20,
                       offset: const Offset(0, 4),
                     ),
@@ -205,7 +205,7 @@ class _FormationsScreenState extends State<FormationsScreen>
                 ),
                 child: TextField(
                   controller: _searchController,
-                  style: const TextStyle(color: Colors.white),
+                  style: TextStyle(color: LightModeColors.lightOnPrimary),
                   onChanged: (value) {
                     Provider.of<FormationProvider>(
                       context,
@@ -215,11 +215,11 @@ class _FormationsScreenState extends State<FormationsScreen>
                   decoration: InputDecoration(
                     hintText: 'Rechercher une formation...',
                     hintStyle: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.7),
+                      color: LightModeColors.lightOnPrimary.withOpacity(0.7), // 70% opacity of white
                     ),
                     prefixIcon: Icon(
                       Icons.search_rounded,
-                      color: Colors.white.withValues(alpha: 0.8),
+                      color: LightModeColors.lightOnPrimary.withOpacity(0.8), // 80% opacity of white
                     ),
                     border: InputBorder.none,
                     contentPadding: const EdgeInsets.symmetric(
@@ -240,11 +240,11 @@ class _FormationsScreenState extends State<FormationsScreen>
     return Container(
       margin: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: LightModeColors.lightSurface,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
+            color: Colors.black.withOpacity(0.1),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -254,13 +254,13 @@ class _FormationsScreenState extends State<FormationsScreen>
         borderRadius: BorderRadius.circular(20),
         child: TabBar(
           controller: _tabController,
-          labelColor: Colors.white,
+          labelColor: LightModeColors.lightOnPrimary,
           unselectedLabelColor: LightModeColors.novoPharmaBlue,
           indicator: BoxDecoration(
             gradient: LinearGradient(
               colors: [
                 LightModeColors.novoPharmaBlue,
-                LightModeColors.novoPharmaBlue.withValues(alpha: 0.8),
+                LightModeColors.novoPharmaBlue.withOpacity(0.8),
               ],
             ),
             borderRadius: BorderRadius.circular(20),
@@ -331,43 +331,6 @@ class _FormationsScreenState extends State<FormationsScreen>
     );
   }
 
-  Widget _buildResourcesTab(FormationProvider provider) {
-    if (provider.isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    final formationsWithDocs = provider.formations
-        .where(
-          (formation) => formation.hasPdf || formation.otherFiles.isNotEmpty,
-        )
-        .toList();
-
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        _buildResourceSection(
-          'Fiches produits (PDF)',
-          Icons.picture_as_pdf,
-          formationsWithDocs,
-          'pdf',
-        ),
-        const SizedBox(height: 16),
-        _buildResourceSection(
-          'Guides de conformité',
-          Icons.book,
-          formationsWithDocs,
-          'guide',
-        ),
-        const SizedBox(height: 16),
-        _buildResourceSection(
-          'Télécopoder',
-          Icons.download,
-          formationsWithDocs,
-          'download',
-        ),
-      ],
-    );
-  }
 
   Widget _buildFormationCard(BlogPost formation) {
     return Container(
@@ -377,25 +340,25 @@ class _FormationsScreenState extends State<FormationsScreen>
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Colors.white,
-            Colors.white.withValues(alpha: 0.95),
-            Colors.grey.shade50,
+            LightModeColors.lightSurface,
+            LightModeColors.lightSurface.withOpacity(0.95),
+            LightModeColors.lightSurfaceVariant,
           ],
         ),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: Colors.white.withValues(alpha: 0.6),
+          color: LightModeColors.lightOnPrimary.withOpacity(0.6),
           width: 1.5,
         ),
         boxShadow: [
           BoxShadow(
-            color: LightModeColors.novoPharmaBlue.withValues(alpha: 0.1),
+            color: LightModeColors.novoPharmaBlue.withOpacity(0.1),
             blurRadius: 30,
             offset: const Offset(0, 12),
             spreadRadius: -5,
           ),
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: Colors.black.withOpacity(0.05),
             blurRadius: 20,
             offset: const Offset(0, 4),
           ),
@@ -421,7 +384,7 @@ class _FormationsScreenState extends State<FormationsScreen>
                       height: 200,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
-                          colors: [Colors.grey.shade200, Colors.grey.shade100],
+                          colors: [LightModeColors.lightSurfaceVariant, LightModeColors.lightSurface],
                         ),
                       ),
                       child: const Center(
@@ -456,7 +419,7 @@ class _FormationsScreenState extends State<FormationsScreen>
                           end: Alignment.bottomCenter,
                           colors: [
                             Colors.transparent,
-                            Colors.black.withValues(alpha: 0.3),
+                            Colors.black.withOpacity(0.3),
                           ],
                         ),
                       ),
@@ -469,11 +432,11 @@ class _FormationsScreenState extends State<FormationsScreen>
                     child: Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.9),
+                        color: LightModeColors.lightOnPrimary.withOpacity(0.9),
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.1),
+                            color: Colors.black.withOpacity(0.1),
                             blurRadius: 10,
                             offset: const Offset(0, 4),
                           ),
@@ -502,14 +465,10 @@ class _FormationsScreenState extends State<FormationsScreen>
                     vertical: 6,
                   ),
                   decoration: BoxDecoration(
-                    color: LightModeColors.novoPharmaBlue.withValues(
-                      alpha: 0.1,
-                    ),
+                    color: LightModeColors.novoPharmaBlue.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
-                      color: LightModeColors.novoPharmaBlue.withValues(
-                        alpha: 0.2,
-                      ),
+                      color: LightModeColors.novoPharmaBlue.withOpacity(0.2),
                       width: 1,
                     ),
                   ),
@@ -540,9 +499,9 @@ class _FormationsScreenState extends State<FormationsScreen>
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.grey.shade50,
+                    color: LightModeColors.lightSurfaceVariant,
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Colors.grey.shade200, width: 1),
+                    border: Border.all(color: LightModeColors.lightSurfaceVariant, width: 1),
                   ),
                   child: Column(
                     children: [
@@ -551,9 +510,7 @@ class _FormationsScreenState extends State<FormationsScreen>
                           Container(
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                              color: LightModeColors.novoPharmaBlue.withValues(
-                                alpha: 0.1,
-                              ),
+                              color: LightModeColors.novoPharmaBlue.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Icon(
@@ -593,10 +550,10 @@ class _FormationsScreenState extends State<FormationsScreen>
                                 vertical: 4,
                               ),
                               decoration: BoxDecoration(
-                                color: Colors.green.withValues(alpha: 0.1),
+                                color: LightModeColors.success.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(8),
                                 border: Border.all(
-                                  color: Colors.green.withValues(alpha: 0.2),
+                                  color: LightModeColors.success.withOpacity(0.2),
                                   width: 1,
                                 ),
                               ),
@@ -605,7 +562,7 @@ class _FormationsScreenState extends State<FormationsScreen>
                                 style: const TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.w600,
-                                  color: Colors.green,
+                                  color: LightModeColors.success,
                                 ),
                               ),
                             ),
@@ -619,14 +576,14 @@ class _FormationsScreenState extends State<FormationsScreen>
                             Icon(
                               Icons.schedule_rounded,
                               size: 14,
-                              color: Colors.grey.shade500,
+                              color: LightModeColors.dashboardTextSecondary,
                             ),
                             const SizedBox(width: 8),
                             Text(
                               'Fin: ${formation.formattedEndDate}',
                               style: TextStyle(
                                 fontSize: 12,
-                                color: Colors.grey.shade600,
+                                color: LightModeColors.dashboardTextSecondary,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -653,22 +610,20 @@ class _FormationsScreenState extends State<FormationsScreen>
                       end: Alignment.bottomRight,
                       colors: [
                         LightModeColors.novoPharmaBlue,
-                        LightModeColors.novoPharmaBlue.withValues(alpha: 0.8),
-                        const Color(0xFF1887B8),
+                        LightModeColors.lightSecondary,
+                        LightModeColors.lightTertiary,
                       ],
                     ),
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
-                        color: LightModeColors.novoPharmaBlue.withValues(
-                          alpha: 0.4,
-                        ),
+                        color: LightModeColors.novoPharmaBlue.withOpacity(0.4),
                         blurRadius: 20,
                         offset: const Offset(0, 8),
                         spreadRadius: -4,
                       ),
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.1),
+                        color: Colors.black.withOpacity(0.1),
                         blurRadius: 10,
                         offset: const Offset(0, 4),
                       ),
@@ -687,7 +642,7 @@ class _FormationsScreenState extends State<FormationsScreen>
                             Container(
                               padding: const EdgeInsets.all(4),
                               decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.2),
+                                color: LightModeColors.lightOnPrimary.withOpacity(0.2),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: const Icon(
@@ -808,8 +763,8 @@ class _FormationsScreenState extends State<FormationsScreen>
       icon: Icon(icon, size: 16),
       label: Text(label, style: const TextStyle(fontSize: 12)),
       style: OutlinedButton.styleFrom(
-        foregroundColor: Colors.grey.shade700,
-        side: BorderSide(color: Colors.grey.shade300),
+        foregroundColor: LightModeColors.dashboardTextSecondary,
+        side: BorderSide(color: LightModeColors.lightSurfaceVariant),
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
@@ -834,7 +789,7 @@ class _FormationsScreenState extends State<FormationsScreen>
           ),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: Colors.white.withValues(alpha: 0.6),
+            color: LightModeColors.lightSurface.withOpacity(0.6),
             width: 1.5,
           ),
           boxShadow: [
@@ -845,7 +800,7 @@ class _FormationsScreenState extends State<FormationsScreen>
               spreadRadius: -3,
             ),
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
+              color: Colors.black.withOpacity(0.05),
               blurRadius: 15,
               offset: const Offset(0, 4),
             ),
@@ -860,11 +815,11 @@ class _FormationsScreenState extends State<FormationsScreen>
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
                 gradient: LinearGradient(
-                  colors: [Colors.grey.shade100, Colors.grey.shade200],
+                  colors: [LightModeColors.lightSurfaceVariant, LightModeColors.lightSurface],
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1),
+                    color: Colors.black.withOpacity(0.1),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -908,7 +863,7 @@ class _FormationsScreenState extends State<FormationsScreen>
                               ),
                               child: Icon(
                                 Icons.image_not_supported,
-                                color: Colors.grey.shade400,
+                                color: LightModeColors.dashboardTextSecondary,
                               ),
                             ),
                           )
@@ -918,12 +873,8 @@ class _FormationsScreenState extends State<FormationsScreen>
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
                                 colors: [
-                                  LightModeColors.novoPharmaBlue.withValues(
-                                    alpha: 0.1,
-                                  ),
-                                  LightModeColors.novoPharmaBlue.withValues(
-                                    alpha: 0.05,
-                                  ),
+                                  LightModeColors.novoPharmaBlue.withOpacity(0.1),
+                                  LightModeColors.novoPharmaBlue.withOpacity(0.05),
                                 ],
                               ),
                             ),
@@ -942,7 +893,7 @@ class _FormationsScreenState extends State<FormationsScreen>
                         gradient: LinearGradient(
                           colors: [
                             Colors.transparent,
-                            Colors.black.withValues(alpha: 0.4),
+                            Colors.black.withOpacity(0.4),
                           ],
                         ),
                       ),
@@ -950,11 +901,11 @@ class _FormationsScreenState extends State<FormationsScreen>
                         child: Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.9),
+                            color: LightModeColors.lightOnPrimary.withOpacity(0.9),
                             borderRadius: BorderRadius.circular(20),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.2),
+                                color: Colors.black.withOpacity(0.2),
                                 blurRadius: 8,
                                 offset: const Offset(0, 2),
                               ),
@@ -983,14 +934,10 @@ class _FormationsScreenState extends State<FormationsScreen>
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: LightModeColors.novoPharmaBlue.withValues(
-                        alpha: 0.1,
-                      ),
+                      color: LightModeColors.novoPharmaBlue.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                        color: LightModeColors.novoPharmaBlue.withValues(
-                          alpha: 0.2,
-                        ),
+                        color: LightModeColors.novoPharmaBlue.withOpacity(0.2),
                         width: 1,
                       ),
                     ),
@@ -1029,7 +976,7 @@ class _FormationsScreenState extends State<FormationsScreen>
                   const SizedBox(height: 4),
                   Text(
                     'Par ${formation.author ?? 'N/A'}',
-                    style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
+                    style: TextStyle(color: LightModeColors.dashboardTextSecondary, fontSize: 14),
                   ),
                 ],
               ),
@@ -1040,74 +987,26 @@ class _FormationsScreenState extends State<FormationsScreen>
     );
   }
 
-  Widget _buildResourceSection(
-    String title,
-    IconData icon,
-    List<BlogPost> formations,
-    String type,
-  ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Icon(icon, color: LightModeColors.novoPharmaBlue),
-            const SizedBox(width: 8),
-            Text(
-              title,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        ...formations.take(3).map((formation) {
-          return Container(
-            margin: const EdgeInsets.only(bottom: 8),
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.grey.shade200),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    formation.title,
-                    style: const TextStyle(fontWeight: FontWeight.w500),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () => _downloadResource(formation, type),
-                  child: const Text('Télécharger'),
-                ),
-              ],
-            ),
-          );
-        }).toList(),
-      ],
-    );
-  }
 
   Widget _buildErrorState(FormationProvider provider) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.error_outline, size: 64, color: Colors.grey.shade400),
+          Icon(Icons.error_outline, size: 64, color: LightModeColors.dashboardTextSecondary),
           const SizedBox(height: 16),
           Text(
             'Erreur de chargement',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              color: Colors.grey.shade600,
+              color: LightModeColors.dashboardTextSecondary,
             ),
           ),
           const SizedBox(height: 8),
           Text(
             provider.error ?? 'Une erreur s\'est produite',
-            style: TextStyle(color: Colors.grey.shade500),
+            style: TextStyle(color: LightModeColors.dashboardTextSecondary),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
@@ -1125,20 +1024,20 @@ class _FormationsScreenState extends State<FormationsScreen>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.school_outlined, size: 64, color: Colors.grey.shade400),
+          Icon(Icons.school_outlined, size: 64, color: LightModeColors.dashboardTextSecondary),
           const SizedBox(height: 16),
           Text(
             'Aucune formation disponible',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              color: Colors.grey.shade600,
+              color: LightModeColors.dashboardTextSecondary,
             ),
           ),
           const SizedBox(height: 8),
           Text(
             'Les formations apparaîtront ici dès qu\'elles seront publiées',
-            style: TextStyle(color: Colors.grey.shade500),
+            style: TextStyle(color: LightModeColors.dashboardTextSecondary),
             textAlign: TextAlign.center,
           ),
         ],
@@ -1154,7 +1053,7 @@ class _FormationsScreenState extends State<FormationsScreen>
           Icon(
             Icons.video_library_outlined,
             size: 64,
-            color: Colors.grey.shade400,
+            color: LightModeColors.dashboardTextSecondary,
           ),
           const SizedBox(height: 16),
           Text(
@@ -1162,7 +1061,7 @@ class _FormationsScreenState extends State<FormationsScreen>
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              color: Colors.grey.shade600,
+              color: LightModeColors.dashboardTextSecondary,
             ),
           ),
         ],
@@ -1210,138 +1109,7 @@ class _FormationsScreenState extends State<FormationsScreen>
     }
   }
 
-  void _showVideoDialog_old(BlogPost formation) {
-    if (!formation.hasVideo) {
-      _showSnackBar('Aucune vidéo disponible pour cette formation');
-      return;
-    }
 
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Dialog(
-          backgroundColor: Colors.black,
-          insetPadding: const EdgeInsets.all(16),
-          child: Container(
-            width: double.infinity,
-            height: MediaQuery.of(context).size.height * 0.8,
-            child: Column(
-              children: [
-                // Header with close button
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        formation.title,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        icon: const Icon(Icons.close, color: Colors.white),
-                      ),
-                    ],
-                  ),
-                ),
-                // Video player area
-                Expanded(
-                  child: Container(
-                    width: double.infinity,
-                    color: Colors.grey.shade900,
-                    child: formation.videoUrl != null
-                        ? _buildVideoPlayer(formation.videoUrl!)
-                        : const Center(
-                            child: Text(
-                              'Chargement de la vidéo...',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                  ),
-                ),
-                // Action buttons
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      if (formation.hasQuiz)
-                        ElevatedButton.icon(
-                          onPressed: null, // Disabled
-                          icon: const Icon(Icons.quiz),
-                          label: const Text('Quiz de validation'),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: LightModeColors.novoPharmaBlue,
-                            foregroundColor: Colors.white,
-                          ),
-                        ),
-                      ElevatedButton.icon(
-                        onPressed: () => Navigator.of(context).pop(),
-                        icon: const Icon(Icons.done),
-                        label: const Text('Terminer'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
-                          foregroundColor: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildVideoPlayer(String videoUrl) {
-    // Simple placeholder for video player
-    // In a real implementation, you would use video_player package
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      color: Colors.grey.shade800,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.play_circle_filled,
-            size: 80,
-            color: Colors.white.withValues(alpha: 0.8),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'Lecteur vidéo',
-            style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.8),
-              fontSize: 16,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'URL: ${videoUrl.length > 50 ? '${videoUrl.substring(0, 50)}...' : videoUrl}',
-            style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.6),
-              fontSize: 12,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 24),
-          const Text(
-            '📝 Note: Intégrer video_player package pour lecture vidéo',
-            style: TextStyle(color: Colors.orange, fontSize: 12),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-    );
-  }
 
   void _downloadPDF(BlogPost formation) {
     if (!formation.hasPdf) {
@@ -1368,61 +1136,6 @@ class _FormationsScreenState extends State<FormationsScreen>
       // TODO: Implement clinical study viewing
       _showSnackBar('Ouverture de l\'étude clinique: ${formation.title}');
     }
-  }
-
-  void _startQuiz(BlogPost formation) {
-    if (!formation.hasQuiz) {
-      _showSnackBar('Aucun quiz disponible pour cette formation');
-      return;
-    }
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Quiz de validation'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Formation: ${formation.title}'),
-              const SizedBox(height: 8),
-              Text('Quiz ID: ${formation.linkedQuizId}'),
-              const SizedBox(height: 16),
-              const Text(
-                'Êtes-vous prêt(e) à commencer le quiz de validation ?',
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Annuler'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                _navigateToQuiz(formation);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: LightModeColors.novoPharmaBlue,
-                foregroundColor: Colors.white,
-              ),
-              child: const Text('Commencer'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _navigateToQuiz(BlogPost formation) {
-    // TODO: Navigate to quiz screen with linkedQuizId
-    _showSnackBar('Navigation vers le quiz: ${formation.linkedQuizId}');
-  }
-
-  void _downloadResource(BlogPost formation, String type) {
-    // TODO: Download specific resource type
   }
 
   void _showSnackBar(String message) {

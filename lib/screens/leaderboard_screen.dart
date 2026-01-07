@@ -157,15 +157,15 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
               padding: const EdgeInsets.symmetric(vertical: 12),
               decoration: BoxDecoration(
                 color: isActive
-                    ? const Color(0xFF1F9BD1)
-                    : const Color(0xFFF3F4F6),
+                    ? LightModeColors.lightPrimary
+                    : LightModeColors.novoPharmaLightGray,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Center(
                 child: Text(
                   tabs[index],
                   style: TextStyle(
-                    color: isActive ? Colors.white : const Color(0xFF6B7280),
+                    color: isActive ? Colors.white : LightModeColors.dashboardTextSecondary,
                     fontSize: 14,
                     fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
                   ),
@@ -192,15 +192,15 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Color(0xFF1F9BD1), Color(0xFF1887B8)],
+          colors: [LightModeColors.lightPrimary, LightModeColors.lightSecondary],
         ),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF1F9BD1).withOpacity(0.3),
+            color: LightModeColors.lightPrimary.withOpacity(0.3),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -384,7 +384,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: LightModeColors.dashboardNavy,
+        color: LightModeColors.lightSurfaceVariant,
         borderRadius: BorderRadius.circular(28),
       ),
       child: Column(
@@ -516,7 +516,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.grey.shade50,
+        color: LightModeColors.lightSurface,
         borderRadius: BorderRadius.circular(28),
       ),
       child: Column(
@@ -550,7 +550,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
             physics: const NeverScrollableScrollPhysics(),
             itemCount: leaderboardData.length,
             separatorBuilder: (context, index) => Divider(
-              color: Colors.grey.shade200,
+              color: LightModeColors.lightOutline,
               height: 1,
               indent: 20,
               endIndent: 20,
@@ -561,7 +561,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
 
               return Container(
                 color: isCurrentUser
-                    ? LightModeColors.dashboardLightCyan.withOpacity(0.1)
+                    ? LightModeColors.lightPrimary.withOpacity(0.1)
                     : Colors.transparent,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
@@ -574,8 +574,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                       height: 24,
                       decoration: BoxDecoration(
                         color: isCurrentUser
-                            ? LightModeColors.dashboardLightCyan
-                            : Colors.grey.shade300,
+                            ? LightModeColors.lightPrimary
+                            : LightModeColors.lightOutlineVariant,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Center(
@@ -584,7 +584,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                           style: TextStyle(
                             color: isCurrentUser
                                 ? Colors.white
-                                : Colors.grey.shade600,
+                                : LightModeColors.dashboardTextSecondary,
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
                           ),
@@ -641,8 +641,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                       '${user['points']} pts',
                       style: TextStyle(
                         color: isCurrentUser
-                            ? LightModeColors.dashboardLightCyan
-                            : Colors.grey.shade600,
+                            ? LightModeColors.lightPrimary
+                            : LightModeColors.dashboardTextSecondary,
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                       ),

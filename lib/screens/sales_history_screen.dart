@@ -6,6 +6,8 @@ import 'package:novopharma/screens/product_screen.dart';
 import 'package:novopharma/widgets/bottom_navigation_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:novopharma/generated/l10n/app_localizations.dart';
+import 'package:novopharma/theme.dart';
+import 'package:novopharma/services/product_service.dart';
 
 class SalesHistoryScreen extends StatefulWidget {
   const SalesHistoryScreen({super.key});
@@ -91,6 +93,26 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
     );
   }
 
+  final Map<String, String?> _productImageCache = {};
+
+  Future<String?> _getProductImage(String productId) async {
+    if (_productImageCache.containsKey(productId)) {
+      return _productImageCache[productId];
+    }
+
+    try {
+      final productService = ProductService();
+      final product = await productService.getProductById(productId);
+      final imageUrl = product?.imageUrl ?? '';
+      _productImageCache[productId] = imageUrl.isNotEmpty ? imageUrl : null;
+      return _productImageCache[productId];
+    } catch (e) {
+      print('Error fetching product image for ID $productId: $e');
+      _productImageCache[productId] = null;
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -99,7 +121,7 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
       currentIndex: 4, // History tab index
       onTap: (index) {},
       child: Scaffold(
-        backgroundColor: const Color(0xFFF8FAFC),
+        backgroundColor: LightModeColors.lightBackground,
         body: SafeArea(
           child: Column(
             children: [
@@ -107,10 +129,10 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: LightModeColors.lightSurface,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: LightModeColors.lightSurfaceVariant.withOpacity(0.05),
                       blurRadius: 10,
                       offset: const Offset(0, 2),
                     ),
@@ -124,12 +146,12 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                         gradient: const LinearGradient(
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
-                          colors: [Color(0xFF1F9BD1), Color(0xFF1887B8)],
+                          colors: [LightModeColors.lightPrimary, LightModeColors.lightTertiary],
                         ),
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFF1F9BD1).withOpacity(0.3),
+                            color: LightModeColors.lightPrimary.withOpacity(0.3),
                             blurRadius: 12,
                             offset: const Offset(0, 4),
                           ),
@@ -137,7 +159,7 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                       ),
                       child: const Icon(
                         Icons.receipt_long_rounded,
-                        color: Colors.white,
+                        color: LightModeColors.lightOnPrimary,
                         size: 26,
                       ),
                     ),
@@ -149,7 +171,7 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                           Text(
                             l10n.salesHistory,
                             style: const TextStyle(
-                              color: Color(0xFF102132),
+                              color: LightModeColors.dashboardTextPrimary,
                               fontSize: 22,
                               fontWeight: FontWeight.w800,
                               letterSpacing: -0.3,
@@ -162,7 +184,7 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                                 '${provider.salesHistory.length} records',
                                 style: const TextStyle(
                                   fontSize: 14,
-                                  color: Color(0xFF64748B),
+                                  color: LightModeColors.dashboardTextSecondary,
                                   fontWeight: FontWeight.w500,
                                 ),
                               );
@@ -185,7 +207,7 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                       return Center(
                         child: Text(
                           provider.error!,
-                          style: const TextStyle(color: Colors.red),
+                          style: const TextStyle(color: LightModeColors.lightError),
                         ),
                       );
                     }
@@ -195,7 +217,7 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                           l10n.noSalesRecorded,
                           style: const TextStyle(
                             fontSize: 16,
-                            color: Colors.grey,
+                            color: LightModeColors.dashboardTextTertiary,
                           ),
                         ),
                       );
@@ -208,11 +230,11 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                         return Container(
                           margin: const EdgeInsets.only(bottom: 12),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: LightModeColors.lightSurface,
                             borderRadius: BorderRadius.circular(20),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.06),
+                                color: LightModeColors.lightSurfaceVariant.withOpacity(0.06),
                                 blurRadius: 15,
                                 offset: const Offset(0, 4),
                               ),
@@ -223,31 +245,59 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                               horizontal: 20,
                               vertical: 12,
                             ),
-                            leading: Container(
-                              padding: const EdgeInsets.all(12),
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                  colors: [
-                                    const Color(0xFF10B981).withOpacity(0.1),
-                                    const Color(0xFF10B981).withOpacity(0.05),
-                                  ],
-                                ),
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                              child: const Icon(
-                                Icons.shopping_bag_rounded,
-                                color: Color(0xFF10B981),
-                                size: 24,
-                              ),
+                            leading: FutureBuilder<String?>(
+                              future: _getProductImage(sale.productId),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData && snapshot.data != null && snapshot.data!.isNotEmpty) {
+                                  return Container(
+                                    width: 60,
+                                    height: 60,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(color: LightModeColors.lightOutline, width: 1),
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: Image.network(
+                                        snapshot.data!,
+                                        fit: BoxFit.cover,
+                                        errorBuilder: (context, error, stackTrace) {
+                                          return Container(
+                                            color: LightModeColors.lightBackground,
+                                            child: Icon(
+                                              Icons.image_not_supported_outlined,
+                                              color: LightModeColors.dashboardTextSecondary,
+                                              size: 30,
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  return Container(
+                                    width: 60,
+                                    height: 60,
+                                    decoration: BoxDecoration(
+                                      color: LightModeColors.lightBackground,
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(color: LightModeColors.lightOutline, width: 1),
+                                    ),
+                                    child: Icon(
+                                      Icons.shopping_bag_rounded,
+                                      color: LightModeColors.success,
+                                      size: 30,
+                                    ),
+                                  );
+                                }
+                              },
                             ),
                             title: Text(
                               sale.productNameSnapshot,
                               style: const TextStyle(
                                 fontWeight: FontWeight.w700,
                                 fontSize: 15,
-                                color: Color(0xFF102132),
+                                color: LightModeColors.dashboardTextPrimary,
                               ),
                             ),
                             subtitle: Padding(
@@ -261,9 +311,7 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                                       vertical: 4,
                                     ),
                                     decoration: BoxDecoration(
-                                      color: const Color(
-                                        0xFF1F9BD1,
-                                      ).withOpacity(0.1),
+                                      color: LightModeColors.lightPrimary.withOpacity(0.1),
                                       borderRadius: BorderRadius.circular(6),
                                     ),
                                     child: Text(
@@ -271,7 +319,7 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                                       style: const TextStyle(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w600,
-                                        color: Color(0xFF1F9BD1),
+                                        color: LightModeColors.lightPrimary,
                                       ),
                                     ),
                                   ),
@@ -280,7 +328,7 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                                     DateFormat.yMMMd().format(sale.saleDate),
                                     style: const TextStyle(
                                       fontSize: 13,
-                                      color: Color(0xFF64748B),
+                                      color: LightModeColors.dashboardTextSecondary,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
@@ -292,15 +340,13 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                               children: [
                                 Container(
                                   decoration: BoxDecoration(
-                                    color: const Color(
-                                      0xFF3B82F6,
-                                    ).withOpacity(0.1),
+                                    color: LightModeColors.lightSecondary.withOpacity(0.1),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: IconButton(
                                     icon: const Icon(
                                       Icons.edit_rounded,
-                                      color: Color(0xFF3B82F6),
+                                      color: LightModeColors.lightSecondary,
                                       size: 20,
                                     ),
                                     onPressed: () {
@@ -316,15 +362,13 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                                 const SizedBox(width: 4),
                                 Container(
                                   decoration: BoxDecoration(
-                                    color: const Color(
-                                      0xFFEF4444,
-                                    ).withOpacity(0.1),
+                                    color: LightModeColors.lightError.withOpacity(0.1),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: IconButton(
                                     icon: const Icon(
                                       Icons.delete_rounded,
-                                      color: Color(0xFFEF4444),
+                                      color: LightModeColors.lightError,
                                       size: 20,
                                     ),
                                     onPressed: () =>
@@ -359,11 +403,11 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
           margin: const EdgeInsets.all(16),
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: LightModeColors.lightSurface,
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.06),
+                color: LightModeColors.lightSurfaceVariant.withOpacity(0.06),
                 blurRadius: 15,
                 offset: const Offset(0, 4),
               ),
@@ -377,12 +421,12 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF1F9BD1).withOpacity(0.1),
+                      color: LightModeColors.lightPrimary.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: const Icon(
                       Icons.filter_list_rounded,
-                      color: Color(0xFF1F9BD1),
+                      color: LightModeColors.lightPrimary,
                       size: 20,
                     ),
                   ),
@@ -392,7 +436,7 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
-                      color: Color(0xFF102132),
+                      color: LightModeColors.dashboardTextPrimary,
                     ),
                   ),
                 ],
@@ -427,7 +471,7 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                     icon: const Icon(Icons.clear, size: 18),
                     label: Text(l10n.clear),
                     style: TextButton.styleFrom(
-                      foregroundColor: const Color(0xFFEF4444),
+                      foregroundColor: LightModeColors.lightError,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 16,
                         vertical: 10,
@@ -446,8 +490,8 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                     icon: const Icon(Icons.search_rounded, size: 20),
                     label: Text(l10n.filter),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF1F9BD1),
-                      foregroundColor: Colors.white,
+                      backgroundColor: LightModeColors.lightPrimary,
+                      foregroundColor: LightModeColors.lightOnPrimary,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 20,
                         vertical: 12,
@@ -481,7 +525,7 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
   }) {
     final l10n = AppLocalizations.of(context)!;
     return Material(
-      color: const Color(0xFFF8FAFC),
+      color: LightModeColors.lightBackground,
       borderRadius: BorderRadius.circular(14),
       child: InkWell(
         onTap: onPressed,
@@ -490,7 +534,7 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: const Color(0xFFE2E8F0), width: 1.5),
+            border: Border.all(color: LightModeColors.lightOutline, width: 1.5),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -498,7 +542,7 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
               Text(
                 label,
                 style: const TextStyle(
-                  color: Color(0xFF64748B),
+                  color: LightModeColors.dashboardTextSecondary,
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                 ),
@@ -508,7 +552,7 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                 children: [
                   const Icon(
                     Icons.calendar_today_rounded,
-                    color: Color(0xFF1F9BD1),
+                    color: LightModeColors.lightPrimary,
                     size: 16,
                   ),
                   const SizedBox(width: 8),
@@ -519,8 +563,8 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                           : l10n.select,
                       style: TextStyle(
                         color: date != null
-                            ? const Color(0xFF102132)
-                            : const Color(0xFF94A3B8),
+                            ? LightModeColors.dashboardTextPrimary
+                            : LightModeColors.dashboardTextTertiary,
                         fontWeight: FontWeight.w600,
                         fontSize: 14,
                       ),

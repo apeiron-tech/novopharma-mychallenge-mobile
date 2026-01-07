@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:novopharma/controllers/badge_provider.dart';
+import '../theme.dart';
 
 class BadgeCard extends StatelessWidget {
   final BadgeDisplayInfo badgeInfo;
@@ -12,15 +13,15 @@ class BadgeCard extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: isAwarded ? Colors.white : const Color(0xFFF9FAFB),
+        color: isAwarded ? LightModeColors.lightSurface : LightModeColors.lightBackground,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isAwarded ? const Color(0xFFE5E7EB) : const Color(0xFFF3F4F6),
+          color: isAwarded ? LightModeColors.lightOutline : LightModeColors.lightSurfaceVariant,
         ),
         boxShadow: [
           if (isAwarded)
             BoxShadow(
-              color: Colors.blue.withOpacity(0.1),
+              color: LightModeColors.lightPrimary.withOpacity(0.1),
               blurRadius: 10,
               spreadRadius: 2,
             ),
@@ -68,7 +69,7 @@ class BadgeCard extends StatelessWidget {
                   return const Icon(
                     Icons.shield_outlined,
                     size: 60,
-                    color: Color(0xFFD1D5DB),
+                    color: LightModeColors.lightOutline,
                   );
                 },
               ),
@@ -85,8 +86,8 @@ class BadgeCard extends StatelessWidget {
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: isAwarded
-                        ? const Color(0xFF111827)
-                        : const Color(0xFF6B7280),
+                        ? LightModeColors.dashboardTextPrimary
+                        : LightModeColors.dashboardTextSecondary,
                   ),
                 ),
               ),
@@ -100,9 +101,9 @@ class BadgeCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                             child: LinearProgressIndicator(
                               value: badgeInfo.progress,
-                              backgroundColor: const Color(0xFFE5E7EB),
+                              backgroundColor: LightModeColors.lightOutline,
                               valueColor: const AlwaysStoppedAnimation<Color>(
-                                Color(0xFF3B82F6),
+                                LightModeColors.lightPrimary,
                               ),
                               minHeight: 6,
                             ),
@@ -110,7 +111,7 @@ class BadgeCard extends StatelessWidget {
                         : const Icon(
                             Icons.lock_outline,
                             size: 18,
-                            color: Color(0xFF9CA3AF),
+                            color: LightModeColors.lightOutline,
                           ))
                   : null, // No widget when awarded
             ),

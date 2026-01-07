@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:novopharma/controllers/locale_provider.dart';
 import 'package:novopharma/generated/l10n/app_localizations.dart';
 import 'package:novopharma/screens/badges_screen.dart';
+import 'package:novopharma/theme.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -82,9 +83,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         uiSettings: [
           AndroidUiSettings(
             toolbarTitle: 'Recadrer la photo',
-            toolbarColor: const Color(0xFF1F9BD1),
+            toolbarColor: LightModeColors.lightPrimary,
             toolbarWidgetColor: Colors.white,
-            activeControlsWidgetColor: const Color(0xFF1F9BD1),
+            activeControlsWidgetColor: LightModeColors.lightPrimary,
             initAspectRatio: CropAspectRatioPreset.square,
             lockAspectRatio: true,
             aspectRatioPresets: [CropAspectRatioPreset.square],
@@ -184,17 +185,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
             return const Center(child: CircularProgressIndicator());
           }
           return Container(
-            color: const Color(0xFFFFFFFF),
+            color: LightModeColors.lightBackground,
             child: SafeArea(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                 child: Column(
                   children: [
-                    const SizedBox(height: 8),
                     _buildAppBar(context, l10n),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 24),
                     _buildProfileHeader(user),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 24),
                     _buildProfileInfo(user, l10n),
                   ],
                 ),
@@ -223,7 +223,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: const Icon(
               Icons.chevron_left,
               size: 24,
-              color: Color(0xFF111827),
+              color: LightModeColors.dashboardTextPrimary,
             ),
           ),
         ),
@@ -234,7 +234,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF111827),
+              color: LightModeColors.dashboardTextPrimary,
             ),
           ),
         ),
@@ -248,8 +248,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           style: TextButton.styleFrom(
-            foregroundColor: const Color(0xFF111827),
-            backgroundColor: const Color(0xFFF3F4F6),
+            foregroundColor: LightModeColors.dashboardTextPrimary,
+            backgroundColor: LightModeColors.novoPharmaLightGray,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
@@ -265,26 +265,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
         Stack(
           children: [
             CircleAvatar(
-              radius: 48,
+              radius: 64,
+              backgroundColor: LightModeColors.novoPharmaLightGray,
               backgroundImage: user.avatarUrl != null
                   ? NetworkImage(user.avatarUrl!)
                   : const NetworkImage(UserModel.defaultAvatarUrl),
               child: _isUploadingAvatar
-                  ? const CircularProgressIndicator()
+                  ? Container(
+                      width: 128,
+                      height: 128,
+                      decoration: BoxDecoration(
+                        color: LightModeColors.lightSurface.withValues(alpha: 0.6),
+                        borderRadius: BorderRadius.circular(64),
+                      ),
+                      child: const Center(
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                    )
                   : null,
             ),
             Positioned(
-              bottom: 0,
-              right: 0,
-              child: GestureDetector(
-                onTap: _isUploadingAvatar ? null : _pickAndUploadAvatar,
-                child: Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: const BoxDecoration(
-                    color: Colors.blue,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(Icons.edit, color: Colors.white, size: 20),
+              bottom: 8,
+              right: 8,
+              child: Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: LightModeColors.lightPrimary,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: LightModeColors.lightSurface, width: 2),
+                ),
+                child: GestureDetector(
+                  onTap: _isUploadingAvatar ? null : _pickAndUploadAvatar,
+                  child: Icon(Icons.camera_alt, color: LightModeColors.lightOnPrimary, size: 20),
                 ),
               ),
             ),
@@ -293,19 +306,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
         const SizedBox(height: 16),
         Text(
           user.name,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF111827),
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color: LightModeColors.dashboardTextPrimary,
           ),
         ),
         const SizedBox(height: 4),
         Text(
           user.email,
-          style: const TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-            color: Color(0xFF9CA3AF),
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+            color: LightModeColors.dashboardTextSecondary,
           ),
         ),
       ],
@@ -319,36 +332,59 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Column(
       children: [
-        const SizedBox(height: 32),
-        _buildInputPill(
-          label: l10n.fullName,
-          field: 'name',
-          controller: _nameController,
-          isEditing: _editingStates['name']!,
-        ),
-        const SizedBox(height: 16),
-        _buildInputPill(label: l10n.email, value: user.email),
-        const SizedBox(height: 16),
-        _buildInputPill(
-          label: l10n.phone,
-          field: 'phone',
-          controller: _phoneController,
-          isEditing: _editingStates['phone']!,
-        ),
-        const SizedBox(height: 16),
-        _buildInputPill(
-          label: l10n.password,
-          value: '••••••••••••',
-          field: 'password',
-        ),
-        const SizedBox(height: 16),
-        _buildInputPill(label: l10n.dateOfBirth, value: formattedDob),
-        const SizedBox(height: 16),
-        _buildInputPill(
-          label: l10n.yourPharmacy,
-          value: user.pharmacy ?? 'N/A',
+        // Personal Information Section
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: LightModeColors.lightSurface,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: LightModeColors.lightOutline),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Personal Information',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: LightModeColors.dashboardTextPrimary,
+                ),
+              ),
+              const SizedBox(height: 16),
+              _buildInputPill(
+                label: l10n.fullName,
+                field: 'name',
+                controller: _nameController,
+                isEditing: _editingStates['name']!,
+              ),
+              const SizedBox(height: 12),
+              _buildInputPill(label: l10n.email, value: user.email),
+              const SizedBox(height: 12),
+              _buildInputPill(
+                label: l10n.phone,
+                field: 'phone',
+                controller: _phoneController,
+                isEditing: _editingStates['phone']!,
+              ),
+              const SizedBox(height: 12),
+              _buildInputPill(
+                label: l10n.password,
+                value: '••••••••••••',
+                field: 'password',
+              ),
+              const SizedBox(height: 12),
+              _buildInputPill(label: l10n.dateOfBirth, value: formattedDob),
+              const SizedBox(height: 12),
+              _buildInputPill(
+                label: l10n.yourPharmacy,
+                value: user.pharmacy ?? 'N/A',
+              ),
+            ],
+          ),
         ),
         const SizedBox(height: 24),
+        // Action Buttons
         SizedBox(
           width: double.infinity,
           height: 56,
@@ -362,10 +398,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             icon: const Icon(Icons.shield_outlined),
             label: const Text('My Badges'),
             style: OutlinedButton.styleFrom(
-              foregroundColor: const Color(0xFF111827),
-              side: const BorderSide(color: Color(0xFFE5E7EB)),
+              foregroundColor: LightModeColors.dashboardTextPrimary,
+              side: BorderSide(color: LightModeColors.lightOutline),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(28),
+                borderRadius: BorderRadius.circular(12),
               ),
             ),
           ),
@@ -377,54 +413,63 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: ElevatedButton(
             onPressed: _hasChanges && !_isLoading ? _saveProfile : null,
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF2E6EF7),
-              disabledBackgroundColor: const Color(0xFF2E6EF7).withOpacity(0.6),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(28),
-              ),
-            ),
-            child: _isLoading
-                ? const CircularProgressIndicator(color: Colors.white)
-                : Text(
-                    l10n.updateProfile,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    ),
-                  ),
-          ),
-        ),
-        const SizedBox(height: 16),
-        SizedBox(
-          width: double.infinity,
-          height: 48,
-          child: OutlinedButton(
-            onPressed: _isLoading ? null : _signOut,
-            style: OutlinedButton.styleFrom(
-              backgroundColor: Colors.white,
-              side: const BorderSide(color: Colors.red, width: 1),
+              backgroundColor: LightModeColors.lightPrimary,
+              disabledBackgroundColor: LightModeColors.lightPrimary.withOpacity(0.6),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
             child: _isLoading
-                ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      color: Colors.red,
-                      strokeWidth: 2,
-                    ),
-                  )
+                ? const CircularProgressIndicator(color: LightModeColors.lightOnPrimary)
                 : Text(
-                    l10n.disconnect,
-                    style: const TextStyle(
+                    l10n.updateProfile,
+                    style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: Colors.red,
+                      color: LightModeColors.lightOnPrimary,
                     ),
                   ),
+          ),
+        ),
+        const SizedBox(height: 16),
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.only(top: 8),
+          child: OutlinedButton.icon(
+            onPressed: _isLoading ? null : _signOut,
+            icon: _isLoading
+                ? SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        LightModeColors.lightError,
+                      ),
+                    ),
+                  )
+                : Icon(
+                    Icons.logout,
+                    size: 18,
+                    color: LightModeColors.lightError,
+                  ),
+            label: Text(
+              l10n.disconnect,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: LightModeColors.lightError,
+              ),
+            ),
+            style: OutlinedButton.styleFrom(
+              foregroundColor: LightModeColors.lightError,
+              side: BorderSide(color: LightModeColors.lightError, width: 1),
+              backgroundColor: LightModeColors.lightErrorContainer.withValues(alpha: 0.1),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+            ),
           ),
         ),
         const SizedBox(height: 24),
@@ -443,73 +488,125 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final bool isPassword = field == 'password';
 
     return Container(
-      height: 56,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: isEditable ? const Color(0xFFFFFFFF) : const Color(0xFFF3F4F6),
-        border: Border.all(color: const Color(0xFFE5E7EB)),
-        borderRadius: BorderRadius.circular(20),
+        color: isEditable ? LightModeColors.lightSurface : LightModeColors.novoPharmaLightGray,
+        border: Border.all(color: LightModeColors.lightOutline),
+        borderRadius: BorderRadius.circular(12),
         boxShadow: [
           if (isEditable)
             BoxShadow(
-              color: const Color(0xFF111827).withOpacity(0.06),
-              blurRadius: 8,
+              color: LightModeColors.dashboardTextPrimary.withValues(alpha: 0.05),
+              blurRadius: 4,
               offset: const Offset(0, 2),
             ),
         ],
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: isEditing
-                ? TextField(
-                    controller: controller,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Color(0xFF111827),
-                    ),
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      isDense: true,
-                      contentPadding: EdgeInsets.zero,
-                      labelText: label,
-                    ),
-                  )
-                : Text(
-                    value ?? controller?.text ?? '',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: isEditable
-                          ? const Color(0xFF111827)
-                          : const Color(0xFF6B7280),
+          if (isEditing) Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: LightModeColors.dashboardTextTertiary,
+            ),
+          ),
+          if (isEditing)
+            const SizedBox(height: 4),
+          if (isEditing)
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: controller,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: LightModeColors.dashboardTextPrimary,
+                      ),
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        isDense: true,
+                        contentPadding: EdgeInsets.zero,
+                        hintText: value ?? controller?.text ?? '',
+                        hintStyle: TextStyle(
+                          fontSize: 16,
+                          color: LightModeColors.dashboardTextPrimary,
+                        ),
+                      ),
                     ),
                   ),
-          ),
-          if (isEditable)
-            GestureDetector(
-              onTap: () {
-                if (isPassword) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ChangePasswordScreen(),
+                  const SizedBox(width: 8),
+                  GestureDetector(
+                    onTap: () => _toggleEditMode(field!),
+                    child: Icon(
+                      Icons.check,
+                      size: 20,
+                      color: LightModeColors.lightPrimary,
                     ),
-                  );
-                } else {
-                  _toggleEditMode(field);
-                }
-              },
-              child: Container(
-                width: 40,
-                height: 40,
-                alignment: Alignment.center,
-                child: Icon(
-                  isEditing
-                      ? Icons.check
-                      : (isPassword ? Icons.chevron_right : Icons.edit),
-                  size: 20,
-                  color: const Color(0xFF9CA3AF),
-                ),
+                  ),
+                ],
+              ),
+            )
+          else
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      value ?? controller?.text ?? '',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: isEditable
+                            ? LightModeColors.dashboardTextPrimary
+                            : LightModeColors.dashboardTextSecondary,
+                      ),
+                    ),
+                  ),
+                  if (isEditable && !isPassword) 
+                    GestureDetector(
+                      onTap: () => _toggleEditMode(field!),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const SizedBox(width: 8),
+                          Icon(
+                            Icons.edit,
+                            size: 20,
+                            color: LightModeColors.dashboardTextTertiary,
+                          ),
+                        ],
+                      ),
+                    )
+                  else if (isEditable && isPassword)
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ChangePasswordScreen(),
+                          ),
+                        );
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const SizedBox(width: 8),
+                          Icon(
+                            Icons.chevron_right,
+                            size: 20,
+                            color: LightModeColors.dashboardTextTertiary,
+                          ),
+                        ],
+                      ),
+                    ),
+                ],
               ),
             ),
         ],

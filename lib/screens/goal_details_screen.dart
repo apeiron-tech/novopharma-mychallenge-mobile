@@ -3,6 +3,7 @@ import 'package:novopharma/models/goal.dart';
 import 'package:novopharma/generated/l10n/app_localizations.dart';
 import 'package:novopharma/services/product_service.dart';
 import 'package:novopharma/services/pharmacy_service.dart';
+import '../theme.dart';
 
 class GoalDetailsScreen extends StatefulWidget {
   final Goal goal;
@@ -44,53 +45,54 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: const Color(0xFFF6F8FB),
+      backgroundColor: LightModeColors.lightBackground,
       appBar: AppBar(
         title: Text(
           l10n.goalDetails,
           style: const TextStyle(
-            color: Color(0xFF102132),
+            color: LightModeColors.dashboardTextPrimary,
             fontWeight: FontWeight.w700,
           ),
         ),
-        backgroundColor: Colors.transparent,
+        backgroundColor: LightModeColors.lightBackground,
         elevation: 0,
-        iconTheme: const IconThemeData(color: Color(0xFF102132)),
+        iconTheme: const IconThemeData(color: LightModeColors.dashboardTextPrimary),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.fromLTRB(20.0, 16.0, 20.0, 24.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               widget.goal.title,
               style: const TextStyle(
-                fontSize: 28,
+                fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF102132),
+                color: LightModeColors.dashboardTextPrimary,
               ),
+              overflow: TextOverflow.ellipsis,
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 16),
             Text(
               widget.goal.description,
               style: const TextStyle(
                 fontSize: 16,
-                color: Color(0xFF4A5568),
+                color: LightModeColors.dashboardTextSecondary,
                 height: 1.5,
               ),
             ),
             const SizedBox(height: 24),
-            const Divider(color: Color(0xFFE2E8F0)),
-            const SizedBox(height: 24),
+            const Divider(color: LightModeColors.lightOutline),
+            const SizedBox(height: 20),
             Text(
               l10n.eligibilityCriteria,
               style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF102132),
+                color: LightModeColors.dashboardTextPrimary,
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
             _buildCriteriaSection(context),
           ],
         ),
@@ -208,11 +210,11 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: LightModeColors.lightSurface,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF102040).withAlpha(15),
+            color: LightModeColors.lightOnSurface.withAlpha(15),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -223,14 +225,14 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
         children: [
           Row(
             children: [
-              Icon(icon, color: const Color(0xFF1F9BD1), size: 24),
+              Icon(icon, color: LightModeColors.lightPrimary, size: 24),
               const SizedBox(width: 12),
               Text(
                 title,
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF102132),
+                  color: LightModeColors.dashboardTextPrimary,
                 ),
               ),
             ],
@@ -239,22 +241,27 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
           if (isLoading)
             const Center(child: CircularProgressIndicator())
           else
-            Wrap(
-              spacing: 8.0,
-              runSpacing: 8.0,
-              children: items
-                  .map(
-                    (item) => Chip(
-                      label: Text(item),
-                      backgroundColor: const Color(0xFF1F9BD1).withOpacity(0.1),
-                      labelStyle: const TextStyle(
-                        color: Color(0xFF1F9BD1),
-                        fontWeight: FontWeight.w500,
-                      ),
-                      side: BorderSide.none,
-                    ),
-                  )
-                  .toList(),
+            Container(
+              constraints: const BoxConstraints(maxHeight: 150),
+              child: SingleChildScrollView(
+                child: Wrap(
+                  spacing: 8.0,
+                  runSpacing: 8.0,
+                  children: items
+                      .map(
+                        (item) => Chip(
+                          label: Text(item, overflow: TextOverflow.ellipsis),
+                          backgroundColor: LightModeColors.lightPrimary.withOpacity(0.1),
+                          labelStyle: const TextStyle(
+                            color: LightModeColors.lightPrimary,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          side: BorderSide.none,
+                        ),
+                      )
+                      .toList(),
+                ),
+              ),
             ),
         ],
       ),

@@ -89,7 +89,7 @@
     "preparateur": "Préparateur",
     "responsableParapharmacie": "Responsable parapharmacie",
     "scanBarcodeHere": "Scannez le code-barres ici",
-    "scannedProduct": "Produit scanné",
+    "scannedProduct": "Produit",
     "productDetailsAppearHere": "Les détails du produit apparaîtront ici.",
     "saleDetails": "Détails de la vente",
     "availableStock": "Stock disponible",
@@ -306,5 +306,10 @@
     "badgeRewardPoints": "Points accordés",
     "showLess": "Voir moins",
     "noBadgesAvailable": "Aucun badge disponible.",
-    "noBadgesInCategory": "Aucun badge dans cette catégorie pour le moment."
+    "noBadgesInCategory": "Aucun badge dans cette catégorie pour le moment.",
+    "pointsLabel": "Points accordées",
+    "rewardLabel": "Récompense",
+    "customRewardLabel": "Récompense personnalisée",
+    "manualSale": "Vente manuelle",
+    "searchProducts": "Rechercher des produits..."
 }
