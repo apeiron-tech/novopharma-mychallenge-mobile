@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../theme.dart';
+import '../generated/l10n/app_localizations.dart';
 
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
@@ -38,8 +39,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           icon: const Icon(Icons.arrow_back, color: LightModeColors.dashboardTextPrimary),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
-          'Notifications',
+        title: Text(
+          AppLocalizations.of(context)!.notifications,
           style: TextStyle(
             color: LightModeColors.dashboardTextPrimary,
             fontSize: 20,
@@ -63,8 +64,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                   foregroundColor: LightModeColors.lightPrimary,
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 ),
-                child: const Text(
-                  'Tout marquer lu',
+                child: Text(
+                  AppLocalizations.of(context)!.markAsRead,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                   ),
@@ -101,8 +102,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  const Text(
-                    'Aucune notification',
+                  Text(
+                    AppLocalizations.of(context)!.noNotifications,
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -110,8 +111,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    'Vous serez notifié des nouvelles formations\net badges disponibles',
+                  Text(
+                    AppLocalizations.of(context)!.notificationsDescription,
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 14, color: LightModeColors.dashboardTextSecondary),
                   ),
@@ -160,9 +161,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       onDismissed: (_) {
         provider.deleteNotification(userId, notification.id);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Notification supprimée'),
-            duration: Duration(seconds: 2),
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.notificationDeleted),
+            duration: const Duration(seconds: 2),
           ),
         );
       },
@@ -212,8 +213,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     );
                   } else if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Formation introuvable'),
+                      SnackBar(
+                        content: Text(AppLocalizations.of(context)!.formationNotFound),
                         backgroundColor: Colors.red,
                       ),
                     );

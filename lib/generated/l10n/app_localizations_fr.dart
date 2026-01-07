@@ -146,6 +146,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get points => 'Points';
 
   @override
+  String get usablePoints => 'Points utilisables';
+
+  @override
   String get rank => 'RANG';
 
   @override
@@ -573,7 +576,12 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get submitRequest => 'Soumettre la demande';
+  String minimumRedemptionAmount(Object amount) {
+    return 'Montant minimum d\'échange: $amount pts';
+  }
+
+  @override
+  String get submitRequest => 'Soumettre';
 
   @override
   String get requestSubmittedSuccess =>
@@ -718,6 +726,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get badgeRewardPoints => 'Points accordés';
 
   @override
+  String get badgeAwarded => 'Badge attribué';
+
+  @override
+  String get badgeLocked => 'Badge verrouillé';
+
+  @override
   String get showLess => 'Voir moins';
 
   @override
@@ -749,17 +763,17 @@ class AppLocalizationsFr extends AppLocalizations {
   String get congratulations => 'Félicitations !';
 
   @override
-  String get goodEffort => 'Bon effort !';
+  String get goodEffort => 'Merci pour votre participation !';
 
   @override
-  String get reviewYourAnswers => 'Revoir vos réponses';
+  String get reviewYourAnswers => 'Consulter vos réponses';
 
   @override
   String get done => 'Terminé';
 
   @override
   String youEarnedPoints(Object points) {
-    return 'Vous avez gagné $points points !';
+    return 'Score obtenu $points points !';
   }
 
   @override
@@ -778,4 +792,111 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get explanation => 'Explication';
+
+  @override
+  String get chooseCorrectAnswer => 'Choisissez la bonne réponse';
+
+  @override
+  String get chooseCorrectAnswers => 'Choisissez les bonnes réponses';
+
+  @override
+  String get myInformation => 'Mes informations';
+
+  @override
+  String get securityCardTitle => 'Sécurité';
+
+  @override
+  String get firstNameHint => 'Jean';
+
+  @override
+  String get lastNameHint => 'Dupont';
+
+  @override
+  String get emailHint => 'jean.dupont@email.com';
+
+  @override
+  String get phoneHint => 'Entrez votre numéro de téléphone';
+
+  @override
+  String get dateOfBirthHint => 'Sélectionnez votre date de naissance';
+
+  @override
+  String get passwordHint => 'Au moins 8 caractères';
+
+  @override
+  String get confirmPasswordHint => 'Confirmez votre mot de passe';
+
+  @override
+  String get firstNameRequiredError => 'Ce champ est obligatoire';
+
+  @override
+  String get lastNameRequiredError => 'Ce champ est obligatoire';
+
+  @override
+  String get emailRequiredError => 'L\'email est requis';
+
+  @override
+  String get emailValidError => 'Veuillez entrer une adresse email valide';
+
+  @override
+  String get phoneRequiredError => 'Le numéro de téléphone est requis';
+
+  @override
+  String get dobRequiredError => 'La date de naissance est requise';
+
+  @override
+  String get passwordRequiredError => 'Le mot de passe est requis';
+
+  @override
+  String get passwordLengthError =>
+      'Le mot de passe doit contenir au moins 8 caractères';
+
+  @override
+  String get confirmPasswordRequiredError =>
+      'Veuillez confirmer votre mot de passe';
+
+  @override
+  String get passwordMatchError => 'Les mots de passe ne correspondent pas';
+
+  @override
+  String get cityRequiredError => 'Veuillez sélectionner une ville';
+
+  @override
+  String pharmacyLoadError(String error) {
+    return 'Erreur lors du chargement des pharmacies: $error';
+  }
+
+  @override
+  String get noPharmaciesError => 'Aucune pharmacie disponible.';
+
+  @override
+  String salesRecorded(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ventes enregistrées',
+      one: '1 vente enregistrée',
+      zero: 'Aucune vente enregistrée',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notifications => 'Notifications';
+
+  @override
+  String get markAsRead => 'Marquer comme lu';
+
+  @override
+  String get noNotifications => 'Aucune notification';
+
+  @override
+  String get notificationsDescription =>
+      'Vous serez notifié des nouvelles formations\net badges disponibles';
+
+  @override
+  String get notificationDeleted => 'Notification supprimée';
+
+  @override
+  String get formationNotFound => 'Formation introuvable';
 }

@@ -83,7 +83,7 @@ class _PluxeeRedemptionScreenState extends State<PluxeeRedemptionScreen> {
                     child: Column(
                       children: [
                         Text(
-                          l10n.points,
+                          l10n.usablePoints,
                           style: GoogleFonts.inter(
                             fontSize: 14,
                             color: Colors.grey[700],
@@ -121,6 +121,20 @@ class _PluxeeRedemptionScreenState extends State<PluxeeRedemptionScreen> {
                         _selectedPoints = double.tryParse(value) ?? 0.0;
                       });
                     },
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    l10n.minimumRedemptionAmount(150),
+                    style: GoogleFonts.inter(
+                      fontSize: 12,
+                      color: _selectedPoints > 0 && _selectedPoints < 150
+                          ? LightModeColors.lightError
+                          : LightModeColors.dashboardTextSecondary,
+                      fontWeight: _selectedPoints > 0 && _selectedPoints < 150
+                          ? FontWeight.w600
+                          : FontWeight.normal,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 16),
                   Container(
@@ -162,108 +176,145 @@ class _PluxeeRedemptionScreenState extends State<PluxeeRedemptionScreen> {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 24),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          onPressed: () => Navigator.pop(ctx),
-                          style: OutlinedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            side: BorderSide(color: LightModeColors.novoPharmaBlue),
-                            foregroundColor: LightModeColors.novoPharmaBlue,
-                            shape: RoundedRectangleBorder(
+                  const SizedBox(height: 20),
+                  Container(
+                    margin: const EdgeInsets.only(top: 8),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Container(
+                            height: 50,
+                            decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: LightModeColors.novoPharmaBlue.withOpacity(0.3)),
                             ),
-                          ),
-                          child: Text(
-                            l10n.cancel,
-                            style: GoogleFonts.inter(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
+                            child: OutlinedButton(
+                              onPressed: () => Navigator.pop(ctx),
+                              style: OutlinedButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                side: BorderSide.none,
+                                foregroundColor: LightModeColors.novoPharmaBlue,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                overlayColor: LightModeColors.novoPharmaBlue.withOpacity(0.1),
+                              ),
+                              child: Text(
+                                l10n.cancel,
+                                style: GoogleFonts.inter(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                  color: LightModeColors.novoPharmaBlue,
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed:
-                              (_selectedPoints > 0 &&
-                                  _selectedPoints <= availablePoints &&
-                                  !_isSubmitting)
-                              ? () async {
-                                  setState(() => _isSubmitting = true);
-
-                                  final error = await pluxeeProvider
-                                      .createRedemptionRequest(_selectedPoints);
-
-                                  setState(() => _isSubmitting = false);
-
-                                  if (mounted) {
-                                    Navigator.pop(ctx);
-
-                                    if (error == null) {
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            l10n.requestSubmittedSuccess,
-                                          ),
-                                          backgroundColor: LightModeColors.success,
-                                          duration: const Duration(seconds: 3),
-                                        ),
-                                      );
-                                    } else {
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        SnackBar(
-                                          content: Text(error),
-                                          backgroundColor: LightModeColors.lightError,
-                                        ),
-                                      );
-                                    }
-                                  }
-                                }
-                              : null,
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 16,
-                              horizontal: 24,
-                            ),
-                            backgroundColor: LightModeColors.novoPharmaBlue,
-                            foregroundColor: Colors.white,
-                            minimumSize: const Size(double.infinity, 50),
-                            shape: RoundedRectangleBorder(
+                        const SizedBox(width: 16),
+                        Expanded(
+                          flex: 1,
+                          child: Container(
+                            height: 50,
+                            decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
+                              boxShadow: _selectedPoints >= 150 && _selectedPoints <= availablePoints && !_isSubmitting
+                                  ? [
+                                      BoxShadow(
+                                        color: LightModeColors.novoPharmaBlue.withOpacity(0.3),
+                                        blurRadius: 8,
+                                        offset: const Offset(0, 4),
+                                      ),
+                                    ]
+                                  : [],
                             ),
-                          ),
-                          child: _isSubmitting
-                              ? const Center(
-                                  child: SizedBox(
-                                    height: 20,
-                                    width: 20,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                        Colors.white,
+                            child: ElevatedButton(
+                              onPressed:
+                                  (_selectedPoints >= 150 &&
+                                      _selectedPoints <= availablePoints &&
+                                      !_isSubmitting)
+                                  ? () async {
+                                      setState(() => _isSubmitting = true);
+
+                                      final error = await pluxeeProvider
+                                          .createRedemptionRequest(_selectedPoints);
+
+                                      setState(() => _isSubmitting = false);
+
+                                      if (mounted) {
+                                        Navigator.pop(ctx);
+
+                                        if (error == null) {
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                l10n.requestSubmittedSuccess,
+                                              ),
+                                              backgroundColor: LightModeColors.success,
+                                              duration: const Duration(seconds: 3),
+                                            ),
+                                          );
+                                        } else {
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
+                                            SnackBar(
+                                              content: Text(error),
+                                              backgroundColor: LightModeColors.lightError,
+                                            ),
+                                          );
+                                        }
+                                      }
+                                    }
+                                  : null,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: _selectedPoints >= 150 && _selectedPoints <= availablePoints && !_isSubmitting
+                                    ? LightModeColors.novoPharmaBlue
+                                    : Colors.grey.shade400,
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                shadowColor: _selectedPoints >= 150 && _selectedPoints <= availablePoints && !_isSubmitting
+                                    ? LightModeColors.novoPharmaBlue.withOpacity(0.3)
+                                    : Colors.transparent,
+                                elevation: _selectedPoints >= 150 && _selectedPoints <= availablePoints && !_isSubmitting
+                                    ? 4.0
+                                    : 0.0,
+                                overlayColor: _selectedPoints >= 150 && _selectedPoints <= availablePoints && !_isSubmitting
+                                    ? LightModeColors.novoPharmaBlue.withOpacity(0.2)
+                                    : Colors.grey.shade400.withOpacity(0.2),
+                              ),
+                              child: _isSubmitting
+                                  ? const Center(
+                                      child: SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          valueColor: AlwaysStoppedAnimation<Color>(
+                                            Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  : Text(
+                                      l10n.submitRequest,
+                                      textAlign: TextAlign.center,
+                                      style: GoogleFonts.inter(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
-                                  ),
-                                )
-                              : Text(
-                                  l10n.submitRequest,
-                                  textAlign: TextAlign.center,
-                                  style: GoogleFonts.inter(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 24),
                 ],

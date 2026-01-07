@@ -181,7 +181,7 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                           Consumer<SalesHistoryProvider>(
                             builder: (context, provider, child) {
                               return Text(
-                                '${provider.salesHistory.length} records',
+                                l10n.salesRecorded(provider.salesHistory.length),
                                 style: const TextStyle(
                                   fontSize: 14,
                                   color: LightModeColors.dashboardTextSecondary,

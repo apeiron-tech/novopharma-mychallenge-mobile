@@ -296,7 +296,7 @@ class _ProductScreenState extends State<ProductScreen> {
         children: [
           if (product.imageUrl.isNotEmpty)
             Container(
-              height: 200,
+              height: 280,
               width: double.infinity,
               decoration: BoxDecoration(
                 color: LightModeColors.lightSurface,
@@ -324,14 +324,14 @@ class _ProductScreenState extends State<ProductScreen> {
               ),
             ),
           Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   product.name,
                   style: const TextStyle(
-                    fontSize: 24,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: LightModeColors.lightOnPrimary,
                   ),

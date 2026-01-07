@@ -38,10 +38,6 @@ class _PluxeeHistoryScreenState extends State<PluxeeHistoryScreen> {
 
             backgroundColor: LightModeColors.lightPrimary,
             surfaceTintColor: Colors.transparent,
-            
-          
-            
-            
             // App bar title and back button
             bottom: PreferredSize(
               preferredSize: const Size.fromHeight(20),

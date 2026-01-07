@@ -186,8 +186,11 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
     final currentUserId = authProvider.firebaseUser?.uid;
     final currentUserData = leaderboardData.firstWhere(
       (user) => user['userId'] == currentUserId,
-      orElse: () => {'rank': 'N/A', 'points': 0},
+      orElse: () => {'rank': '0', 'points': 0},
     );
+    final leaderboardAuthProvider = Provider.of<AuthProvider>(context, listen: false);
+    final currentUserProfile = leaderboardAuthProvider.userProfile;
+    final userAvailablePoints = currentUserProfile?.availablePoints ?? 0;
 
     return Container(
       width: double.infinity,
@@ -261,6 +264,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                         ),
                       ),
                     ),
+                    if (currentUserData['rank']!='0')
                     Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 16,
@@ -287,7 +291,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                           ),
                           const SizedBox(width: 6),
                           Text(
-                            '#${currentUserData['rank']}',
+                            userAvailablePoints == 0 ? '0' : '#${currentUserData['rank']}',
                             style: const TextStyle(
                               color: Color(0xFF1F2937),
                               fontSize: 16,
@@ -328,6 +332,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                   ],
                 ),
                 const SizedBox(height: 8),
+                if (currentUserData['rank']!='0')
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 12,
@@ -353,7 +358,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                       Flexible(
                         child: Text(
                           l10n.rankOnMychallenge(
-                            currentUserData['rank']?.toString() ?? 'N/A',
+                            currentUserData['rank']?.toString() ?? '0',
                             leaderboardData.length,
                           ),
                           style: TextStyle(

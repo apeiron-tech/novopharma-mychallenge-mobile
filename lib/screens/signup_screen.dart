@@ -379,8 +379,9 @@ class _SignupScreenState extends State<SignupScreen> {
                 // Name fields in modern card
                 _buildModernCard(
                   icon: Icons.person_outline,
-                  title: 'Personal Information',
+                  title: l10n.myInformation,
                   children: [
+                    // Personal Information
                     Row(
                       children: [
                         Expanded(
@@ -392,10 +393,10 @@ class _SignupScreenState extends State<SignupScreen> {
                               TextFormField(
                                 controller: _firstNameController,
                                 decoration: _buildModernInputDecoration(
-                                  hintText: 'John',
+                                  hintText: l10n.firstNameHint,
                                 ),
                                 validator: (value) => (value?.isEmpty ?? true)
-                                    ? 'This field is required'
+                                    ? l10n.firstNameRequiredError
                                     : null,
                               ),
                             ],
@@ -411,10 +412,10 @@ class _SignupScreenState extends State<SignupScreen> {
                               TextFormField(
                                 controller: _lastNameController,
                                 decoration: _buildModernInputDecoration(
-                                  hintText: 'Doe',
+                                  hintText: l10n.lastNameHint,
                                 ),
                                 validator: (value) => (value?.isEmpty ?? true)
-                                    ? 'This field is required'
+                                    ? l10n.lastNameRequiredError
                                     : null,
                               ),
                             ],
@@ -422,27 +423,21 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                       ],
                     ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                // Contact Information Card
-                _buildModernCard(
-                  icon: Icons.email_outlined,
-                  title: 'Contact Information',
-                  children: [
+                    const SizedBox(height: 20),
+                    // Contact Information
                     _buildModernLabel(l10n.emailAddress),
                     const SizedBox(height: 8),
                     TextFormField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
                       decoration: _buildModernInputDecoration(
-                        hintText: 'john.doe@email.com',
+                        hintText: l10n.emailHint,
                         prefixIcon: Icons.email_outlined,
                       ),
                       validator: (value) {
-                        if (value?.isEmpty ?? true) return 'Email is required';
-                        if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value!))
-                          return 'Please enter a valid email address';
+                        if (value?.isEmpty ?? true) return l10n.emailRequiredError;
+                        if (!RegExp(r'^[^@]+@[^@]+\\.[^@]+').hasMatch(value!))
+                          return l10n.emailValidError;
                         return null;
                       },
                     ),
@@ -453,21 +448,15 @@ class _SignupScreenState extends State<SignupScreen> {
                       controller: _phoneController,
                       keyboardType: TextInputType.phone,
                       decoration: _buildModernInputDecoration(
-                        hintText: 'Enter your phone number',
+                        hintText: l10n.phoneHint,
                         prefixIcon: Icons.phone_outlined,
                       ),
                       validator: (value) => (value?.isEmpty ?? true)
-                          ? 'Phone number is required'
+                          ? l10n.phoneRequiredError
                           : null,
                     ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                // Additional Details Card
-                _buildModernCard(
-                  icon: Icons.badge_outlined,
-                  title: 'Additional Details',
-                  children: [
+                    const SizedBox(height: 20),
+                    // Additional Details
                     _buildModernLabel(l10n.dateOfBirth),
                     const SizedBox(height: 8),
                     TextFormField(
@@ -475,11 +464,11 @@ class _SignupScreenState extends State<SignupScreen> {
                       readOnly: true,
                       onTap: () => _selectDate(context),
                       decoration: _buildModernInputDecoration(
-                        hintText: 'Select your birthdate',
+                        hintText: l10n.dateOfBirthHint,
                         prefixIcon: Icons.calendar_today_outlined,
                       ),
                       validator: (value) => (value?.isEmpty ?? true)
-                          ? 'Date of birth is required'
+                          ? l10n.dobRequiredError
                           : null,
                     ),
                     const SizedBox(height: 20),
@@ -500,7 +489,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 // Security Card
                 _buildModernCard(
                   icon: Icons.lock_outline,
-                  title: 'Security',
+                  title: l10n.securityCardTitle,
                   children: [
                     _buildModernLabel(l10n.password),
                     const SizedBox(height: 8),
@@ -509,7 +498,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       obscureText: _obscurePassword,
                       decoration:
                           _buildModernInputDecoration(
-                            hintText: 'At least 8 characters',
+                            hintText: l10n.passwordHint,
                             prefixIcon: Icons.lock_outline,
                           ).copyWith(
                             suffixIcon: IconButton(
@@ -526,9 +515,9 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                       validator: (value) {
                         if (value?.isEmpty ?? true)
-                          return 'Password is required';
+                          return l10n.passwordRequiredError;
                         if (value!.length < 8)
-                          return 'Password must be at least 8 characters';
+                          return l10n.passwordLengthError;
                         return null;
                       },
                     ),
@@ -540,7 +529,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       obscureText: _obscureConfirmPassword,
                       decoration:
                           _buildModernInputDecoration(
-                            hintText: 'Re-enter your password',
+                            hintText: l10n.confirmPasswordHint,
                             prefixIcon: Icons.lock_outline,
                           ).copyWith(
                             suffixIcon: IconButton(
@@ -558,9 +547,9 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                       validator: (value) {
                         if (value?.isEmpty ?? true)
-                          return 'Please confirm your password';
+                          return l10n.confirmPasswordRequiredError;
                         if (value != _passwordController.text)
-                          return 'Passwords do not match';
+                          return l10n.passwordMatchError;
                         return null;
                       },
                     ),
@@ -944,10 +933,10 @@ class _SignupScreenState extends State<SignupScreen> {
           return const Center(child: CircularProgressIndicator());
         }
         if (snapshot.hasError) {
-          return Text('Error loading pharmacies: ${snapshot.error}');
+          return Text(l10n.pharmacyLoadError(snapshot.error.toString()));
         }
         if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Text('No pharmacies available.');
+          return Text(l10n.noPharmaciesError);
         }
 
         final pharmacies = snapshot.data!;
@@ -1043,7 +1032,7 @@ class _SignupScreenState extends State<SignupScreen> {
         });
         _updateButtonState();
       },
-      validator: (value) => value == null ? 'Please select a city' : null,
+      validator: (value) => value == null ? l10n.cityRequiredError : null,
     );
   }
 }

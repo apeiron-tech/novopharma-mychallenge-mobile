@@ -748,9 +748,9 @@ class BadgesScreen extends StatelessWidget {
 
           return CustomScrollView(
             slivers: [
-              _buildSectionHeader('Awarded (${awardedBadges.length})'),
+              _buildSectionHeader('${l10n.badgeAwarded} (${awardedBadges.length})'),
               _buildGrid(awardedBadges, context),
-              _buildSectionHeader('Locked (${lockedBadges.length})'),
+              _buildSectionHeader('${l10n.badgeLocked} (${lockedBadges.length})'),
               _buildGrid(lockedBadges, context),
               const SliverToBoxAdapter(child: SizedBox(height: 20)),
             ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../controllers/actualite_provider.dart';
 import '../models/blog_post.dart';
 import '../theme.dart';
@@ -468,6 +469,8 @@ class _ActualitesScreenState extends State<ActualitesScreen>
 
                     const SizedBox(height: 16),
 
+                    // Action buttons - only show if media is available
+                    _buildActionButtonsSection(actualite),
                     // Meta Information
                     Row(
                       children: [
@@ -695,5 +698,93 @@ class _ActualitesScreenState extends State<ActualitesScreen>
     } else {
       return '${date.day}/${date.month}/${date.year}';
     }
+  }
+
+  Widget _buildActionButtonsSection(BlogPost actualite) {
+    // Collect available action buttons
+    List<Widget> topRowButtons = [];
+
+    // Video button (first priority - top row)
+    if (actualite.hasVideo) {
+      topRowButtons.add(
+        Expanded(
+          child: _buildActionButton(
+            'Vidéo explicative',
+            Icons.play_circle_outline,
+            () => _showVideoDialog(actualite),
+          ),
+        ),
+      );
+    }
+
+    // If no buttons available, return empty container
+    if (topRowButtons.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return Column(
+      children: [
+        Row(children: topRowButtons),
+        const SizedBox(height: 16),
+      ],
+    );
+  }
+
+  Widget _buildActionButton(
+    String label,
+    IconData icon,
+    VoidCallback onPressed,
+  ) {
+    return OutlinedButton.icon(
+      onPressed: onPressed,
+      icon: Icon(icon, size: 16),
+      label: Text(label, style: const TextStyle(fontSize: 12)),
+      style: OutlinedButton.styleFrom(
+        foregroundColor: LightModeColors.lightError,
+        side: BorderSide(color: LightModeColors.lightError),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      ),
+    );
+  }
+
+  void _showVideoDialog(BlogPost actualite) async {
+    if (!actualite.hasVideo) {
+      _showSnackBar('Aucune vidéo disponible pour cette actualité');
+      return;
+    }
+
+    final videoUrl = actualite.videoUrl;
+    if (videoUrl == null || videoUrl.isEmpty) {
+      _showSnackBar('URL de la vidéo non disponible');
+      return;
+    }
+
+    try {
+      final Uri url = Uri.parse(videoUrl);
+      final launched = await launchUrl(
+        url,
+        mode: LaunchMode.externalApplication,
+      );
+
+      if (!launched) {
+        // Try with inAppBrowserView as fallback
+        await launchUrl(url, mode: LaunchMode.inAppBrowserView);
+      }
+    } catch (e) {
+      print('Error launching video: $e');
+      print('Video URL: $videoUrl');
+      _showSnackBar('Erreur lors de l\'ouverture de la vidéo');
+    }
+  }
+
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: LightModeColors.novoPharmaBlue,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
   }
 }
