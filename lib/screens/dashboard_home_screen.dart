@@ -702,13 +702,7 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
       decoration: BoxDecoration(
         color: LightModeColors.lightError,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: LightModeColors.lightError.withOpacity(0.3),
-            blurRadius: 12,
-            offset: const Offset(0, 6),
-          ),
-        ],
+       
       ),
       child: Material(
         color: Colors.transparent,
@@ -797,7 +791,7 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: const BoxDecoration(
-                    color: LightModeColors.lightPrimary,
+                    color: LightModeColors.warning,
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
@@ -857,7 +851,7 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: const BoxDecoration(
-                    color: LightModeColors.lightError,
+                    color: LightModeColors.success,
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
@@ -917,7 +911,7 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: LightModeColors.lightSecondary,
+                    color: LightModeColors.lightError,
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
@@ -977,7 +971,7 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: const BoxDecoration(
-                    color: LightModeColors.lightPrimary,
+                    color: LightModeColors.lightwarning,
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(

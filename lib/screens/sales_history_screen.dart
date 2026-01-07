@@ -311,7 +311,7 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                                       vertical: 4,
                                     ),
                                     decoration: BoxDecoration(
-                                      color: LightModeColors.lightPrimary.withOpacity(0.1),
+                                      color: LightModeColors.success.withOpacity(0.1),
                                       borderRadius: BorderRadius.circular(6),
                                     ),
                                     child: Text(
@@ -319,7 +319,7 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                                       style: const TextStyle(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w600,
-                                        color: LightModeColors.lightPrimary,
+                                        color: LightModeColors.success,
                                       ),
                                     ),
                                   ),
@@ -340,13 +340,13 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                               children: [
                                 Container(
                                   decoration: BoxDecoration(
-                                    color: LightModeColors.lightSecondary.withOpacity(0.1),
+                                    color: LightModeColors.warning.withOpacity(0.1),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: IconButton(
                                     icon: const Icon(
                                       Icons.edit_rounded,
-                                      color: LightModeColors.lightSecondary,
+                                      color: LightModeColors.warning,
                                       size: 20,
                                     ),
                                     onPressed: () {

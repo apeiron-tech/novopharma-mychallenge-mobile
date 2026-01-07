@@ -100,31 +100,6 @@ class _FormationsScreenState extends State<FormationsScreen>
       ),
       child: Stack(
         children: [
-          // Decorative circles in background
-          Positioned(
-            right: -30,
-            top: -30,
-            child: Container(
-              width: 120,
-              height: 120,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: LightModeColors.lightOnPrimary.withValues(alpha: 0.1),
-              ),
-            ),
-          ),
-          Positioned(
-            left: -20,
-            bottom: -20,
-            child: Container(
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: LightModeColors.lightOnPrimary.withValues(alpha: 0.05),
-              ),
-            ),
-          ),
           // Main content
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -172,18 +147,6 @@ class _FormationsScreenState extends State<FormationsScreen>
                       ],
                     ),
                   ),
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: LightModeColors.lightOnPrimary.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Icon(
-                      Icons.notifications_none_rounded,
-                      size: 20,
-                      color: LightModeColors.lightOnPrimary,
-                    ),
-                  ),
                 ],
               ),
               const SizedBox(height: 20),
@@ -205,7 +168,7 @@ class _FormationsScreenState extends State<FormationsScreen>
                 ),
                 child: TextField(
                   controller: _searchController,
-                  style: TextStyle(color: LightModeColors.lightOnPrimary),
+                  style: TextStyle(color: LightModeColors.lightOnPrimaryContainer),
                   onChanged: (value) {
                     Provider.of<FormationProvider>(
                       context,
@@ -215,11 +178,11 @@ class _FormationsScreenState extends State<FormationsScreen>
                   decoration: InputDecoration(
                     hintText: 'Rechercher une formation...',
                     hintStyle: TextStyle(
-                      color: LightModeColors.lightOnPrimary.withOpacity(0.7), // 70% opacity of white
+                      color: LightModeColors.lightOnPrimaryContainer.withOpacity(0.7), // 70% opacity of white
                     ),
                     prefixIcon: Icon(
                       Icons.search_rounded,
-                      color: LightModeColors.lightOnPrimary.withOpacity(0.8), // 80% opacity of white
+                      color: LightModeColors.lightOnPrimaryContainer.withOpacity(0.8), // 80% opacity of white
                     ),
                     border: InputBorder.none,
                     contentPadding: const EdgeInsets.symmetric(
@@ -255,14 +218,9 @@ class _FormationsScreenState extends State<FormationsScreen>
         child: TabBar(
           controller: _tabController,
           labelColor: LightModeColors.lightOnPrimary,
-          unselectedLabelColor: LightModeColors.novoPharmaBlue,
+          unselectedLabelColor: LightModeColors.lightError,
           indicator: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                LightModeColors.novoPharmaBlue,
-                LightModeColors.novoPharmaBlue.withOpacity(0.8),
-              ],
-            ),
+            color: LightModeColors.lightError,
             borderRadius: BorderRadius.circular(20),
           ),
           indicatorSize: TabBarIndicatorSize.tab,
@@ -465,10 +423,10 @@ class _FormationsScreenState extends State<FormationsScreen>
                     vertical: 6,
                   ),
                   decoration: BoxDecoration(
-                    color: LightModeColors.novoPharmaBlue.withOpacity(0.1),
+                    color: LightModeColors.success.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
-                      color: LightModeColors.novoPharmaBlue.withOpacity(0.2),
+                      color: LightModeColors.success.withOpacity(0.2),
                       width: 1,
                     ),
                   ),
@@ -477,7 +435,7 @@ class _FormationsScreenState extends State<FormationsScreen>
                     style: TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.w700,
-                      color: LightModeColors.novoPharmaBlue,
+                      color: LightModeColors.success,
                       letterSpacing: 1.2,
                     ),
                   ),
@@ -510,13 +468,13 @@ class _FormationsScreenState extends State<FormationsScreen>
                           Container(
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                              color: LightModeColors.novoPharmaBlue.withOpacity(0.1),
+                              color: LightModeColors.warning.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Icon(
                               Icons.person_outline_rounded,
                               size: 16,
-                              color: LightModeColors.novoPharmaBlue,
+                              color: LightModeColors.warning,
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -605,29 +563,9 @@ class _FormationsScreenState extends State<FormationsScreen>
                 Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        LightModeColors.novoPharmaBlue,
-                        LightModeColors.lightSecondary,
-                        LightModeColors.lightTertiary,
-                      ],
-                    ),
+                    color: LightModeColors.success,
                     borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: LightModeColors.novoPharmaBlue.withOpacity(0.4),
-                        blurRadius: 20,
-                        offset: const Offset(0, 8),
-                        spreadRadius: -4,
-                      ),
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
+                    
                   ),
                   child: Material(
                     color: Colors.transparent,
@@ -913,7 +851,7 @@ class _FormationsScreenState extends State<FormationsScreen>
                           ),
                           child: const Icon(
                             Icons.play_arrow_rounded,
-                            color: LightModeColors.novoPharmaBlue,
+                            color: LightModeColors.success,
                             size: 20,
                           ),
                         ),
@@ -934,10 +872,10 @@ class _FormationsScreenState extends State<FormationsScreen>
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: LightModeColors.novoPharmaBlue.withOpacity(0.1),
+                      color: LightModeColors.success.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                        color: LightModeColors.novoPharmaBlue.withOpacity(0.2),
+                        color: LightModeColors.success.withOpacity(0.2),
                         width: 1,
                       ),
                     ),
@@ -947,7 +885,7 @@ class _FormationsScreenState extends State<FormationsScreen>
                         Icon(
                           Icons.play_circle_outline_rounded,
                           size: 14,
-                          color: LightModeColors.novoPharmaBlue,
+                          color: LightModeColors.success,
                         ),
                         const SizedBox(width: 4),
                         const Text(
@@ -955,7 +893,7 @@ class _FormationsScreenState extends State<FormationsScreen>
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w700,
-                            color: LightModeColors.novoPharmaBlue,
+                            color: LightModeColors.success,
                             letterSpacing: 0.5,
                           ),
                         ),

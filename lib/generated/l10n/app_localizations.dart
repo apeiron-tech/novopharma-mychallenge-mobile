@@ -1441,6 +1441,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Search products...'**
   String get searchProducts;
+
+  /// No description provided for @quizResults.
+  ///
+  /// In en, this message translates to:
+  /// **'Quiz Results'**
+  String get quizResults;
+
+  /// No description provided for @congratulations.
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulations!'**
+  String get congratulations;
+
+  /// No description provided for @goodEffort.
+  ///
+  /// In en, this message translates to:
+  /// **'Good Effort!'**
+  String get goodEffort;
+
+  /// No description provided for @reviewYourAnswers.
+  ///
+  /// In en, this message translates to:
+  /// **'Review Your Answers'**
+  String get reviewYourAnswers;
+
+  /// No description provided for @done.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get done;
+
+  /// No description provided for @youEarnedPoints.
+  ///
+  /// In en, this message translates to:
+  /// **'You earned {points} points!'**
+  String youEarnedPoints(Object points);
+
+  /// No description provided for @questionNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Question {number}: {text}'**
+  String questionNumber(Object number, Object text);
+
+  /// No description provided for @correctAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct Answer'**
+  String get correctAnswer;
+
+  /// No description provided for @incorrectAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect Answer'**
+  String get incorrectAnswer;
+
+  /// No description provided for @yourAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Answer'**
+  String get yourAnswer;
+
+  /// No description provided for @explanation.
+  ///
+  /// In en, this message translates to:
+  /// **'Explanation'**
+  String get explanation;
 }
 
 class _AppLocalizationsDelegate

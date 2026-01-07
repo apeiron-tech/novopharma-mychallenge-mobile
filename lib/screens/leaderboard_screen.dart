@@ -157,7 +157,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
               padding: const EdgeInsets.symmetric(vertical: 12),
               decoration: BoxDecoration(
                 color: isActive
-                    ? LightModeColors.lightPrimary
+                    ? LightModeColors.lightError
                     : LightModeColors.novoPharmaLightGray,
                 borderRadius: BorderRadius.circular(20),
               ),
@@ -424,13 +424,13 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
     Color medalColor;
     switch (position) {
       case 1:
-        medalColor = Colors.amber;
+        medalColor = LightModeColors.lightError;
         break;
       case 2:
         medalColor = Colors.grey.shade400;
         break;
       case 3:
-        medalColor = Colors.orange.shade700;
+        medalColor = LightModeColors.warning;
         break;
       default:
         medalColor = Colors.grey;
@@ -574,7 +574,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                       height: 24,
                       decoration: BoxDecoration(
                         color: isCurrentUser
-                            ? LightModeColors.lightPrimary
+                            ? LightModeColors.warning
                             : LightModeColors.lightOutlineVariant,
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -641,7 +641,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                       '${user['points']} pts',
                       style: TextStyle(
                         color: isCurrentUser
-                            ? LightModeColors.lightPrimary
+                            ? LightModeColors.warning
                             : LightModeColors.dashboardTextSecondary,
                         fontSize: 14,
                         fontWeight: FontWeight.w600,

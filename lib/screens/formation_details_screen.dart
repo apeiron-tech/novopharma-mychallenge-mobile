@@ -329,7 +329,7 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
                     Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: LightModeColors.novoPharmaBlue.withOpacity(
+                        color: LightModeColors.warning.withOpacity(
                           0.1,
                         ),
                         borderRadius: BorderRadius.circular(8),
@@ -337,7 +337,7 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
                       child: Icon(
                         Icons.person_outline,
                         size: 16,
-                        color: LightModeColors.novoPharmaBlue,
+                        color: LightModeColors.warning,
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -522,8 +522,8 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        LightModeColors.novoPharmaBlue,
-                        LightModeColors.novoPharmaBlue.withValues(alpha: 0.8),
+                        LightModeColors.success,
+                        LightModeColors.success.withValues(alpha: 0.8),
                       ],
                     ),
                     borderRadius: BorderRadius.circular(20),
@@ -610,8 +610,8 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        LightModeColors.novoPharmaBlue,
-                        LightModeColors.novoPharmaBlue.withValues(alpha: 0.8),
+                        LightModeColors.warning,
+                        LightModeColors.warning.withValues(alpha: 0.8),
                       ],
                     ),
                     borderRadius: BorderRadius.circular(16),
@@ -658,10 +658,10 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
                         gradient: isActive
                             ? LinearGradient(
                                 colors: [
-                                  LightModeColors.novoPharmaBlue.withOpacity(
+                                  LightModeColors.lightwarning.withOpacity(
                                     0.1,
                                   ),
-                                  LightModeColors.novoPharmaBlue.withOpacity(
+                                  LightModeColors.lightwarning.withOpacity(
                                     0.05,
                                   ),
                                 ],
@@ -673,7 +673,7 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
                               ),
                         border: Border.all(
                           color: isActive
-                              ? LightModeColors.novoPharmaBlue.withOpacity(
+                              ? LightModeColors.lightwarning.withOpacity(
                                   0.3,
                                 )
                               : LightModeColors.lightSurfaceVariant,
@@ -683,7 +683,7 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
                         boxShadow: [
                           if (isActive)
                             BoxShadow(
-                              color: LightModeColors.novoPharmaBlue.withOpacity(
+                              color: LightModeColors.lightwarning.withOpacity(
                                 0.1,
                               ),
                               blurRadius: 12,
@@ -701,15 +701,15 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
                               gradient: isCompleted
                                   ? const LinearGradient(
                                       colors: [
-                                        Color(0xFF48BB78),
-                                        Color(0xFF38A169),
+                                        LightModeColors.success,
+                                        LightModeColors.success
                                       ],
                                     )
                                   : isActive
                                   ? LinearGradient(
                                       colors: [
-                                        LightModeColors.novoPharmaBlue,
-                                        LightModeColors.novoPharmaBlue
+                                        LightModeColors.lightwarning,
+                                        LightModeColors.warning
                                             .withValues(alpha: 0.8),
                                       ],
                                     )
@@ -720,18 +720,7 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
                                       ],
                                     ),
                               shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: isCompleted
-                                      ? Colors.green.withValues(alpha: 0.3)
-                                      : isActive
-                                      ? LightModeColors.novoPharmaBlue
-                                            .withValues(alpha: 0.3)
-                                      : Colors.grey.withValues(alpha: 0.2),
-                                  blurRadius: 8,
-                                  offset: const Offset(0, 4),
-                                ),
-                              ],
+                              
                             ),
                             child: Icon(
                               isCompleted ? Icons.check_rounded : step.icon,
@@ -753,7 +742,7 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
                                     fontSize: 17,
                                     fontWeight: FontWeight.w700,
                                     color: isActive
-                                        ? LightModeColors.novoPharmaBlue
+                                        ? LightModeColors.warning
                                         : const Color(0xFF2D3748),
                                   ),
                                 ),
@@ -784,7 +773,7 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
                                       style: TextStyle(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w600,
-                                        color: Color(0xFF38A169),
+                                        color: LightModeColors.success,
                                       ),
                                     ),
                                   ),
@@ -798,7 +787,7 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
                               color: isActive
-                                  ? LightModeColors.novoPharmaBlue.withValues(
+                                  ? LightModeColors.warning.withValues(
                                       alpha: 0.1,
                                     )
                                   : Colors.grey.shade100,
@@ -808,7 +797,7 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
                               Icons.arrow_forward_ios_rounded,
                               size: 16,
                               color: isActive
-                                  ? LightModeColors.novoPharmaBlue
+                                  ? LightModeColors.warning
                                   : Colors.grey.shade500,
                             ),
                           ),

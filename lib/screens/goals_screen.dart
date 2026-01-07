@@ -100,14 +100,6 @@ class _GoalsScreenState extends State<GoalsScreen>
                                         ],
                                       ),
                                       borderRadius: BorderRadius.circular(18),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: LightModeColors.lightPrimary.withValues(alpha: 0.35),
-                                          blurRadius: 16,
-                                          offset: const Offset(0, 6),
-                                          spreadRadius: 0,
-                                        ),
-                                      ],
                                     ),
                                     child: const Icon(
                                       Icons.flag_rounded,
@@ -144,13 +136,13 @@ class _GoalsScreenState extends State<GoalsScreen>
                                                         vertical: 6,
                                                       ),
                                                   decoration: BoxDecoration(
-                                                    color: LightModeColors.lightPrimary.withValues(alpha: 0.1),
+                                                    color: LightModeColors.success.withValues(alpha: 0.1),
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                           12,
                                                         ),
                                                     border: Border.all(
-                                                      color: LightModeColors.lightPrimary.withValues(alpha: 0.2),
+                                                      color: LightModeColors.success.withValues(alpha: 0.2),
                                                     ),
                                                   ),
                                                   child: Text(
@@ -159,7 +151,7 @@ class _GoalsScreenState extends State<GoalsScreen>
                                                     ),
                                                     style: const TextStyle(
                                                       fontSize: 13,
-                                                      color: LightModeColors.lightPrimary,
+                                                      color: LightModeColors.success,
                                                       fontWeight:
                                                           FontWeight.w700,
                                                       letterSpacing: 0.3,
@@ -185,7 +177,6 @@ class _GoalsScreenState extends State<GoalsScreen>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 24),
                       // Active Goals Section Header
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -194,13 +185,13 @@ class _GoalsScreenState extends State<GoalsScreen>
                             Container(
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
-                                color: LightModeColors.lightPrimary.withValues(alpha: 0.1),
+                                color: LightModeColors.warning.withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: const Icon(
                                 Icons.military_tech_rounded,
-                                size: 20,
-                                color: LightModeColors.lightPrimary,
+                                size: 28,
+                                color: LightModeColors.warning,
                               ),
                             ),
                             const SizedBox(width: 12),
@@ -283,29 +274,7 @@ class _GoalsScreenState extends State<GoalsScreen>
                               margin: const EdgeInsets.symmetric(horizontal: 4),
                               width: _currentPage == index ? 24 : 8,
                               height: 8,
-                              decoration: BoxDecoration(
-                                gradient: _currentPage == index
-                                    ? const LinearGradient(
-                                        colors: [
-                                          LightModeColors.lightPrimary,
-                                          LightModeColors.lightSecondary,
-                                        ],
-                                      )
-                                    : null,
-                                color: _currentPage != index
-                                    ? LightModeColors.lightOutline
-                                    : null,
-                                borderRadius: BorderRadius.circular(4),
-                                boxShadow: _currentPage == index
-                                    ? [
-                                        BoxShadow(
-                                          color: LightModeColors.lightPrimary.withValues(alpha: 0.4),
-                                          blurRadius: 8,
-                                          offset: const Offset(0, 2),
-                                        ),
-                                      ]
-                                    : null,
-                              ),
+                              
                             ),
                           ),
                         ),
@@ -459,29 +428,13 @@ class GoalBottomSheet extends StatelessWidget {
                               vertical: 8,
                             ),
                             decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: progressPercent >= 100
-                                    ? [
-                                        LightModeColors.success,
-                                        LightModeColors.lightSecondary,
-                                      ]
-                                    : [
-                                        LightModeColors.lightPrimary,
-                                        LightModeColors.lightSecondary,
-                                      ],
-                              ),
+                              
+                                color: progressPercent >= 100
+                                    ? LightModeColors.success
+                                    : LightModeColors.lightError,
+                                      
                               borderRadius: BorderRadius.circular(14),
-                              boxShadow: [
-                                BoxShadow(
-                                  color:
-                                      (progressPercent >= 100
-                                              ? LightModeColors.success
-                                              : LightModeColors.lightPrimary)
-                                          .withValues(alpha: 0.3),
-                                  blurRadius: 8,
-                                  offset: const Offset(0, 3),
-                                ),
-                              ],
+                              
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
@@ -545,13 +498,13 @@ class GoalBottomSheet extends StatelessWidget {
                                 Container(
                                   padding: const EdgeInsets.all(8),
                                   decoration: BoxDecoration(
-                                    color: LightModeColors.lightPrimary.withValues(alpha: 0.1),
+                                    color: LightModeColors.lightError.withValues(alpha: 0.1),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: const Icon(
                                     Icons.analytics_rounded,
                                     size: 18,
-                                    color: LightModeColors.lightPrimary,
+                                    color: LightModeColors.lightError,
                                   ),
                                 ),
                                 const SizedBox(width: 12),
@@ -585,19 +538,9 @@ class GoalBottomSheet extends StatelessWidget {
                         width: double.infinity,
                         height: 56,
                         decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [LightModeColors.lightPrimary, LightModeColors.lightSecondary],
-                          ),
+                          color: LightModeColors.lightError,
                           borderRadius: BorderRadius.circular(16),
-                          boxShadow: [
-                            BoxShadow(
-                              color: LightModeColors.lightPrimary.withValues(alpha: 0.4),
-                              blurRadius: 16,
-                              offset: const Offset(0, 6),
-                            ),
-                          ],
+
                         ),
                         child: Material(
                           color: Colors.transparent,
@@ -662,10 +605,10 @@ class GoalBottomSheet extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
-              color: LightModeColors.lightPrimary.withValues(alpha: 0.1),
+              color: LightModeColors.warning.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(icon, size: 18, color: LightModeColors.lightPrimary),
+            child: Icon(icon, size: 18, color: LightModeColors.warning),
           ),
           const SizedBox(width: 12),
           Expanded(

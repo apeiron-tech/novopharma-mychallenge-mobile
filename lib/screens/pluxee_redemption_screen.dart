@@ -329,20 +329,7 @@ class _PluxeeRedemptionScreenState extends State<PluxeeRedemptionScreen> {
                 // Header Section with Dark Gradient
                 Container(
                   width: double.infinity,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [LightModeColors.lightPrimary, LightModeColors.lightTertiary],
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        blurRadius: 20,
-                        offset: const Offset(0, 10),
-                      ),
-                    ],
-                  ),
+      
                   padding: const EdgeInsets.symmetric(
                     horizontal: 24,
                     vertical: 40,
@@ -365,7 +352,7 @@ class _PluxeeRedemptionScreenState extends State<PluxeeRedemptionScreen> {
                         child: Text(
                           l10n.points.toUpperCase(),
                           style: GoogleFonts.inter(
-                            color: LightModeColors.lightOnPrimary.withOpacity(0.9),
+                            color: LightModeColors.lightOnPrimaryContainer,
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
                             letterSpacing: 1.2,
@@ -376,7 +363,7 @@ class _PluxeeRedemptionScreenState extends State<PluxeeRedemptionScreen> {
                       Text(
                         '$availablePoints',
                         style: GoogleFonts.inter(
-                          color: LightModeColors.lightOnPrimary,
+                          color: LightModeColors.lightOnPrimaryContainer,
                           fontSize: 56,
                           fontWeight: FontWeight.w900,
                           letterSpacing: -2,
@@ -389,21 +376,14 @@ class _PluxeeRedemptionScreenState extends State<PluxeeRedemptionScreen> {
                             horizontal: 20,
                             vertical: 10,
                           ),
-                          decoration: BoxDecoration(
-                            color: LightModeColors.warning.withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                              color: LightModeColors.warning,
-                              width: 1.5,
-                            ),
-                          ),
+                          
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               const Icon(
                                 Icons.schedule_rounded,
                                 color: LightModeColors.warning,
-                                size: 18,
+                                size: 20,
                               ),
                               const SizedBox(width: 8),
                               Text(
@@ -420,7 +400,7 @@ class _PluxeeRedemptionScreenState extends State<PluxeeRedemptionScreen> {
                       ],
                       const SizedBox(height: 28),
                       Material(
-                        color: LightModeColors.lightOnPrimary.withOpacity(0.1),
+                        color: LightModeColors.success.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(16),
                         child: InkWell(
                           onTap: () {
@@ -440,7 +420,7 @@ class _PluxeeRedemptionScreenState extends State<PluxeeRedemptionScreen> {
                             ),
                             decoration: BoxDecoration(
                               border: Border.all(
-                                color: LightModeColors.lightOnPrimary.withOpacity(0.2),
+                                color: LightModeColors.success.withOpacity(0.2),
                                 width: 1.5,
                               ),
                               borderRadius: BorderRadius.circular(16),
@@ -450,14 +430,14 @@ class _PluxeeRedemptionScreenState extends State<PluxeeRedemptionScreen> {
                               children: [
                                 const Icon(
                                   Icons.history_rounded,
-                                  color: LightModeColors.lightOnPrimary,
+                                  color: LightModeColors.success,
                                   size: 22,
                                 ),
                                 const SizedBox(width: 12),
                                 Text(
                                   l10n.viewRedemptionHistory,
                                   style: GoogleFonts.inter(
-                                    color: LightModeColors.lightOnPrimary,
+                                    color: LightModeColors.success,
                                     fontSize: 15,
                                     fontWeight: FontWeight.w700,
                                   ),
@@ -473,61 +453,38 @@ class _PluxeeRedemptionScreenState extends State<PluxeeRedemptionScreen> {
 
                 // Main Content
                 Padding(
-                  padding: const EdgeInsets.all(24),
+                  padding: const EdgeInsets.all(20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(
                         l10n.redeemPluxeeCredits,
-                        style: GoogleFonts.montserrat(
+                        style: GoogleFonts.inter(
                           color: LightModeColors.dashboardTextPrimary,
-                          fontSize: 22,
+                          fontSize: 24,
                           fontWeight: FontWeight.w800,
-                          letterSpacing: -0.3,
+                          
                         ),
                         textAlign: TextAlign.center,
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 14),
 
                       // Info Card with Dark Layered Design
                       Container(
                         padding: const EdgeInsets.all(28),
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [LightModeColors.lightPrimary, LightModeColors.lightTertiary],
-                          ),
+                          color: LightModeColors.warning,
                           borderRadius: BorderRadius.circular(24),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              blurRadius: 25,
-                              offset: const Offset(0, 10),
-                            ),
-                          ],
+                         
                         ),
                         child: Column(
                           children: [
                             Container(
                               padding: const EdgeInsets.all(20),
                               decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                  colors: [
-                                    LightModeColors.novoPharmaBlue.withOpacity(1.0),
-                                    LightModeColors.novoPharmaBlue.withOpacity(0.8),
-                                  ],
-                                ),
+                                color: LightModeColors.lightOnPrimary.withOpacity(0.2),
                                 shape: BoxShape.circle,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: LightModeColors.novoPharmaBlue.withOpacity(0.4),
-                                    blurRadius: 20,
-                                    offset: const Offset(0, 8),
-                                  ),
-                                ],
+                                
                               ),
                               child: const Icon(
                                 Icons.card_giftcard_rounded,
@@ -569,13 +526,13 @@ class _PluxeeRedemptionScreenState extends State<PluxeeRedemptionScreen> {
                                   Container(
                                     padding: const EdgeInsets.all(8),
                                     decoration: BoxDecoration(
-                                      color: LightModeColors.novoPharmaBlue.withOpacity(0.2),
+                                      color: LightModeColors.lightOnPrimary.withOpacity(0.2),
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                     child: const Icon(
                                       Icons.info_rounded,
                                       size: 20,
-                                      color: LightModeColors.novoPharmaBlue,
+                                      color: LightModeColors.lightOnPrimary,
                                     ),
                                   ),
                                   const SizedBox(width: 12),
@@ -603,27 +560,11 @@ class _PluxeeRedemptionScreenState extends State<PluxeeRedemptionScreen> {
                       // Redeem Button with Blue Gradient
                       Container(
                         decoration: BoxDecoration(
-                          gradient: availablePoints > 0
-                              ? LinearGradient(
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                  colors: [
-                                    LightModeColors.novoPharmaBlue.withOpacity(1.0),
-                                    LightModeColors.novoPharmaBlue.withOpacity(0.8),
-                                  ],
-                                )
-                              : null,
-                          color: availablePoints > 0 ? null : LightModeColors.lightSurfaceVariant,
+                          
+                          color:  LightModeColors.lightError,
                           borderRadius: BorderRadius.circular(16),
-                          boxShadow: availablePoints > 0
-                              ? [
-                                  BoxShadow(
-                                    color: LightModeColors.novoPharmaBlue.withOpacity(0.4),
-                                    blurRadius: 20,
-                                    offset: const Offset(0, 8),
-                                  ),
-                                ]
-                              : null,
+                          
+                              
                         ),
                         child: Material(
                           color: Colors.transparent,
@@ -685,19 +626,9 @@ class _PluxeeRedemptionScreenState extends State<PluxeeRedemptionScreen> {
             width: 32,
             height: 32,
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [LightModeColors.novoPharmaBlue.withOpacity(1.0), LightModeColors.novoPharmaBlue.withOpacity(0.8)],
-              ),
+              color: LightModeColors.lightOnPrimary.withOpacity(0.2),
               shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: LightModeColors.novoPharmaBlue.withOpacity(0.3),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ],
+              
             ),
             child: Center(
               child: Text(

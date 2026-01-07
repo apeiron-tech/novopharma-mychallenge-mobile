@@ -33,86 +33,66 @@ class _PluxeeHistoryScreenState extends State<PluxeeHistoryScreen> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: LightModeColors.lightBackground,
-      body: CustomScrollView(
-        slivers: [
-          // Modern App Bar with gradient
-          SliverAppBar(
-            expandedHeight: 120,
-            floating: false,
-            pinned: true,
-            elevation: 0,
-            backgroundColor: LightModeColors.lightSurface,
-            surfaceTintColor: LightModeColors.lightSurface,
-            scrolledUnderElevation: 6.0,
-            leading: Padding(
-              padding: const EdgeInsets.only(left: 8),
-              child: IconButton(
-                icon: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: LightModeColors.lightSurfaceVariant.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Icon(
-                    Icons.arrow_back_ios_new,
-                    color: LightModeColors.lightSurfaceVariant,
-                    size: 20,
-                  ),
-                ),
-                onPressed: () => Navigator.of(context).pop(),
-                iconSize: 20,
-                splashRadius: 20,
-              ),
-            ),
-            flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [LightModeColors.lightPrimary, LightModeColors.lightTertiary],
-                  ),
-                ),
-                child: SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 50, 20, 16),
-                    child: Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: LightModeColors.lightSurfaceVariant.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: const Icon(
-                              Icons.history,
-                              color: LightModeColors.lightSurfaceVariant,
-                              size: 28,
-                            ),
-                          ),
-                          const SizedBox(width: 14),
-                          Expanded(
-                            child: Text(
-                              l10n.redemptionHistory,
-                              style: GoogleFonts.montserrat(
-                                color: LightModeColors.lightSurfaceVariant,
-                                fontSize: 22,
-                                fontWeight: FontWeight.w700,
-                                letterSpacing: -0.5,
-                              ),
-                            ),
-                          ),
-                        ],
+      appBar: // Modern App Bar with simpler design
+          AppBar(
+
+            backgroundColor: LightModeColors.lightPrimary,
+            surfaceTintColor: Colors.transparent,
+            
+          
+            
+            
+            // App bar title and back button
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(20),
+              child: Container(
+                padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+                child: Row(
+                  children: [
+                    // Back button with standard styling
+                    Container(
+                      decoration: BoxDecoration(
+                        color: LightModeColors.lightOnPrimary.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: LightModeColors.lightOnPrimary.withOpacity(0.3),
+                          width: 1,
+                        ),
+                      ),
+                      child: IconButton(
+                        icon: const Icon(
+                          Icons.arrow_back_ios_new,
+                          color: LightModeColors.lightOnPrimary,
+                          size: 16,
+                        ),
+                        onPressed: () => Navigator.of(context).pop(),
+                        padding: const EdgeInsets.all(2),
+                        splashRadius: 20,
                       ),
                     ),
-                  ),
+                    
+                    const SizedBox(width: 12),
+                    
+                    // Title
+                    Expanded(
+                      child: Text(
+                        l10n.redemptionHistory,
+                        style: GoogleFonts.inter(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                          color: LightModeColors.lightOnPrimary,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
           ),
+      backgroundColor: LightModeColors.lightBackground,
+      body: CustomScrollView(
+        slivers: [
+          
 
           // Content
           Consumer<PluxeeRedemptionProvider>(
@@ -124,21 +104,37 @@ class _PluxeeHistoryScreenState extends State<PluxeeHistoryScreen> {
               if (provider.isLoading) {
                 return SliverFillRemaining(
                   child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CircularProgressIndicator(
-                          color: LightModeColors.novoPharmaBlue,
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          'Loading history...',
-                          style: GoogleFonts.inter(
-                            color: LightModeColors.dashboardTextSecondary,
-                            fontSize: 14,
+                    child: Container(
+                      margin: const EdgeInsets.all(32),
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        color: LightModeColors.lightSurface,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: LightModeColors.lightSurfaceVariant.withOpacity(0.1),
+                            blurRadius: 20,
+                            offset: const Offset(0, 4),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CircularProgressIndicator(
+                            color: LightModeColors.lightPrimary,
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Loading history...',
+                            style: TextStyle(
+                              color: LightModeColors.dashboardTextSecondary,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 );
@@ -148,53 +144,60 @@ class _PluxeeHistoryScreenState extends State<PluxeeHistoryScreen> {
                 print('⚠️ [HistoryScreen] No requests to display');
                 return SliverFillRemaining(
                   child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(32),
-                          decoration: BoxDecoration(
-                            color: LightModeColors.lightSurface,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: LightModeColors.novoPharmaBlue.withOpacity(0.1),
-                                blurRadius: 20,
-                                offset: const Offset(0, 10),
+                    child: Container(
+                      margin: const EdgeInsets.all(32),
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        color: LightModeColors.lightSurface,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: LightModeColors.lightSurfaceVariant.withOpacity(0.1),
+                            blurRadius: 20,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: LightModeColors.warning.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            child: Icon(
+                              Icons.receipt_long_outlined,
+                              size: 48,
+                              color: LightModeColors.warning,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            l10n.noRedemptionHistory,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                              color: LightModeColors.dashboardTextPrimary,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Text(
+                              l10n.noRedemptionHistoryMessage,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: LightModeColors.dashboardTextSecondary,
+                                height: 1.4,
                               ),
-                            ],
-                          ),
-                          child: Icon(
-                            Icons.receipt_long_outlined,
-                            size: 64,
-                            color: LightModeColors.novoPharmaBlue.withOpacity(
-                              0.5,
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 24),
-                        Text(
-                          l10n.noRedemptionHistory,
-                          style: GoogleFonts.montserrat(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                            color: LightModeColors.dashboardTextPrimary,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 40),
-                          child: Text(
-                            l10n.noRedemptionHistoryMessage,
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.inter(
-                              fontSize: 14,
-                              color: LightModeColors.dashboardTextSecondary,
-                              height: 1.5,
-                            ),
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 );
@@ -264,265 +267,283 @@ class _PluxeeHistoryScreenState extends State<PluxeeHistoryScreen> {
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(20),
-            child: Stack(
-              children: [
-                // Colored accent bar on the left
-                Positioned(
-                  left: 0,
-                  top: 0,
-                  bottom: 0,
-                  width: 6,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: request.isPending
-                            ? [LightModeColors.warning, LightModeColors.warning]
-                            : request.isApproved
-                            ? [LightModeColors.success, LightModeColors.success]
-                            : [
-                                LightModeColors.lightError,
-                                LightModeColors.lightError,
-                              ],
+            child: Container(
+              decoration: BoxDecoration(
+                color: LightModeColors.lightSurface,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: LightModeColors.lightOnPrimary.withOpacity(0.6),
+                  width: 1.5,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: LightModeColors.lightSurfaceVariant.withOpacity(0.08),
+                    blurRadius: 20,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Stack(
+                children: [
+                  // Colored accent bar on the left
+                  Positioned(
+                    left: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: 6,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: request.isPending
+                              ? [LightModeColors.warning, LightModeColors.warning]
+                              : request.isApproved
+                              ? [LightModeColors.success, LightModeColors.success]
+                              : [
+                                  LightModeColors.lightError,
+                                  LightModeColors.lightError,
+                                ],
+                        ),
                       ),
                     ),
                   ),
-                ),
 
-                // Main content
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Header with status badge and date
-                      Row(
-                        children: [
-                          Expanded(
-                            child: _buildModernStatusBadge(context, request),
-                          ),
-                          const SizedBox(width: 12),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 6,
-                            ),
-                            decoration: BoxDecoration(
-                              color: LightModeColors.novoPharmaLightBlue,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.calendar_today,
-                                  size: 14,
-                                  color: LightModeColors.dashboardTextPrimary,
-                                ),
-                                const SizedBox(width: 6),
-                                Text(
-                                  DateFormat(
-                                    'MMM dd, yyyy',
-                                  ).format(request.requestedAt),
-                                  style: GoogleFonts.inter(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                    color: LightModeColors.dashboardTextPrimary,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-
-                      // Points and credits display
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: LightModeColors.novoPharmaLightBlue,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Column(
+                  // Main content
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Header with status badge and date
+                        Row(
                           children: [
-                            _buildModernInfoRow(
-                              context,
-                              Icons.stars_rounded,
-                              l10n.pointsToRedeem,
-                              '${request.pointsToRedeem}',
-                              LightModeColors.warning,
+                            Expanded(
+                              child: _buildModernStatusBadge(context, request),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 12),
+                            const SizedBox(width: 12),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 6,
+                              ),
+                              decoration: BoxDecoration(
+                                color: LightModeColors.lightSurfaceVariant.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                               child: Row(
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Expanded(
-                                    child: Container(
-                                      height: 1,
-                                      decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                          colors: [
-                                            LightModeColors.dashboardTextSecondary.withOpacity(0.1),
-                                            LightModeColors.dashboardTextSecondary.withOpacity(0.3),
-                                            LightModeColors.dashboardTextSecondary.withOpacity(0.1),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
+                                  Icon(
+                                    Icons.calendar_today,
+                                    size: 14,
+                                    color: LightModeColors.dashboardTextSecondary,
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 12,
-                                    ),
-                                    child: Icon(
-                                      Icons.arrow_downward_rounded,
-                                      size: 16,
-                                      color: LightModeColors
-                                          .dashboardTextSecondary,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Container(
-                                      height: 1,
-                                      decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                          colors: [
-                                            LightModeColors.dashboardTextSecondary.withOpacity(0.1),
-                                            LightModeColors.dashboardTextSecondary.withOpacity(0.3),
-                                            LightModeColors.dashboardTextSecondary.withOpacity(0.1),
-                                          ],
-                                        ),
-                                      ),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    DateFormat(
+                                      'MMM dd, yyyy',
+                                    ).format(request.requestedAt),
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500,
+                                      color: LightModeColors.dashboardTextSecondary,
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                            _buildModernInfoRow(
-                              context,
-                              Icons.card_giftcard_rounded,
-                              l10n.pluxeeCredits,
-                              '${request.pluxeeCreditsEquivalent.toStringAsFixed(2)}',
-                              LightModeColors.success,
-                            ),
                           ],
                         ),
-                      ),
+                        const SizedBox(height: 16),
 
-                      // Show rejection reason if rejected and expanded
-                      if (request.isRejected &&
-                          request.rejectionReason != null) ...[
-                        AnimatedSize(
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeInOut,
-                          child: _expandedCards.contains(request.id)
-                              ? Container(
-                                  margin: const EdgeInsets.only(top: 16),
-                                  padding: const EdgeInsets.all(16),
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        LightModeColors.warningContainer,
-                                        LightModeColors.warningContainer,
-                                      ],
-                                    ),
-                                    borderRadius: BorderRadius.circular(16),
-                                    border: Border.all(
-                                      color: LightModeColors.lightError.withOpacity(0.5),
-                                      width: 1.5,
-                                    ),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Container(
-                                            padding: const EdgeInsets.all(8),
-                                            decoration: BoxDecoration(
-                                              color: LightModeColors.lightError.withOpacity(0.1),
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            child: const Icon(
-                                              Icons.error_outline,
-                                              color: LightModeColors.lightError,
-                                              size: 20,
-                                            ),
+                        // Points and credits display
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: LightModeColors.novoPharmaBlue.withValues(
+                              alpha: 0.05,
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: LightModeColors.novoPharmaBlue.withValues(
+                                alpha: 0.1,
+                              ),
+                            ),
+                          ),
+                          child: Column(
+                            children: [
+                              _buildModernInfoRow(
+                                context,
+                                Icons.stars_rounded,
+                                l10n.pointsToRedeem,
+                                '${request.pointsToRedeem}',
+                                LightModeColors.warning,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Container(
+                                        height: 1,
+                                        decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                            colors: [
+                                              LightModeColors.dashboardTextSecondary.withOpacity(0.1),
+                                              LightModeColors.dashboardTextSecondary.withOpacity(0.3),
+                                              LightModeColors.dashboardTextSecondary.withOpacity(0.1),
+                                            ],
                                           ),
-                                          const SizedBox(width: 12),
-                                          Expanded(
-                                            child: Text(
-                                              l10n.rejectionReason,
-                                              style: GoogleFonts.montserrat(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 12,
+                                      ),
+                                      child: Icon(
+                                        Icons.arrow_downward_rounded,
+                                        size: 16,
+                                        color: LightModeColors
+                                            .dashboardTextSecondary,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        height: 1,
+                                        decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                            colors: [
+                                              LightModeColors.dashboardTextSecondary.withOpacity(0.1),
+                                              LightModeColors.dashboardTextSecondary.withOpacity(0.3),
+                                              LightModeColors.dashboardTextSecondary.withOpacity(0.1),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              _buildModernInfoRow(
+                                context,
+                                Icons.card_giftcard_rounded,
+                                l10n.pluxeeCredits,
+                                '${request.pluxeeCreditsEquivalent.toStringAsFixed(2)}',
+                                LightModeColors.success,
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        // Show rejection reason if rejected and expanded
+                        if (request.isRejected &&
+                            request.rejectionReason != null)
+                          AnimatedSize(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                            child: _expandedCards.contains(request.id)
+                                ? Container(
+                                    margin: const EdgeInsets.only(top: 16),
+                                    padding: const EdgeInsets.all(16),
+                                    decoration: BoxDecoration(
+                                      color: LightModeColors.lightSurfaceVariant.withOpacity(0.05),
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(
+                                        color: LightModeColors.lightError.withOpacity(0.2),
+                                        width: 1,
+                                      ),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Container(
+                                              padding: const EdgeInsets.all(8),
+                                              decoration: BoxDecoration(
+                                                color: LightModeColors.lightError.withOpacity(0.1),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              child: const Icon(
+                                                Icons.error_outline,
                                                 color: LightModeColors.lightError,
+                                                size: 20,
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 12),
-                                      Text(
-                                        request.rejectionReason!,
-                                        style: GoogleFonts.inter(
-                                          fontSize: 13,
-                                          color: LightModeColors.lightError,
-                                          height: 1.5,
+                                            const SizedBox(width: 12),
+                                            Expanded(
+                                              child: Text(
+                                                l10n.rejectionReason,
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: LightModeColors.lightError,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
+                                        const SizedBox(height: 12),
+                                        Text(
+                                          request.rejectionReason!,
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            color: LightModeColors.lightError,
+                                            height: 1.5,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : Container(
+                                    margin: const EdgeInsets.only(top: 16),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                      vertical: 12,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: LightModeColors.lightSurfaceVariant.withOpacity(0.05),
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(
+                                        color: LightModeColors.lightError.withOpacity(0.2),
+                                        width: 1,
                                       ),
-                                    ],
-                                  ),
-                                )
-                              : Container(
-                                  margin: const EdgeInsets.only(top: 16),
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                    vertical: 12,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: LightModeColors.warningContainer,
-                                    borderRadius: BorderRadius.circular(12),
-                                    border: Border.all(
-                                      color: LightModeColors.lightError.withOpacity(0.3),
-                                      width: 1.5,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.info_outline,
+                                          size: 18,
+                                          color: LightModeColors.lightError,
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Expanded(
+                                          child: Text(
+                                            l10n.tapToViewReason,
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: LightModeColors.lightError,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ),
+                                        Icon(
+                                          Icons.arrow_drop_down,
+                                          color: LightModeColors.lightError,
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.info_outline,
-                                        size: 18,
-                                        color: LightModeColors.lightError,
-                                      ),
-                                      const SizedBox(width: 8),
-                                      Expanded(
-                                        child: Text(
-                                          l10n.tapToViewReason,
-                                          style: GoogleFonts.inter(
-                                            fontSize: 12,
-                                            color: LightModeColors.lightError,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      ),
-                                      Icon(
-                                        Icons.arrow_drop_down,
-                                        color: LightModeColors.lightError,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                        ),
+                          )
                       ],
-                    ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -563,23 +584,28 @@ class _PluxeeHistoryScreenState extends State<PluxeeHistoryScreen> {
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: iconColor.withOpacity(0.2), width: 1.5),
+        gradient: LinearGradient(
+          colors: [
+            iconColor.withValues(alpha: 0.1),
+            iconColor.withValues(alpha: 0.05),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: iconColor.withValues(alpha: 0.2), width: 1),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, color: iconColor, size: 18),
-          const SizedBox(width: 8),
+          Icon(icon, color: iconColor, size: 16),
+          const SizedBox(width: 6),
           Text(
             text,
-            style: GoogleFonts.montserrat(
-              fontSize: 13,
-              fontWeight: FontWeight.w700,
-              color: textColor,
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+              color: iconColor,
             ),
           ),
         ],
@@ -597,12 +623,12 @@ class _PluxeeHistoryScreenState extends State<PluxeeHistoryScreen> {
     return Row(
       children: [
         Container(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: accentColor.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(12),
+            color: accentColor.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(8),
           ),
-          child: Icon(icon, color: accentColor, size: 20),
+          child: Icon(icon, color: accentColor, size: 16),
         ),
         const SizedBox(width: 12),
         Expanded(
@@ -611,16 +637,16 @@ class _PluxeeHistoryScreenState extends State<PluxeeHistoryScreen> {
             children: [
               Text(
                 label,
-                style: GoogleFonts.inter(
+                style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
                   color: LightModeColors.dashboardTextSecondary,
                 ),
               ),
-              const SizedBox(height: 2),
+              const SizedBox(height: 4),
               Text(
                 value,
-                style: GoogleFonts.montserrat(
+                style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
                   color: LightModeColors.dashboardTextPrimary,

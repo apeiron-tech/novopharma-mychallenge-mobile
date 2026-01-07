@@ -311,5 +311,16 @@
     "rewardLabel": "Récompense",
     "customRewardLabel": "Récompense personnalisée",
     "manualSale": "Vente manuelle",
-    "searchProducts": "Rechercher des produits..."
+    "searchProducts": "Rechercher des produits...",
+    "quizResults": "Résultats du quiz",
+    "congratulations": "Félicitations !",
+    "goodEffort": "Bon effort !",
+    "reviewYourAnswers": "Revoir vos réponses",
+    "done": "Terminé",
+    "youEarnedPoints": "Vous avez gagné {points} points !",
+    "questionNumber": "Question {number} : {text}",
+    "correctAnswer": "Bonne réponse",
+    "incorrectAnswer": "Mauvaise réponse",
+    "yourAnswer": "Votre réponse",
+    "explanation": "Explication"
 }

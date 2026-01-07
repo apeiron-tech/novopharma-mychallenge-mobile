@@ -11,9 +11,9 @@ class LightModeColors {
   static const lightOnSecondary = Color(0xFFFFFFFF);
   static const lightTertiary = Color(0xFF7B7BFF); // Lighter version of primary
   static const lightOnTertiary = Color(0xFFFFFFFF);
-  
+
   // Error colors
-  static const lightError = Color(0xFFD93025); // Google red
+  static const lightError = Color(0xFFFF676F); 
   static const lightOnError = Color(0xFFFFFFFF);
   static const lightErrorContainer = Color(0xFFFCEEEE);
   static const lightOnErrorContainer = Color(0xFF410002);
@@ -52,11 +52,12 @@ class LightModeColors {
   static const dashboardTextTertiary = Color(0xFF9CA3AF); // Light text
   
   // Success and warning colors
-  static const success = Color(0xFF10B981);
+  static const success = Color(0xFF73DB94);
   static const successContainer = Color(0xFFD1FAE5);
-  static const warning = Color(0xFFF59F00);
+  static const warning = Color(0xFFFFB388);
+  static const lightwarning = Color(0xFFFED7AA); // Light orange/yellow
   static const warningContainer = Color(0xFFFFF3CD);
-  
+    
   // Card and container colors
   static const cardBackground = Color(0xFFFFFFFF);
   static const cardElevated = Color(0xFFFFFFFF);
@@ -111,7 +112,7 @@ class DarkModeColors {
   static const darkSuccessContainer = Color(0xFF064E3B);
   static const darkWarning = Color(0xFFFBBF24);
   static const darkWarningContainer = Color(0xFF78350F);
-  
+    
   // Card and container colors for dark mode
   static const darkCardBackground = Color(0xFF1F1F1F);
   static const darkCardElevated = Color(0xFF252525);
