@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
 import 'package:novopharma/controllers/auth_provider.dart';
 import 'package:novopharma/theme.dart';
+import 'package:novopharma/generated/l10n/app_localizations.dart';
 
 class QuizQuestionScreen extends StatefulWidget {
   final Quiz quiz;
@@ -195,8 +196,8 @@ class _QuizQuestionScreenState extends State<QuizQuestionScreen> {
           const SizedBox(height: 12),
           Text(
             question.multipleAnswersAllowed
-                ? 'Select all that apply'
-                : 'Select one answer',
+                ? AppLocalizations.of(context)!.chooseCorrectAnswers
+                : AppLocalizations.of(context)!.chooseCorrectAnswer,
             style: const TextStyle(fontSize: 16, color: Colors.grey),
           ),
           const SizedBox(height: 32),

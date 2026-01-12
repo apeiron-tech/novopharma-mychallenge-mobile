@@ -42,6 +42,7 @@
     "totalPoints": "POINTS TOTAUX",
     "currentBalance": "solde actuel",
     "points": "Points",
+    "usablePoints": "Points utilisables",
     "rank": "RANG",
     "badges": "BADGES",
     "challenges": "DÉFIS",
@@ -215,6 +216,7 @@
     "enterAmount": "Entrez le montant",
     "youWillReceive": "Vous recevrez:",
     "pluxeeCreditsAmount": "{amount} crédits Pluxee",
+    "minimumRedemptionAmount": "Montant minimum d'échange: {amount} pts",
     "@pluxeeCreditsAmount": {
         "placeholders": {
             "amount": {
@@ -222,7 +224,7 @@
             }
         }
     },
-    "submitRequest": "Soumettre la demande",
+    "submitRequest": "Soumettre",
     "requestSubmittedSuccess": "Demande soumise avec succès ! Elle sera examinée par un administrateur.",
     "requestedDate": "Demandé",
     "processedDate": "Traité",
@@ -304,6 +306,8 @@
     "totalRevenue": "Revenu total",
     "quantitySold": "Quantité vendue",
     "badgeRewardPoints": "Points accordés",
+    "badgeAwarded": "Badge attribué",
+    "badgeLocked": "Badge verrouillé",
     "showLess": "Voir moins",
     "noBadgesAvailable": "Aucun badge disponible.",
     "noBadgesInCategory": "Aucun badge dans cette catégorie pour le moment.",
@@ -314,13 +318,57 @@
     "searchProducts": "Rechercher des produits...",
     "quizResults": "Résultats du quiz",
     "congratulations": "Félicitations !",
-    "goodEffort": "Bon effort !",
-    "reviewYourAnswers": "Revoir vos réponses",
+    "goodEffort": "Merci pour votre participation !",
+    "reviewYourAnswers": "Consulter vos réponses",
     "done": "Terminé",
-    "youEarnedPoints": "Vous avez gagné {points} points !",
+    "youEarnedPoints": "Score obtenu {points} points !",
     "questionNumber": "Question {number} : {text}",
     "correctAnswer": "Bonne réponse",
     "incorrectAnswer": "Mauvaise réponse",
     "yourAnswer": "Votre réponse",
-    "explanation": "Explication"
+    "explanation": "Explication",
+    "chooseCorrectAnswer": "Choisissez la bonne réponse",
+    "chooseCorrectAnswers": "Choisissez les bonnes réponses",
+    "myInformation": "Mes informations",
+    "securityCardTitle": "Sécurité",
+    "firstNameHint": "Jean",
+    "lastNameHint": "Dupont",
+    "emailHint": "jean.dupont@email.com",
+    "phoneHint": "Entrez votre numéro de téléphone",
+    "dateOfBirthHint": "Sélectionnez votre date de naissance",
+    "passwordHint": "Au moins 8 caractères",
+    "confirmPasswordHint": "Confirmez votre mot de passe",
+    "firstNameRequiredError": "Ce champ est obligatoire",
+    "lastNameRequiredError": "Ce champ est obligatoire",
+    "emailRequiredError": "L'email est requis",
+    "emailValidError": "Veuillez entrer une adresse email valide",
+    "phoneRequiredError": "Le numéro de téléphone est requis",
+    "dobRequiredError": "La date de naissance est requise",
+    "passwordRequiredError": "Le mot de passe est requis",
+    "passwordLengthError": "Le mot de passe doit contenir au moins 8 caractères",
+    "confirmPasswordRequiredError": "Veuillez confirmer votre mot de passe",
+    "passwordMatchError": "Les mots de passe ne correspondent pas",
+    "cityRequiredError": "Veuillez sélectionner une ville",
+    "pharmacyLoadError": "Erreur lors du chargement des pharmacies: {error}",
+    "@pharmacyLoadError": {
+      "placeholders": {
+        "error": { "type": "String" }
+      }
+    },
+    "noPharmaciesError": "Aucune pharmacie disponible.",
+    "salesRecorded": "{count,plural, =0{Aucune vente enregistrée} =1{1 vente enregistrée} other{{count} ventes enregistrées}}",
+    "@salesRecorded": {
+        "description": "Affiche le nombre de ventes enregistrées avec la bonne pluralisation",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "notifications": "Notifications",
+    "markAsRead": "Marquer comme lu",
+    "noNotifications": "Aucune notification",
+    "notificationsDescription": "Vous serez notifié des nouvelles formations\net badges disponibles",
+    "notificationDeleted": "Notification supprimée",
+    "formationNotFound": "Formation introuvable"
 }

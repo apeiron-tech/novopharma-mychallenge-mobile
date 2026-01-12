@@ -42,6 +42,7 @@
     "totalPoints": "TOTAL POINTS",
     "currentBalance": "current balance",
     "points": "Points",
+    "usablePoints": "Usable points",
     "rank": "RANK",
     "badges": "BADGES",
     "challenges": "CHALLENGES",
@@ -215,6 +216,7 @@
     "enterAmount": "Enter amount",
     "youWillReceive": "You will receive:",
     "pluxeeCreditsAmount": "{amount} Pluxee Credits",
+    "minimumRedemptionAmount": "Minimum redemption amount: {amount} pts",
     "@pluxeeCreditsAmount": {
         "placeholders": {
             "amount": {
@@ -304,6 +306,8 @@
     "totalRevenue": "Total Revenue",
     "quantitySold": "Quantity Sold",
     "badgeRewardPoints": "Points Rewarded",
+    "badgeAwarded": "Awarded",
+    "badgeLocked": "Locked",
     "showLess": "Show Less",
     "noBadgesAvailable": "No badges available.",
     "noBadgesInCategory": "No badges in this category yet.",
@@ -314,13 +318,57 @@
     "searchProducts": "Search products...",
     "quizResults": "Quiz Results",
     "congratulations": "Congratulations!",
-    "goodEffort": "Good Effort!",
+    "goodEffort": "Thank you for your participation!",
     "reviewYourAnswers": "Review Your Answers",
     "done": "Done",
-    "youEarnedPoints": "You earned {points} points!",
+    "youEarnedPoints": "Score obtained {points} points!",
     "questionNumber": "Question {number}: {text}",
     "correctAnswer": "Correct Answer",
     "incorrectAnswer": "Incorrect Answer",
     "yourAnswer": "Your Answer",
-    "explanation": "Explanation"
+    "explanation": "Explanation",
+    "chooseCorrectAnswer": "Choose the correct answer",
+    "chooseCorrectAnswers": "Choose the correct answers",
+    "myInformation": "My Information",
+    "securityCardTitle": "Security",
+    "firstNameHint": "John",
+    "lastNameHint": "Doe",
+    "emailHint": "john.doe@email.com",
+    "phoneHint": "Enter your phone number",
+    "dateOfBirthHint": "Select your birthdate",
+    "passwordHint": "At least 8 characters",
+    "confirmPasswordHint": "Re-enter your password",
+    "firstNameRequiredError": "This field is required",
+    "lastNameRequiredError": "This field is required",
+    "emailRequiredError": "Email is required",
+    "emailValidError": "Please enter a valid email address",
+    "phoneRequiredError": "Phone number is required",
+    "dobRequiredError": "Date of birth is required",
+    "passwordRequiredError": "Password is required",
+    "passwordLengthError": "Password must be at least 8 characters",
+    "confirmPasswordRequiredError": "Please confirm your password",
+    "passwordMatchError": "Passwords do not match",
+    "cityRequiredError": "Please select a city",
+    "pharmacyLoadError": "Error loading pharmacies: {error}",
+    "@pharmacyLoadError": {
+      "placeholders": {
+        "error": { "type": "String" }
+      }
+    },
+    "noPharmaciesError": "No pharmacies available.",
+    "salesRecorded": "{count,plural, =0{No sales recorded} =1{1 sale recorded} other{{count} sales recorded}}",
+    "@salesRecorded": {
+        "description": "Display the number of sales recorded with proper pluralization",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "notifications": "Notifications",
+    "markAsRead": "Mark as read",
+    "noNotifications": "No notifications",
+    "notificationsDescription": "You will be notified of new trainings and available badges",
+    "notificationDeleted": "Notification deleted",
+    "formationNotFound": "Training not found"
 }
