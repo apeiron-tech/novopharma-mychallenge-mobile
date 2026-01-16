@@ -278,7 +278,7 @@ class _ManualSaleScreenState extends State<ManualSaleScreen> {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
-                                '${product.points.toInt()} pts',
+                                '${product.points} pts',
                                 style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,

@@ -21,8 +21,8 @@ class ActualiteProvider extends ChangeNotifier {
   // Category mappings for Firebase
   final Map<String, String> _categoryMappings = {
     'Actualités produits': 'Actualités produits',
-    'Actualités scientifiques': 'Actualités scientifiques',
-    'Vie de l\'entreprise - evenements': 'Vie de l\'entreprise - evenements',
+    'Actualités scientifiques': 'Actualités scientifique',
+    'Vie de l\'entreprise - evenements': 'Vie de l\'entreprise/Événements',
   };
 
   Future<void> initialize() async {
