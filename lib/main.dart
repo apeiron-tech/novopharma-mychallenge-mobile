@@ -93,7 +93,7 @@ class NovoPharmaApp extends StatelessWidget {
 
     return MaterialApp(
       navigatorKey: appNavigatorKey,
-      title: 'NovoPharma Rewards',
+      title: 'MyChallenge',
       debugShowCheckedModeBanner: false,
       theme: lightTheme,
       darkTheme: darkTheme,
@@ -145,7 +145,9 @@ class NovoPharmaApp extends StatelessWidget {
         '/rewards': (context) => const PluxeeRedemptionScreen(),
         '/manual-sale': (context) => const ManualSaleScreen(),
         '/product': (context) {
-          final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+          final args =
+              ModalRoute.of(context)?.settings.arguments
+                  as Map<String, dynamic>?;
           final sku = args?['sku'] as String?;
           return ProductScreen(sku: sku);
         },
