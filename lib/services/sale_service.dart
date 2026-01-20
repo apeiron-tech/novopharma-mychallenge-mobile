@@ -23,9 +23,9 @@ class SaleService {
           transaction.set(saleRef, saleData);
 
           // 2. Atomically update the user's points
-          transaction.update(userRef, {
+          /* transaction.update(userRef, {
             'points': FieldValue.increment(sale.pointsEarned),
-          });
+          });*/
         })
         .catchError((error) {
           log('[SaleService] Error in createSale transaction: $error');
