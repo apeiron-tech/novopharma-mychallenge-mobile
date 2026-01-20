@@ -370,5 +370,12 @@
     "noNotifications": "No notifications",
     "notificationsDescription": "You will be notified of new trainings and available badges",
     "notificationDeleted": "Notification deleted",
-    "formationNotFound": "Training not found"
+    "formationNotFound": "Training not found",
+    "authErrorUserNotFound": "User not found",
+    "authErrorWrongPassword": "Incorrect password",
+    "authErrorEmailAlreadyInUse": "Email already in use",
+    "authErrorInvalidEmail": "Invalid email",
+    "authErrorWeakPassword": "Password is too weak",
+    "authErrorGeneric": "An error occurred. Please try again.",
+    "authErrorTooManyRequests": "Too many requests. Please try again later."
 }

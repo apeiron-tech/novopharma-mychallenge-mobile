@@ -11,6 +11,7 @@ import 'package:novopharma/services/pharmacy_service.dart';
 import 'package:novopharma/services/storage_service.dart';
 import 'package:provider/provider.dart';
 import 'package:novopharma/generated/l10n/app_localizations.dart';
+import 'package:novopharma/utils/auth_error_handler.dart';
 import 'package:novopharma/widgets/terms_conditions_modal.dart';
 import 'package:novopharma/theme.dart';
 
@@ -75,7 +76,7 @@ class _SignupScreenState extends State<SignupScreen> {
     'Tataouine',
     'Tozeur',
     'Tunis',
-    'Zaghouan'
+    'Zaghouan',
   ];
 
   @override
@@ -220,11 +221,10 @@ class _SignupScreenState extends State<SignupScreen> {
     if (mounted) {
       setState(() => _isLoading = false);
       if (error != null) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(
+        final errorMessage = AuthErrorHandler.getErrorMessage(context, error);
+        ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Sign up failed: $error'),
+            content: Text(errorMessage),
             backgroundColor: LightModeColors.lightError,
             behavior: SnackBarBehavior.floating,
             margin: const EdgeInsets.all(16),
@@ -286,7 +286,10 @@ class _SignupScreenState extends State<SignupScreen> {
                     gradient: const LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
-                      colors: [LightModeColors.novoPharmaBlue, LightModeColors.lightPrimary],
+                      colors: [
+                        LightModeColors.novoPharmaBlue,
+                        LightModeColors.lightPrimary,
+                      ],
                     ),
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
@@ -435,8 +438,9 @@ class _SignupScreenState extends State<SignupScreen> {
                         prefixIcon: Icons.email_outlined,
                       ),
                       validator: (value) {
-                        if (value?.isEmpty ?? true) return l10n.emailRequiredError;
-                        if (!RegExp(r'^[^@]+@[^@]+\\.[^@]+').hasMatch(value!))
+                        if (value?.isEmpty ?? true)
+                          return l10n.emailRequiredError;
+                        if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value!))
                           return l10n.emailValidError;
                         return null;
                       },
@@ -516,8 +520,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       validator: (value) {
                         if (value?.isEmpty ?? true)
                           return l10n.passwordRequiredError;
-                        if (value!.length < 8)
-                          return l10n.passwordLengthError;
+                        if (value!.length < 8) return l10n.passwordLengthError;
                         return null;
                       },
                     ),
@@ -613,7 +616,10 @@ class _SignupScreenState extends State<SignupScreen> {
                   decoration: BoxDecoration(
                     gradient: _isButtonEnabled
                         ? const LinearGradient(
-                            colors: [LightModeColors.novoPharmaBlue, LightModeColors.lightPrimary],
+                            colors: [
+                              LightModeColors.novoPharmaBlue,
+                              LightModeColors.lightPrimary,
+                            ],
                           )
                         : null,
                     color: _isButtonEnabled ? null : Colors.grey.shade200,
@@ -621,7 +627,9 @@ class _SignupScreenState extends State<SignupScreen> {
                     boxShadow: _isButtonEnabled
                         ? [
                             BoxShadow(
-                              color: LightModeColors.novoPharmaBlue.withOpacity(0.3),
+                              color: LightModeColors.novoPharmaBlue.withOpacity(
+                                0.3,
+                              ),
                               blurRadius: 12,
                               offset: const Offset(0, 6),
                             ),
@@ -633,7 +641,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         ? _handleSignUp
                         : null,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: _isButtonEnabled && !_isLoading 
+                      backgroundColor: _isButtonEnabled && !_isLoading
                           ? null // Use the gradient defined in the container
                           : Colors.grey.shade300,
                       foregroundColor: Colors.white,
@@ -794,12 +802,17 @@ class _SignupScreenState extends State<SignupScreen> {
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
-                          colors: [LightModeColors.novoPharmaBlue, LightModeColors.lightPrimary],
+                          colors: [
+                            LightModeColors.novoPharmaBlue,
+                            LightModeColors.lightPrimary,
+                          ],
                         ),
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: LightModeColors.novoPharmaBlue.withOpacity(0.3),
+                            color: LightModeColors.novoPharmaBlue.withOpacity(
+                              0.3,
+                            ),
                             blurRadius: 8,
                             offset: const Offset(0, 4),
                           ),
@@ -940,7 +953,9 @@ class _SignupScreenState extends State<SignupScreen> {
         }
 
         final pharmacies = snapshot.data!;
-        final filteredPharmacies = pharmacies.where((pharmacy) => pharmacy.clientCategory != 'Para-Pharmacie').toList();
+        final filteredPharmacies = pharmacies
+            .where((pharmacy) => pharmacy.clientCategory != 'Para-Pharmacie')
+            .toList();
         return DropdownButtonFormField<Pharmacy>(
           value: _selectedPharmacy,
           isExpanded: true,

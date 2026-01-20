@@ -97,7 +97,7 @@ class AuthProvider with ChangeNotifier {
       await _authService.signInWithEmailAndPassword(email, password);
       return null; // Success
     } on FirebaseAuthException catch (e) {
-      return e.message; // Return error message
+      return e.code; // Return error code
     }
   }
 
@@ -133,9 +133,9 @@ class AuthProvider with ChangeNotifier {
       );
       return null; // Success
     } on FirebaseAuthException catch (e) {
-      return e.message; // Return error message
+      return e.code; // Return error code
     } catch (e) {
-      return 'An unexpected error occurred.';
+      return 'generic-error';
     }
   }
 
@@ -185,9 +185,20 @@ class AuthProvider with ChangeNotifier {
       );
       return null; // Success
     } on FirebaseAuthException catch (e) {
-      return e.message;
+      return e.code;
     } catch (e) {
-      return 'An unexpected error occurred.';
+      return 'generic-error';
+    }
+  }
+
+  Future<String?> sendPasswordResetEmail(String email) async {
+    try {
+      await _authService.sendPasswordResetEmail(email);
+      return null; // Success
+    } on FirebaseAuthException catch (e) {
+      return e.code;
+    } catch (e) {
+      return 'generic-error';
     }
   }
 

@@ -899,4 +899,27 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get formationNotFound => 'Formation introuvable';
+
+  @override
+  String get authErrorUserNotFound => 'Utilisateur introuvable';
+
+  @override
+  String get authErrorWrongPassword => 'Mot de passe incorrect';
+
+  @override
+  String get authErrorEmailAlreadyInUse => 'Cet email est déjà utilisé';
+
+  @override
+  String get authErrorInvalidEmail => 'Adresse email invalide';
+
+  @override
+  String get authErrorWeakPassword => 'Le mot de passe est trop faible';
+
+  @override
+  String get authErrorGeneric =>
+      'Une erreur s\'est produite. Veuillez réessayer.';
+
+  @override
+  String get authErrorTooManyRequests =>
+      'Trop de tentatives. Veuillez réessayer plus tard.';
 }
