@@ -1717,6 +1717,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Training not found'**
   String get formationNotFound;
+
+  /// No description provided for @authErrorUserNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'User not found'**
+  String get authErrorUserNotFound;
+
+  /// No description provided for @authErrorWrongPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect password'**
+  String get authErrorWrongPassword;
+
+  /// No description provided for @authErrorEmailAlreadyInUse.
+  ///
+  /// In en, this message translates to:
+  /// **'Email already in use'**
+  String get authErrorEmailAlreadyInUse;
+
+  /// No description provided for @authErrorInvalidEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid email'**
+  String get authErrorInvalidEmail;
+
+  /// No description provided for @authErrorWeakPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Password is too weak'**
+  String get authErrorWeakPassword;
+
+  /// No description provided for @authErrorGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred. Please try again.'**
+  String get authErrorGeneric;
+
+  /// No description provided for @authErrorTooManyRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many requests. Please try again later.'**
+  String get authErrorTooManyRequests;
 }
 
 class _AppLocalizationsDelegate

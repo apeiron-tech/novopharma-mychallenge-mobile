@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:novopharma/controllers/auth_provider.dart';
 import 'package:novopharma/generated/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:novopharma/utils/auth_error_handler.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   const ChangePasswordScreen({super.key});
@@ -44,8 +45,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           );
           Navigator.pop(context);
         } else {
+          final errorMessage = AuthErrorHandler.getErrorMessage(context, error);
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(error), backgroundColor: Colors.red),
+            SnackBar(content: Text(errorMessage), backgroundColor: Colors.red),
           );
         }
         setState(() => _isLoading = false);

@@ -370,5 +370,12 @@
     "noNotifications": "Aucune notification",
     "notificationsDescription": "Vous serez notifié des nouvelles formations\net badges disponibles",
     "notificationDeleted": "Notification supprimée",
-    "formationNotFound": "Formation introuvable"
+    "formationNotFound": "Formation introuvable",
+    "authErrorUserNotFound": "Utilisateur introuvable",
+    "authErrorWrongPassword": "Mot de passe incorrect",
+    "authErrorEmailAlreadyInUse": "Cet email est déjà utilisé",
+    "authErrorInvalidEmail": "Adresse email invalide",
+    "authErrorWeakPassword": "Le mot de passe est trop faible",
+    "authErrorGeneric": "Une erreur s'est produite. Veuillez réessayer.",
+    "authErrorTooManyRequests": "Trop de tentatives. Veuillez réessayer plus tard."
 }

@@ -889,4 +889,26 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get formationNotFound => 'Training not found';
+
+  @override
+  String get authErrorUserNotFound => 'User not found';
+
+  @override
+  String get authErrorWrongPassword => 'Incorrect password';
+
+  @override
+  String get authErrorEmailAlreadyInUse => 'Email already in use';
+
+  @override
+  String get authErrorInvalidEmail => 'Invalid email';
+
+  @override
+  String get authErrorWeakPassword => 'Password is too weak';
+
+  @override
+  String get authErrorGeneric => 'An error occurred. Please try again.';
+
+  @override
+  String get authErrorTooManyRequests =>
+      'Too many requests. Please try again later.';
 }
