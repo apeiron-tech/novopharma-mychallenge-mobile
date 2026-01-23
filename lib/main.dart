@@ -149,7 +149,8 @@ class NovoPharmaApp extends StatelessWidget {
               ModalRoute.of(context)?.settings.arguments
                   as Map<String, dynamic>?;
           final sku = args?['sku'] as String?;
-          return ProductScreen(sku: sku);
+          final id = args?['id'] as String?;
+          return ProductScreen(sku: sku, id: id);
         },
       },
     );

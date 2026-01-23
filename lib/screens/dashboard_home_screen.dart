@@ -431,7 +431,10 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
             gradient: const LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [LightModeColors.lightPrimary, LightModeColors.lightSecondary],
+              colors: [
+                LightModeColors.lightPrimary,
+                LightModeColors.lightSecondary,
+              ],
             ),
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
@@ -702,7 +705,6 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
       decoration: BoxDecoration(
         color: LightModeColors.lightError,
         borderRadius: BorderRadius.circular(16),
-       
       ),
       child: Material(
         color: Colors.transparent,
