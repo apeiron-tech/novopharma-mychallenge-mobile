@@ -36,8 +36,9 @@ class _ProductScreenData {
 
 class ProductScreen extends StatefulWidget {
   final String? sku;
+  final String? id;
   final Sale? sale;
-  const ProductScreen({super.key, this.sku, this.sale});
+  const ProductScreen({super.key, this.sku, this.id, this.sale});
 
   @override
   State<ProductScreen> createState() => _ProductScreenState();
@@ -71,6 +72,8 @@ class _ProductScreenState extends State<ProductScreen> {
   Future<_ProductScreenData> _loadData() async {
     final product = widget.sale != null
         ? await _productService.getProductById(widget.sale!.productId)
+        : widget.id != null
+        ? await _productService.getProductById(widget.id!)
         : await _productService.getProductBySku(widget.sku!);
     if (product == null) return _ProductScreenData(product: null);
 
@@ -281,7 +284,10 @@ class _ProductScreenState extends State<ProductScreen> {
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [LightModeColors.lightPrimary, LightModeColors.lightSecondary],
+          colors: [
+            LightModeColors.lightPrimary,
+            LightModeColors.lightSecondary,
+          ],
         ),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
@@ -573,7 +579,6 @@ class _ProductScreenState extends State<ProductScreen> {
           decoration: BoxDecoration(
             color: LightModeColors.warning,
             borderRadius: BorderRadius.circular(12),
-            
           ),
           child: Row(
             children: [
@@ -583,7 +588,11 @@ class _ProductScreenState extends State<ProductScreen> {
                   color: LightModeColors.lightOnPrimary.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Icon(icon, color: LightModeColors.lightOnPrimary, size: 22),
+                child: Icon(
+                  icon,
+                  color: LightModeColors.lightOnPrimary,
+                  size: 22,
+                ),
               ),
               const SizedBox(width: 12),
               Text(
@@ -636,7 +645,7 @@ class _ProductScreenState extends State<ProductScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ProductScreen(sku: product.sku),
+                  builder: (context) => ProductScreen(id: product.id),
                 ),
               );
             },
@@ -738,7 +747,10 @@ class _ProductScreenState extends State<ProductScreen> {
               end: Alignment.bottomRight,
               colors: isEligible
                   ? [LightModeColors.success, LightModeColors.successContainer]
-                  : [LightModeColors.lightError, LightModeColors.lightErrorContainer],
+                  : [
+                      LightModeColors.lightError,
+                      LightModeColors.lightErrorContainer,
+                    ],
             ),
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
@@ -826,7 +838,6 @@ class _ProductScreenState extends State<ProductScreen> {
               child: ValueListenableBuilder<int>(
                 valueListenable: _quantityNotifier,
                 builder: (context, quantity, child) {
-
                   // Display only the unit price (fixed, not multiplied)
                   return Column(
                     mainAxisSize: MainAxisSize.min,
@@ -841,7 +852,8 @@ class _ProductScreenState extends State<ProductScreen> {
                         ),
                       ),
                       const SizedBox(height: 2.0),
-                      Padding(padding: const EdgeInsets.only(left: 6.0),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 6.0),
                         child: Text(
                           '${product.price.toStringAsFixed(3)} TND',
                           style: const TextStyle(
@@ -863,7 +875,10 @@ class _ProductScreenState extends State<ProductScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: LightModeColors.lightError,
                 foregroundColor: LightModeColors.lightOnError,
-                padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 24),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 18,
+                  horizontal: 24,
+                ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
@@ -943,7 +958,11 @@ class _ProductScreenState extends State<ProductScreen> {
                 color: LightModeColors.lightErrorContainer,
                 shape: BoxShape.circle,
               ),
-              child: Icon(Icons.block, color: LightModeColors.lightError, size: 64),
+              child: Icon(
+                Icons.block,
+                color: LightModeColors.lightError,
+                size: 64,
+              ),
             ),
             const SizedBox(height: 24),
 
@@ -963,7 +982,10 @@ class _ProductScreenState extends State<ProductScreen> {
             Text(
               product.marque,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 16, color: LightModeColors.dashboardTextSecondary),
+              style: const TextStyle(
+                fontSize: 16,
+                color: LightModeColors.dashboardTextSecondary,
+              ),
             ),
             const SizedBox(height: 32),
 
@@ -973,7 +995,10 @@ class _ProductScreenState extends State<ProductScreen> {
               decoration: BoxDecoration(
                 color: LightModeColors.lightErrorContainer,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: LightModeColors.lightErrorContainer, width: 2),
+                border: Border.all(
+                  color: LightModeColors.lightErrorContainer,
+                  width: 2,
+                ),
               ),
               child: Column(
                 children: [

@@ -74,7 +74,7 @@ class _ManualSaleScreenState extends State<ManualSaleScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.manualSale),
@@ -107,53 +107,58 @@ class _ManualSaleScreenState extends State<ManualSaleScreen> {
                 controller: _searchController,
                 decoration: InputDecoration(
                   hintText: l10n.searchProducts,
-                  prefixIcon: const Icon(Icons.search, color: LightModeColors.lightOnSurfaceVariant),
+                  prefixIcon: const Icon(
+                    Icons.search,
+                    color: LightModeColors.lightOnSurfaceVariant,
+                  ),
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 20,
                     vertical: 16,
                   ),
-                  hintStyle: const TextStyle(color: LightModeColors.lightOnSurfaceVariant),
+                  hintStyle: const TextStyle(
+                    color: LightModeColors.lightOnSurfaceVariant,
+                  ),
                 ),
               ),
             ),
           ),
-          
+
           // Products list
           Expanded(
             child: _isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : _filteredProducts.isEmpty
-                    ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.search_off,
-                              size: 80,
-                              color: LightModeColors.lightOnSurfaceVariant,
-                            ),
-                            const SizedBox(height: 16),
-                            Text(
-                              _searchController.text.isEmpty
-                                  ? 'No products available'
-                                  : 'No products found',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                color: LightModeColors.lightOnSurfaceVariant,
-                              ),
-                            ),
-                          ],
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.search_off,
+                          size: 80,
+                          color: LightModeColors.lightOnSurfaceVariant,
                         ),
-                      )
-                    : ListView.builder(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        itemCount: _filteredProducts.length,
-                        itemBuilder: (context, index) {
-                          final product = _filteredProducts[index];
-                          return _buildProductCard(product, l10n);
-                        },
-                      ),
+                        const SizedBox(height: 16),
+                        Text(
+                          _searchController.text.isEmpty
+                              ? 'No products available'
+                              : 'No products found',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: LightModeColors.lightOnSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                : ListView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    itemCount: _filteredProducts.length,
+                    itemBuilder: (context, index) {
+                      final product = _filteredProducts[index];
+                      return _buildProductCard(product, l10n);
+                    },
+                  ),
           ),
         ],
       ),
@@ -163,9 +168,7 @@ class _ManualSaleScreenState extends State<ManualSaleScreen> {
   Widget _buildProductCard(Product product, AppLocalizations l10n) {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       elevation: 0,
       child: Container(
         decoration: BoxDecoration(
@@ -188,7 +191,7 @@ class _ManualSaleScreenState extends State<ManualSaleScreen> {
               Navigator.pushNamed(
                 context,
                 '/product',
-                arguments: {'sku': product.sku},
+                arguments: {'id': product.id},
               );
             },
             child: Padding(
@@ -210,10 +213,12 @@ class _ManualSaleScreenState extends State<ManualSaleScreen> {
                           ? CachedNetworkImage(
                               imageUrl: product.imageUrl,
                               fit: BoxFit.contain,
-                              placeholder: (context, url) =>
-                                  const Center(child: CircularProgressIndicator()),
-                              errorWidget: (context, url, error) =>
-                                  const Icon(Icons.image_not_supported_outlined),
+                              placeholder: (context, url) => const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                              errorWidget: (context, url, error) => const Icon(
+                                Icons.image_not_supported_outlined,
+                              ),
                             )
                           : const Icon(
                               Icons.image_not_supported_outlined,
@@ -222,7 +227,7 @@ class _ManualSaleScreenState extends State<ManualSaleScreen> {
                     ),
                   ),
                   const SizedBox(width: 16),
-                  
+
                   // Product Info
                   Expanded(
                     child: Column(

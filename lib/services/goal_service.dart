@@ -168,27 +168,33 @@ class GoalService {
 
     if (criteria.categories.isNotEmpty &&
         !criteria.categories.contains(product.category)) {
+      log('Goal category does not match product category');
       return false;
     }
-    if (criteria.brands.isNotEmpty &&
-        !criteria.brands.contains(product.marque)) {
-      return false;
-    }
+    //if (criteria.brands.isNotEmpty &&
+    //    !criteria.brands.contains(product.marque)) {
+    //  log('Goal brand does not match product brand');
+    //  return false;
+    //}
     if (criteria.products.isNotEmpty &&
         !criteria.products.contains(product.id)) {
+      log('Goal product does not match product');
       return false;
     }
     if (criteria.pharmacyIds.isNotEmpty &&
         !criteria.pharmacyIds.contains(user.pharmacyId)) {
+      log('Goal pharmacy does not match user pharmacy');
       return false;
     }
     if (criteria.zones.isNotEmpty && !criteria.zones.contains(pharmacy.zone)) {
+      log('Goal zone does not match pharmacy zone');
       return false;
     }
-    if (criteria.clientCategories.isNotEmpty &&
-        !criteria.clientCategories.contains(pharmacy.clientCategory)) {
-      return false;
-    }
+    //if (criteria.clientCategories.isNotEmpty &&
+    //    !criteria.clientCategories.contains(pharmacy.clientCategory)) {
+    //  log('Goal client category does not match pharmacy client category');
+    //  return false;
+    //}
     return true;
   }
 }

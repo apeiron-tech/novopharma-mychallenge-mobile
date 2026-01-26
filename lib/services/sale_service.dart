@@ -23,9 +23,9 @@ class SaleService {
           transaction.set(saleRef, saleData);
 
           // 2. Atomically update the user's points
-          /* transaction.update(userRef, {
+          transaction.update(userRef, {
             'points': FieldValue.increment(sale.pointsEarned),
-          });*/
+          });
         })
         .catchError((error) {
           log('[SaleService] Error in createSale transaction: $error');
@@ -46,11 +46,14 @@ class SaleService {
     await _firestore
         .runTransaction((transaction) async {
           transaction.update(saleRef, newSale.toFirestore());
+          log(
+            '[SaleService] Sale updated successfully at: sales/${saleRef.id}',
+          );
 
-          final pointsDifference = newSale.pointsEarned - oldSale.pointsEarned;
-          transaction.update(userRef, {
-            'points': FieldValue.increment(pointsDifference),
-          });
+          // final pointsDifference = newSale.pointsEarned - oldSale.pointsEarned;
+          //transaction.update(userRef, {
+          //  'points': FieldValue.increment(pointsDifference),
+          //});
         })
         .catchError((error) {
           log('Error in updateSale transaction: $error');
@@ -67,9 +70,9 @@ class SaleService {
     await _firestore
         .runTransaction((transaction) async {
           transaction.delete(saleRef);
-          transaction.update(userRef, {
-            'points': FieldValue.increment(-sale.pointsEarned),
-          });
+          //transaction.update(userRef, {
+          //  'points': FieldValue.increment(-sale.pointsEarned),
+          //});
         })
         .catchError((error) {
           log('Error in deleteSale transaction: $error');

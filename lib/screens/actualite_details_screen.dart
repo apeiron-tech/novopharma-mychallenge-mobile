@@ -21,9 +21,7 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
-          color: LightModeColors.lightSurfaceVariant,
-        ),
+        decoration: BoxDecoration(color: LightModeColors.lightSurfaceVariant),
         child: SafeArea(
           child: Column(
             children: [
@@ -67,7 +65,9 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      color: LightModeColors.lightOnPrimary.withValues(alpha: 0.1),
+                      color: LightModeColors.lightOnPrimary.withValues(
+                        alpha: 0.1,
+                      ),
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
                         color: LightModeColors.lightOnPrimary.withOpacity(0.2),
@@ -97,7 +97,6 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
                             letterSpacing: -0.5,
                           ),
                         ),
-                        
                       ],
                     ),
                   ),
@@ -150,24 +149,33 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
                       end: Alignment.bottomCenter,
                     ),
                   ),
-                  child: CachedNetworkImage(
-                    imageUrl: widget.actualite.coverImageUrl!,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => Container(
-                      color: LightModeColors.lightSurfaceVariant,
-                      child: const Center(
-                        child: CircularProgressIndicator(
-                          color: LightModeColors.lightPrimary,
-                          strokeWidth: 2,
+                  child: GestureDetector(
+                    onTap: () => _handleMediaTap(
+                      widget.actualite.coverImageUrl!,
+                      widget.actualite.title,
+                      false,
+                      false,
+                      true,
+                    ),
+                    child: CachedNetworkImage(
+                      imageUrl: widget.actualite.coverImageUrl!,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Container(
+                        color: LightModeColors.lightSurfaceVariant,
+                        child: const Center(
+                          child: CircularProgressIndicator(
+                            color: LightModeColors.lightPrimary,
+                            strokeWidth: 2,
+                          ),
                         ),
                       ),
-                    ),
-                    errorWidget: (context, url, error) => Container(
-                      color: LightModeColors.lightSurfaceVariant,
-                      child: Icon(
-                        Icons.image_not_supported_outlined,
-                        color: LightModeColors.dashboardTextTertiary,
-                        size: 40,
+                      errorWidget: (context, url, error) => Container(
+                        color: LightModeColors.lightSurfaceVariant,
+                        child: Icon(
+                          Icons.image_not_supported_outlined,
+                          color: LightModeColors.dashboardTextTertiary,
+                          size: 40,
+                        ),
                       ),
                     ),
                   ),
@@ -187,19 +195,13 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            LightModeColors.success.withOpacity(
-                              0.1,
-                            ),
-                            LightModeColors.success.withOpacity(
-                              0.05,
-                            ),
+                            LightModeColors.success.withOpacity(0.1),
+                            LightModeColors.success.withOpacity(0.05),
                           ],
                         ),
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
-                          color: LightModeColors.success.withOpacity(
-                            0.2,
-                          ),
+                          color: LightModeColors.success.withOpacity(0.2),
                         ),
                       ),
                       child: Text(
@@ -232,9 +234,7 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
                         Container(
                           padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
-                            color: LightModeColors.warning.withOpacity(
-                              0.1,
-                            ),
+                            color: LightModeColors.warning.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Icon(
@@ -256,7 +256,8 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
                         Container(
                           padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
-                            color: LightModeColors.lightSurfaceVariant.withOpacity(0.1),
+                            color: LightModeColors.lightSurfaceVariant
+                                .withOpacity(0.1),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Icon(
@@ -323,7 +324,9 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
                     const SizedBox(height: 24),
 
                     // Video Section
-                    if (widget.actualite.hasVideo && widget.actualite.youtubeVideoUrl != null && widget.actualite.youtubeVideoUrl!.isNotEmpty)
+                    if (widget.actualite.hasVideo &&
+                        widget.actualite.youtubeVideoUrl != null &&
+                        widget.actualite.youtubeVideoUrl!.isNotEmpty)
                       _buildVideoSection(),
 
                     // Media Section
@@ -373,15 +376,19 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
                                   vertical: 6,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: LightModeColors.lightSurfaceVariant.withOpacity(0.1),
+                                  color: LightModeColors.lightSurfaceVariant
+                                      .withOpacity(0.1),
                                   borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(color: LightModeColors.lightOutline,),
+                                  border: Border.all(
+                                    color: LightModeColors.lightOutline,
+                                  ),
                                 ),
                                 child: Text(
                                   tag,
                                   style: TextStyle(
                                     fontSize: 12,
-                                    color: LightModeColors.dashboardTextSecondary,
+                                    color:
+                                        LightModeColors.dashboardTextSecondary,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
@@ -480,7 +487,7 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
       decoration: BoxDecoration(
         color: LightModeColors.lightSurfaceVariant.withOpacity(0.05),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: LightModeColors.lightOutline,),
+        border: Border.all(color: LightModeColors.lightOutline),
       ),
       child: Material(
         color: Colors.transparent,
@@ -615,10 +622,16 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
               minScale: PhotoViewComputedScale.contained,
               maxScale: PhotoViewComputedScale.covered * 2.0,
               loadingBuilder: (context, event) => const Center(
-                child: CircularProgressIndicator(color: LightModeColors.lightOnPrimary),
+                child: CircularProgressIndicator(
+                  color: LightModeColors.lightOnPrimary,
+                ),
               ),
               errorBuilder: (context, error, stackTrace) => const Center(
-                child: Icon(Icons.error, color: LightModeColors.lightOnPrimary, size: 64),
+                child: Icon(
+                  Icons.error,
+                  color: LightModeColors.lightOnPrimary,
+                  size: 64,
+                ),
               ),
             ),
             Positioned(
@@ -626,7 +639,11 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
               right: 20,
               child: IconButton(
                 onPressed: () => Navigator.of(dialogContext).pop(),
-                icon: const Icon(Icons.close, color: LightModeColors.lightOnPrimary, size: 30),
+                icon: const Icon(
+                  Icons.close,
+                  color: LightModeColors.lightOnPrimary,
+                  size: 30,
+                ),
               ),
             ),
             Positioned(
@@ -786,7 +803,7 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
           decoration: BoxDecoration(
             color: LightModeColors.lightSurfaceVariant.withOpacity(0.05),
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: LightModeColors.lightOutline,),
+            border: Border.all(color: LightModeColors.lightOutline),
           ),
           child: Material(
             color: Colors.transparent,
@@ -801,10 +818,16 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
                       width: 48,
                       height: 48,
                       decoration: BoxDecoration(
-                        color: LightModeColors.lightError.withValues(alpha: 0.1),
+                        color: LightModeColors.lightError.withValues(
+                          alpha: 0.1,
+                        ),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Icon(Icons.play_circle_filled, color: LightModeColors.lightError, size: 24),
+                      child: Icon(
+                        Icons.play_circle_filled,
+                        color: LightModeColors.lightError,
+                        size: 24,
+                      ),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
@@ -828,7 +851,9 @@ class _ActualiteDetailsScreenState extends State<ActualiteDetailsScreen> {
                               vertical: 2,
                             ),
                             decoration: BoxDecoration(
-                              color: LightModeColors.lightError.withValues(alpha: 0.1),
+                              color: LightModeColors.lightError.withValues(
+                                alpha: 0.1,
+                              ),
                               borderRadius: BorderRadius.circular(4),
                             ),
                             child: Text(
