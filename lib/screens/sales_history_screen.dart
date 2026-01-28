@@ -93,6 +93,55 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
     );
   }
 
+  void _showInfoDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: Row(
+            children: [
+              const Icon(
+                Icons.info_outline_rounded,
+                color: LightModeColors.lightPrimary,
+              ),
+              const SizedBox(width: 12),
+              const Text(
+                'Information',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: LightModeColors.dashboardTextPrimary,
+                ),
+              ),
+            ],
+          ),
+          content: const Text(
+            'Vos ventes sont vérifiées tous les 2 mois. Après validation, vos points sont automatiquement ajoutés à votre solde de points utilisables et peuvent être échangés en crédits Pluxee.',
+            style: TextStyle(
+              fontSize: 15,
+              height: 1.5,
+              color: LightModeColors.dashboardTextSecondary,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text(
+                'Fermer',
+                style: TextStyle(
+                  color: LightModeColors.lightPrimary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   final Map<String, String?> _productImageCache = {};
 
   Future<String?> _getProductImage(String productId) async {
@@ -132,7 +181,9 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                   color: LightModeColors.lightSurface,
                   boxShadow: [
                     BoxShadow(
-                      color: LightModeColors.lightSurfaceVariant.withOpacity(0.05),
+                      color: LightModeColors.lightSurfaceVariant.withOpacity(
+                        0.05,
+                      ),
                       blurRadius: 10,
                       offset: const Offset(0, 2),
                     ),
@@ -146,12 +197,17 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                         gradient: const LinearGradient(
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
-                          colors: [LightModeColors.lightPrimary, LightModeColors.lightTertiary],
+                          colors: [
+                            LightModeColors.lightPrimary,
+                            LightModeColors.lightTertiary,
+                          ],
                         ),
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: LightModeColors.lightPrimary.withOpacity(0.3),
+                            color: LightModeColors.lightPrimary.withOpacity(
+                              0.3,
+                            ),
                             blurRadius: 12,
                             offset: const Offset(0, 4),
                           ),
@@ -181,7 +237,9 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                           Consumer<SalesHistoryProvider>(
                             builder: (context, provider, child) {
                               return Text(
-                                l10n.salesRecorded(provider.salesHistory.length),
+                                l10n.salesRecorded(
+                                  provider.salesHistory.length,
+                                ),
                                 style: const TextStyle(
                                   fontSize: 14,
                                   color: LightModeColors.dashboardTextSecondary,
@@ -192,6 +250,14 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                           ),
                         ],
                       ),
+                    ),
+                    IconButton(
+                      icon: const Icon(
+                        Icons.info_outline_rounded,
+                        color: LightModeColors.lightPrimary,
+                        size: 28,
+                      ),
+                      onPressed: () => _showInfoDialog(context),
                     ),
                   ],
                 ),
@@ -207,7 +273,9 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                       return Center(
                         child: Text(
                           provider.error!,
-                          style: const TextStyle(color: LightModeColors.lightError),
+                          style: const TextStyle(
+                            color: LightModeColors.lightError,
+                          ),
                         ),
                       );
                     }
@@ -234,7 +302,8 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                             borderRadius: BorderRadius.circular(20),
                             boxShadow: [
                               BoxShadow(
-                                color: LightModeColors.lightSurfaceVariant.withOpacity(0.06),
+                                color: LightModeColors.lightSurfaceVariant
+                                    .withOpacity(0.06),
                                 blurRadius: 15,
                                 offset: const Offset(0, 4),
                               ),
@@ -248,13 +317,18 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                             leading: FutureBuilder<String?>(
                               future: _getProductImage(sale.productId),
                               builder: (context, snapshot) {
-                                if (snapshot.hasData && snapshot.data != null && snapshot.data!.isNotEmpty) {
+                                if (snapshot.hasData &&
+                                    snapshot.data != null &&
+                                    snapshot.data!.isNotEmpty) {
                                   return Container(
                                     width: 60,
                                     height: 60,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(12),
-                                      border: Border.all(color: LightModeColors.lightOutline, width: 1),
+                                      border: Border.all(
+                                        color: LightModeColors.lightOutline,
+                                        width: 1,
+                                      ),
                                     ),
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(12),
@@ -263,10 +337,13 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                                         fit: BoxFit.cover,
                                         errorBuilder: (context, error, stackTrace) {
                                           return Container(
-                                            color: LightModeColors.lightBackground,
+                                            color:
+                                                LightModeColors.lightBackground,
                                             child: Icon(
-                                              Icons.image_not_supported_outlined,
-                                              color: LightModeColors.dashboardTextSecondary,
+                                              Icons
+                                                  .image_not_supported_outlined,
+                                              color: LightModeColors
+                                                  .dashboardTextSecondary,
                                               size: 30,
                                             ),
                                           );
@@ -281,7 +358,10 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                                     decoration: BoxDecoration(
                                       color: LightModeColors.lightBackground,
                                       borderRadius: BorderRadius.circular(12),
-                                      border: Border.all(color: LightModeColors.lightOutline, width: 1),
+                                      border: Border.all(
+                                        color: LightModeColors.lightOutline,
+                                        width: 1,
+                                      ),
                                     ),
                                     child: Icon(
                                       Icons.shopping_bag_rounded,
@@ -311,7 +391,8 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                                       vertical: 4,
                                     ),
                                     decoration: BoxDecoration(
-                                      color: LightModeColors.success.withOpacity(0.1),
+                                      color: LightModeColors.success
+                                          .withOpacity(0.1),
                                       borderRadius: BorderRadius.circular(6),
                                     ),
                                     child: Text(
@@ -328,58 +409,67 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                                     DateFormat.yMMMd().format(sale.saleDate),
                                     style: const TextStyle(
                                       fontSize: 13,
-                                      color: LightModeColors.dashboardTextSecondary,
+                                      color: LightModeColors
+                                          .dashboardTextSecondary,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: LightModeColors.warning.withOpacity(0.1),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: IconButton(
-                                    icon: const Icon(
-                                      Icons.edit_rounded,
-                                      color: LightModeColors.warning,
-                                      size: 20,
-                                    ),
-                                    onPressed: () {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              ProductScreen(sale: sale),
+                            trailing: sale.status == 'pending'
+                                ? Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: LightModeColors.warning
+                                              .withOpacity(0.1),
+                                          borderRadius: BorderRadius.circular(
+                                            10,
+                                          ),
                                         ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                                const SizedBox(width: 4),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: LightModeColors.lightError.withOpacity(0.1),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: IconButton(
-                                    icon: const Icon(
-                                      Icons.delete_rounded,
-                                      color: LightModeColors.lightError,
-                                      size: 20,
-                                    ),
-                                    onPressed: () =>
-                                        _showDeleteConfirmationDialog(
-                                          context,
-                                          sale,
+                                        child: IconButton(
+                                          icon: const Icon(
+                                            Icons.edit_rounded,
+                                            color: LightModeColors.warning,
+                                            size: 20,
+                                          ),
+                                          onPressed: () {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ProductScreen(sale: sale),
+                                              ),
+                                            );
+                                          },
                                         ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: LightModeColors.lightError
+                                              .withOpacity(0.1),
+                                          borderRadius: BorderRadius.circular(
+                                            10,
+                                          ),
+                                        ),
+                                        child: IconButton(
+                                          icon: const Icon(
+                                            Icons.delete_rounded,
+                                            color: LightModeColors.lightError,
+                                            size: 20,
+                                          ),
+                                          onPressed: () =>
+                                              _showDeleteConfirmationDialog(
+                                                context,
+                                                sale,
+                                              ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : null,
                           ),
                         );
                       },

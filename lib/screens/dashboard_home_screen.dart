@@ -5,6 +5,7 @@ import 'package:novopharma/controllers/badge_provider.dart';
 import 'package:novopharma/controllers/goal_provider.dart';
 import 'package:novopharma/controllers/leaderboard_provider.dart';
 import 'package:novopharma/controllers/notification_provider.dart';
+import 'package:novopharma/controllers/pluxee_redemption_provider.dart';
 import 'package:novopharma/controllers/redeemed_rewards_provider.dart';
 import 'package:novopharma/models/user_model.dart';
 import 'package:novopharma/screens/badges_screen.dart';
@@ -385,7 +386,15 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
                                     },
                                   ),
                                   const SizedBox(height: 20),
-                                  _buildPointsCard(user, l10n, redeemedRewards),
+                                  Consumer<PluxeeRedemptionProvider>(
+                                    builder: (context, pluxee, _) =>
+                                        _buildPointsCard(
+                                          user,
+                                          l10n,
+                                          redeemedRewards,
+                                          pluxee,
+                                        ),
+                                  ),
                                   const SizedBox(height: 16),
                                   _buildRedeemButton(context, l10n),
                                   const SizedBox(height: 20),
@@ -416,12 +425,12 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
     UserModel? user,
     AppLocalizations l10n,
     RedeemedRewardsProvider redeemedRewards,
+    PluxeeRedemptionProvider pluxeeRedemption,
   ) {
     final totalPoints = user?.points ?? 0;
     final pendingPoints = user?.pendingPluxeePoints ?? 0;
-    final currentPoints =
-        totalPoints - pendingPoints; // Available points (usable)
     final currentYear = DateTime.now().year;
+    final allTimePoints = pluxeeRedemption.allTimePoints;
 
     return Column(
       children: [
@@ -492,7 +501,7 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Text(
-                              'POINTS CUMULÉS TOTAL $currentYear',
+                              'POINTS CUMULÉS TOTAL',
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                 color: Colors.white,
@@ -519,14 +528,10 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
                                   textBaseline: TextBaseline.alphabetic,
                                   children: [
                                     Text(
-                                      _currentYearPoints
-                                          .toString()
-                                          .replaceAllMapped(
-                                            RegExp(
-                                              r'(\d{1,3})(?=(\d{3})+(?!\d))',
-                                            ),
-                                            (Match m) => '${m[1]} ',
-                                          ),
+                                      allTimePoints.toString().replaceAllMapped(
+                                        RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+                                        (Match m) => '${m[1]} ',
+                                      ),
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 32,
@@ -600,7 +605,7 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
                             textBaseline: TextBaseline.alphabetic,
                             children: [
                               Text(
-                                currentPoints.toString().replaceAllMapped(
+                                totalPoints.toString().replaceAllMapped(
                                   RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
                                   (Match m) => '${m[1]} ',
                                 ),
