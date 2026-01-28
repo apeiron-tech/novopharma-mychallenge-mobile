@@ -73,6 +73,14 @@ class PluxeeRedemptionRequest {
   bool get isPending => status == RedemptionStatus.pending;
   bool get isApproved => status == RedemptionStatus.approved;
   bool get isRejected => status == RedemptionStatus.rejected;
+
+  static double calculateTotalApprovedPoints(
+    List<PluxeeRedemptionRequest> requests,
+  ) {
+    return requests
+        .where((r) => r.isApproved)
+        .fold(0.0, (sum, request) => sum + request.pointsToRedeem);
+  }
 }
 
 DateTime? _parseDate(dynamic dateValue) {

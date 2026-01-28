@@ -35,6 +35,12 @@ class PluxeeRedemptionProvider with ChangeNotifier {
   double get totalPendingPoints =>
       pendingRequests.fold(0.0, (sum, request) => sum + request.pointsToRedeem);
 
+  double get totalApprovedPoints =>
+      PluxeeRedemptionRequest.calculateTotalApprovedPoints(_requests);
+
+  double get allTimePoints =>
+      (_authProvider.userProfile?.points ?? 0.0) + totalApprovedPoints;
+
   void update(AuthProvider authProvider) {
     if (authProvider.userProfile?.uid != _authProvider.userProfile?.uid) {
       _authProvider = authProvider;

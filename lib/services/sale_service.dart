@@ -7,7 +7,7 @@ class SaleService {
   final String _collection = 'sales';
 
   Future<void> createSale(Sale sale) async {
-    final userRef = _firestore.collection('users').doc(sale.userId);
+    //final userRef = _firestore.collection('users').doc(sale.userId);
     final saleRef = _firestore.collection(_collection).doc();
 
     final saleData = sale.toFirestore();
@@ -23,9 +23,9 @@ class SaleService {
           transaction.set(saleRef, saleData);
 
           // 2. Atomically update the user's points
-          transaction.update(userRef, {
-            'points': FieldValue.increment(sale.pointsEarned),
-          });
+          // transaction.update(userRef, {
+          //  'points': FieldValue.increment(sale.pointsEarned),
+          //});
         })
         .catchError((error) {
           log('[SaleService] Error in createSale transaction: $error');

@@ -5,6 +5,7 @@ import 'package:novopharma/models/user_model.dart';
 import 'package:novopharma/theme.dart';
 import 'package:novopharma/widgets/bottom_navigation_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:novopharma/controllers/pluxee_redemption_provider.dart';
 import 'package:novopharma/generated/l10n/app_localizations.dart';
 
 class LeaderboardScreen extends StatefulWidget {
@@ -165,7 +166,9 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                 child: Text(
                   tabs[index],
                   style: TextStyle(
-                    color: isActive ? Colors.white : LightModeColors.dashboardTextSecondary,
+                    color: isActive
+                        ? Colors.white
+                        : LightModeColors.dashboardTextSecondary,
                     fontSize: 14,
                     fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
                   ),
@@ -188,9 +191,13 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
       (user) => user['userId'] == currentUserId,
       orElse: () => {'rank': '0', 'points': 0},
     );
-    final leaderboardAuthProvider = Provider.of<AuthProvider>(context, listen: false);
+    final leaderboardAuthProvider = Provider.of<AuthProvider>(
+      context,
+      listen: false,
+    );
     final currentUserProfile = leaderboardAuthProvider.userProfile;
     final userAvailablePoints = currentUserProfile?.availablePoints ?? 0;
+    final pluxeeProvider = Provider.of<PluxeeRedemptionProvider>(context);
 
     return Container(
       width: double.infinity,
@@ -198,7 +205,10 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [LightModeColors.lightPrimary, LightModeColors.lightSecondary],
+          colors: [
+            LightModeColors.lightPrimary,
+            LightModeColors.lightSecondary,
+          ],
         ),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
@@ -264,43 +274,45 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                         ),
                       ),
                     ),
-                    if (currentUserData['rank']!='0')
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 8,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(
-                            Icons.star,
-                            color: Color(0xFFF59E0B),
-                            size: 18,
-                          ),
-                          const SizedBox(width: 6),
-                          Text(
-                            userAvailablePoints == 0 ? '0' : '#${currentUserData['rank']}',
-                            style: const TextStyle(
-                              color: Color(0xFF1F2937),
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                    if (currentUserData['rank'] != '0')
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.star,
+                              color: Color(0xFFF59E0B),
+                              size: 18,
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              userAvailablePoints == 0
+                                  ? '0'
+                                  : '#${currentUserData['rank']}',
+                              style: const TextStyle(
+                                color: Color(0xFF1F2937),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
                   ],
                 ),
                 const SizedBox(height: 20),
@@ -309,7 +321,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                   textBaseline: TextBaseline.alphabetic,
                   children: [
                     Text(
-                      '${currentUserData['points']}',
+                      '${pluxeeProvider.allTimePoints}',
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 42,
@@ -332,45 +344,45 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                   ],
                 ),
                 const SizedBox(height: 8),
-                if (currentUserData['rank']!='0')
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 8,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.15),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: Colors.white.withOpacity(0.3),
-                      width: 1,
+                if (currentUserData['rank'] != '0')
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
                     ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.emoji_events_rounded,
-                        color: Colors.white.withOpacity(0.9),
-                        size: 16,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.15),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: Colors.white.withOpacity(0.3),
+                        width: 1,
                       ),
-                      const SizedBox(width: 8),
-                      Flexible(
-                        child: Text(
-                          l10n.rankOnMychallenge(
-                            currentUserData['rank']?.toString() ?? '0',
-                            leaderboardData.length,
-                          ),
-                          style: TextStyle(
-                            color: Colors.white.withOpacity(0.95),
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.emoji_events_rounded,
+                          color: Colors.white.withOpacity(0.9),
+                          size: 16,
+                        ),
+                        const SizedBox(width: 8),
+                        Flexible(
+                          child: Text(
+                            l10n.rankOnMychallenge(
+                              currentUserData['rank']?.toString() ?? '0',
+                              leaderboardData.length,
+                            ),
+                            style: TextStyle(
+                              color: Colors.white.withOpacity(0.95),
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
               ],
             ),
           ),
@@ -396,8 +408,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
         children: [
           Text(
             l10n.nationalPodium,
-            style: const TextStyle(
-              color: Colors.white,
+            style: TextStyle(
+              color: LightModeColors.dashboardTextPrimary,
               fontSize: 12,
               fontWeight: FontWeight.w600,
             ),
@@ -481,8 +493,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
         const SizedBox(height: 8),
         Text(
           isCurrentUser ? user['name'] : _getInitials(user['name']),
-          style: const TextStyle(
-            color: Colors.white,
+          style: TextStyle(
+            color: LightModeColors.dashboardTextPrimary,
             fontSize: 12,
             fontWeight: FontWeight.w600,
           ),
@@ -490,7 +502,10 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
         const SizedBox(height: 4),
         Text(
           '${user['points']} pts',
-          style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 10),
+          style: TextStyle(
+            color: LightModeColors.dashboardTextPrimary.withOpacity(0.8),
+            fontSize: 10,
+          ),
         ),
         const SizedBox(height: 8),
         Container(

@@ -13,6 +13,7 @@ import 'package:novopharma/controllers/locale_provider.dart';
 import 'package:novopharma/generated/l10n/app_localizations.dart';
 import 'package:novopharma/screens/badges_screen.dart';
 import 'package:novopharma/theme.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -188,7 +189,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             color: LightModeColors.lightBackground,
             child: SafeArea(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 16,
+                ),
                 child: Column(
                   children: [
                     _buildAppBar(context, l10n),
@@ -275,7 +279,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       width: 128,
                       height: 128,
                       decoration: BoxDecoration(
-                        color: LightModeColors.lightSurface.withValues(alpha: 0.6),
+                        color: LightModeColors.lightSurface.withValues(
+                          alpha: 0.6,
+                        ),
                         borderRadius: BorderRadius.circular(64),
                       ),
                       child: const Center(
@@ -293,11 +299,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 decoration: BoxDecoration(
                   color: LightModeColors.lightPrimary,
                   shape: BoxShape.circle,
-                  border: Border.all(color: LightModeColors.lightSurface, width: 2),
+                  border: Border.all(
+                    color: LightModeColors.lightSurface,
+                    width: 2,
+                  ),
                 ),
                 child: GestureDetector(
                   onTap: _isUploadingAvatar ? null : _pickAndUploadAvatar,
-                  child: Icon(Icons.camera_alt, color: LightModeColors.lightOnPrimary, size: 20),
+                  child: Icon(
+                    Icons.camera_alt,
+                    color: LightModeColors.lightOnPrimary,
+                    size: 20,
+                  ),
                 ),
               ),
             ),
@@ -414,13 +427,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
             onPressed: _hasChanges && !_isLoading ? _saveProfile : null,
             style: ElevatedButton.styleFrom(
               backgroundColor: LightModeColors.lightPrimary,
-              disabledBackgroundColor: LightModeColors.lightPrimary.withOpacity(0.6),
+              disabledBackgroundColor: LightModeColors.lightPrimary.withOpacity(
+                0.6,
+              ),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
             child: _isLoading
-                ? const CircularProgressIndicator(color: LightModeColors.lightOnPrimary)
+                ? const CircularProgressIndicator(
+                    color: LightModeColors.lightOnPrimary,
+                  )
                 : Text(
                     l10n.updateProfile,
                     style: TextStyle(
@@ -464,11 +481,64 @@ class _ProfileScreenState extends State<ProfileScreen> {
             style: OutlinedButton.styleFrom(
               foregroundColor: LightModeColors.lightError,
               side: BorderSide(color: LightModeColors.lightError, width: 1),
-              backgroundColor: LightModeColors.lightErrorContainer.withValues(alpha: 0.1),
+              backgroundColor: LightModeColors.lightErrorContainer.withValues(
+                alpha: 0.1,
+              ),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
               padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+        InkWell(
+          onTap: () async {
+            final Uri telLaunchUri = Uri(
+              scheme: 'tel',
+              path: '+216 98 667 540',
+            );
+            if (await canLaunchUrl(telLaunchUri)) {
+              await launchUrl(telLaunchUri);
+            }
+          },
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            decoration: const BoxDecoration(),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  "Besoin d'aide ?",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: LightModeColors.dashboardTextPrimary,
+                  ),
+                ),
+                const SizedBox(width: 20),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.phone_in_talk_rounded,
+                      size: 26,
+                      color: LightModeColors.dashboardTextPrimary,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Appeler le +216 \n 98 667 540',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 8,
+                        color: LightModeColors.dashboardTextSecondary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ),
@@ -490,13 +560,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: isEditable ? LightModeColors.lightSurface : LightModeColors.novoPharmaLightGray,
+        color: isEditable
+            ? LightModeColors.lightSurface
+            : LightModeColors.novoPharmaLightGray,
         border: Border.all(color: LightModeColors.lightOutline),
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           if (isEditable)
             BoxShadow(
-              color: LightModeColors.dashboardTextPrimary.withValues(alpha: 0.05),
+              color: LightModeColors.dashboardTextPrimary.withValues(
+                alpha: 0.05,
+              ),
               blurRadius: 4,
               offset: const Offset(0, 2),
             ),
@@ -505,16 +579,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (isEditing) Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              color: LightModeColors.dashboardTextTertiary,
-            ),
-          ),
           if (isEditing)
-            const SizedBox(height: 4),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                color: LightModeColors.dashboardTextTertiary,
+              ),
+            ),
+          if (isEditing) const SizedBox(height: 4),
           if (isEditing)
             Container(
               width: double.infinity,
@@ -569,7 +643,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                   ),
-                  if (isEditable && !isPassword) 
+                  if (isEditable && !isPassword)
                     GestureDetector(
                       onTap: () => _toggleEditMode(field!),
                       child: Row(
