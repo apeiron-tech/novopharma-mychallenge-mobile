@@ -12,6 +12,7 @@ class Sale {
   final double totalPrice;
   final String? productBrandSnapshot;
   final String? productCategorySnapshot;
+  final String status;
 
   Sale({
     required this.id,
@@ -25,6 +26,7 @@ class Sale {
     required this.totalPrice,
     this.productBrandSnapshot,
     this.productCategorySnapshot,
+    required this.status,
   });
 
   factory Sale.fromFirestore(DocumentSnapshot doc) {
@@ -41,6 +43,7 @@ class Sale {
       totalPrice: (data['totalPrice'] as num?)?.toDouble() ?? 0.0,
       productBrandSnapshot: data['productBrandSnapshot'],
       productCategorySnapshot: data['productCategorySnapshot'],
+      status: data['status'] ?? 'pending',
     );
   }
 
@@ -56,6 +59,7 @@ class Sale {
       'totalPrice': totalPrice,
       'productBrandSnapshot': productBrandSnapshot,
       'productCategorySnapshot': productCategorySnapshot,
+      'status': status,
     };
   }
 }

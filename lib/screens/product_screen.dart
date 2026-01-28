@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:novopharma/controllers/sales_history_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:novopharma/controllers/auth_provider.dart';
+import 'package:novopharma/controllers/pluxee_redemption_provider.dart';
 import 'package:novopharma/models/goal.dart';
 import 'package:novopharma/models/pharmacy.dart';
 import 'package:novopharma/models/product.dart';
@@ -15,6 +16,7 @@ import 'package:novopharma/services/product_service.dart';
 import 'package:novopharma/services/user_service.dart';
 import 'package:novopharma/generated/l10n/app_localizations.dart';
 import 'package:novopharma/services/sale_service.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../theme.dart';
 
 // Helper class to hold all the data fetched for the screen
@@ -125,6 +127,7 @@ class _ProductScreenState extends State<ProductScreen> {
         pointsEarned: product.points * quantity,
         saleDate: widget.sale!.saleDate, // Keep original sale date
         totalPrice: totalPrice,
+        status: widget.sale!.status, // Keep original status
       );
       Provider.of<SalesHistoryProvider>(
         context,
@@ -142,6 +145,7 @@ class _ProductScreenState extends State<ProductScreen> {
         pointsEarned: product.points * quantity,
         saleDate: DateTime.now(),
         totalPrice: totalPrice,
+        status: 'pending',
       );
       _saleService.createSale(newSale);
     }
@@ -159,6 +163,18 @@ class _ProductScreenState extends State<ProductScreen> {
         elevation: 0,
         surfaceTintColor: Colors.transparent,
         scrolledUnderElevation: 4,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.phone_in_talk_rounded),
+            onPressed: () async {
+              final Uri telLaunchUri = Uri(scheme: 'tel', path: '+21698667540');
+              if (await canLaunchUrl(telLaunchUri)) {
+                await launchUrl(telLaunchUri);
+              }
+            },
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
       backgroundColor: LightModeColors.lightBackground,
       body: FutureBuilder<_ProductScreenData>(
@@ -852,6 +868,17 @@ class _ProductScreenState extends State<ProductScreen> {
                         ),
                       ),
                       const SizedBox(height: 2.0),
+                      Consumer<PluxeeRedemptionProvider>(
+                        builder: (context, pluxee, _) => Text(
+                          'Solde: ${pluxee.allTimePoints.toInt().toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]} ')} pts',
+                          style: const TextStyle(
+                            fontSize: 13,
+                            color: LightModeColors.success,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 4.0),
                       Padding(
                         padding: const EdgeInsets.only(left: 6.0),
                         child: Text(

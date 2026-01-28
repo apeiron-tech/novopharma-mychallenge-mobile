@@ -127,6 +127,7 @@ class ScanProvider with ChangeNotifier {
         pointsEarned: totalPoints,
         saleDate: DateTime.now(),
         totalPrice: totalPrice,
+        status: 'pending',
       );
 
       await _saleService.createSale(newSale);
