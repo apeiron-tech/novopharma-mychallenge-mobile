@@ -1,4 +1,4 @@
-package com.example.novopharma
+package com.apeiron.novopharma
 
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine

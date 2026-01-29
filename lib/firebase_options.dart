@@ -63,6 +63,6 @@ class DefaultFirebaseOptions {
     messagingSenderId: '501099928244',
     projectId: 'pharmadefi-b352b',
     storageBucket: 'pharmadefi-b352b.firebasestorage.app',
-    iosBundleId: 'com.example.novopharma',
+    iosBundleId: 'com.apeiron.novopharma',
   );
 }
