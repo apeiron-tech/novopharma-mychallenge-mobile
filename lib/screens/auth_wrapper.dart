@@ -3,6 +3,7 @@ import 'package:novopharma/controllers/auth_provider.dart';
 import 'package:novopharma/screens/dashboard_home_screen.dart';
 import 'package:novopharma/screens/login_screen.dart';
 import 'package:novopharma/screens/pending_approval_screen.dart';
+import 'package:novopharma/screens/introduction_screen_custom.dart';
 import 'package:provider/provider.dart';
 
 class AuthWrapper extends StatelessWidget {
@@ -21,6 +22,10 @@ class AuthWrapper extends StatelessWidget {
       case AppAuthState.unauthenticated:
       case AppAuthState
           .authenticatedDisabled: // Kicking disabled users back to login
+        if (!authProvider.hasSeenIntro &&
+            authProvider.appAuthState == AppAuthState.unauthenticated) {
+          return IntroductionScreenCustom();
+        }
         return const LoginScreen();
       case AppAuthState.unknown:
       default:
