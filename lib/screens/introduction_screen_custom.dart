@@ -28,7 +28,7 @@ class IntroductionScreenCustom extends StatelessWidget {
   Widget build(BuildContext context) {
     // Page Decoration
     final pageDecoration = PageDecoration(
-      footerPadding: EdgeInsets.only(top: 0.0),
+      footerPadding: EdgeInsets.only(top: 8.0),
       titleTextStyle: const TextStyle(fontSize: 0.0, height: 0),
       bodyTextStyle: GoogleFonts.inter(
         fontSize: 16,

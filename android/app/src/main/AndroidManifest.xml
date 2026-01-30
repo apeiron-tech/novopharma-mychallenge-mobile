@@ -7,6 +7,12 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     
+    <!-- Camera permission for mobile_scanner and image_picker -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    
+    <!-- Notification permission for Android 13+ -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    
     <application
         android:label="MyChallenge"
         android:name="${applicationName}"

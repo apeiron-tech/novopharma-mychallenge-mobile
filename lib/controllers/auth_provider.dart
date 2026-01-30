@@ -175,6 +175,22 @@ class AuthProvider with ChangeNotifier {
     await _authService.signOut();
   }
 
+  Future<String?> deleteAccount() async {
+    if (_firebaseUser == null) return 'No user logged in.';
+    try {
+      final uid = _firebaseUser!.uid;
+      // 1. Delete user profile from Firestore
+      await _userService.deleteUserProfile(uid);
+      // 2. Delete user from Firebase Auth
+      await _authService.deleteAccount();
+      return null; // Success
+    } on FirebaseAuthException catch (e) {
+      return e.code;
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
   Future<String?> changePassword(
     String currentPassword,
     String newPassword,

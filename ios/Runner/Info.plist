@@ -28,6 +28,11 @@
 		<true/>
 		<key>UIApplicationSupportsIndirectInputEvents</key>
 		<true/>
+		<key>UIBackgroundModes</key>
+		<array>
+			<string>fetch</string>
+			<string>remote-notification</string>
+		</array>
 		<key>UILaunchStoryboardName</key>
 		<string>Main.storyboard</string>
 		<key>UIMainStoryboardFile</key>
@@ -51,8 +56,14 @@
 		<true/>
 		<key>NSPhotoLibraryUsageDescription</key>
 		<string>Cette application a besoin d'accéder à vos photos pour télécharger et recadrer votre photo de profil</string>
+		<key>NSPhotoLibraryAddUsageDescription</key>
+		<string>Cette application a besoin de l'autorisation d'ajouter des photos à votre bibliothèque pour enregistrer des documents ou des images téléchargés.</string>
 		<key>NSCameraUsageDescription</key>
 		<string>Cette application a besoin d'accéder à votre caméra pour prendre une photo de profil</string>
+		<key>UIFileSharingEnabled</key>
+		<true/>
+		<key>LSSupportsOpeningDocumentsInPlace</key>
+		<true/>
 		<key>UIStatusBarHidden</key>
 		<false/>
 	</dict>

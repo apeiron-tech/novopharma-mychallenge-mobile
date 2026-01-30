@@ -377,5 +377,10 @@
     "authErrorInvalidEmail": "Adresse email invalide",
     "authErrorWeakPassword": "Le mot de passe est trop faible",
     "authErrorGeneric": "Une erreur s'est produite. Veuillez réessayer.",
-    "authErrorTooManyRequests": "Trop de tentatives. Veuillez réessayer plus tard."
+    "authErrorTooManyRequests": "Trop de tentatives. Veuillez réessayer plus tard.",
+    "deleteAccount": "Supprimer le compte",
+    "deleteAccountTitle": "Confirmer la suppression du compte",
+    "deleteAccountConfirmation": "Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible et toutes vos données seront définitivement supprimées.",
+    "deleteAccountConfirm": "Supprimer définitivement",
+    "recentLoginRequiredError": "Pour des raisons de sécurité, cette action nécessite une connexion récente. Veuillez vous déconnecter et vous reconnecter avant de supprimer votre compte."
 }
