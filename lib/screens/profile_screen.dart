@@ -173,6 +173,69 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  Future<void> _deleteAccount() async {
+    final l10n = AppLocalizations.of(context)!;
+    final bool? confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(
+          l10n.deleteAccountTitle,
+          style: const TextStyle(
+            color: LightModeColors.lightError,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: Text(l10n.deleteAccountConfirmation),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(
+              l10n.cancel,
+              style: const TextStyle(color: LightModeColors.novoPharmaGray),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: LightModeColors.lightError,
+              foregroundColor: Colors.white,
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            child: Text(l10n.deleteAccountConfirm),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm == true) {
+      setState(() => _isLoading = true);
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      final error = await authProvider.deleteAccount();
+
+      if (mounted) {
+        if (error == null) {
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const AuthWrapper()),
+            (route) => false,
+          );
+        } else {
+          setState(() => _isLoading = false);
+          String errorMessage = error;
+          if (error == 'requires-recent-login') {
+            errorMessage = l10n.recentLoginRequiredError;
+          }
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(errorMessage)));
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -488,6 +551,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 borderRadius: BorderRadius.circular(12),
               ),
               padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+        SizedBox(
+          width: double.infinity,
+          child: TextButton.icon(
+            onPressed: _isLoading ? null : _deleteAccount,
+            icon: Icon(
+              Icons.delete_forever_rounded,
+              size: 20,
+              color: LightModeColors.lightError.withOpacity(0.8),
+            ),
+            label: Text(
+              l10n.deleteAccount,
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+                color: LightModeColors.lightError.withOpacity(0.8),
+                decoration: TextDecoration.underline,
+                decorationColor: LightModeColors.lightError.withOpacity(0.8),
+              ),
+            ),
+            style: TextButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
             ),
           ),
         ),

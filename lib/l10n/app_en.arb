@@ -377,5 +377,10 @@
     "authErrorInvalidEmail": "Invalid email",
     "authErrorWeakPassword": "Password is too weak",
     "authErrorGeneric": "An error occurred. Please try again.",
-    "authErrorTooManyRequests": "Too many requests. Please try again later."
+    "authErrorTooManyRequests": "Too many requests. Please try again later.",
+    "deleteAccount": "Delete Account",
+    "deleteAccountTitle": "Confirm Account Deletion",
+    "deleteAccountConfirmation": "Are you sure you want to delete your account? This action is irreversible and all your data will be permanently removed.",
+    "deleteAccountConfirm": "Permanently Delete",
+    "recentLoginRequiredError": "For security reasons, this action requires a recent login. Please log out and sign in again before deleting your account."
 }

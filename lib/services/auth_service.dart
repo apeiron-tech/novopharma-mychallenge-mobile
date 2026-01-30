@@ -77,4 +77,14 @@ class AuthService {
       throw e;
     }
   }
+
+  // Delete account
+  Future<void> deleteAccount() async {
+    try {
+      await _firebaseAuth.currentUser?.delete();
+    } on FirebaseAuthException catch (e) {
+      // Re-throw the exception to be handled by the caller
+      throw e;
+    }
+  }
 }

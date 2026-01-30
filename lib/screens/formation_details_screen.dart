@@ -173,7 +173,10 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
       margin: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [LightModeColors.lightSurface, LightModeColors.lightSurface.withValues(alpha: 0.95)],
+          colors: [
+            LightModeColors.lightSurface,
+            LightModeColors.lightSurface.withValues(alpha: 0.95),
+          ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -210,9 +213,7 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
-                        color: LightModeColors.novoPharmaBlue.withOpacity(
-                          0.2,
-                        ),
+                        color: LightModeColors.novoPharmaBlue.withOpacity(0.2),
                         blurRadius: 15,
                         offset: const Offset(0, 8),
                       ),
@@ -329,9 +330,7 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
                     Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: LightModeColors.warning.withOpacity(
-                          0.1,
-                        ),
+                        color: LightModeColors.warning.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Icon(
@@ -484,7 +483,10 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
       margin: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [LightModeColors.lightSurface, LightModeColors.lightSurface.withValues(alpha: 0.9)],
+          colors: [
+            LightModeColors.lightSurface,
+            LightModeColors.lightSurface.withValues(alpha: 0.9),
+          ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -496,7 +498,10 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
             offset: const Offset(0, 4),
           ),
         ],
-        border: Border.all(color: LightModeColors.lightSurfaceVariant, width: 1),
+        border: Border.all(
+          color: LightModeColors.lightSurfaceVariant,
+          width: 1,
+        ),
       ),
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -658,9 +663,7 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
                         gradient: isActive
                             ? LinearGradient(
                                 colors: [
-                                  LightModeColors.lightwarning.withOpacity(
-                                    0.1,
-                                  ),
+                                  LightModeColors.lightwarning.withOpacity(0.1),
                                   LightModeColors.lightwarning.withOpacity(
                                     0.05,
                                   ),
@@ -669,13 +672,14 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
                                 end: Alignment.bottomRight,
                               )
                             : LinearGradient(
-                                colors: [LightModeColors.lightSurfaceVariant, LightModeColors.lightSurface],
+                                colors: [
+                                  LightModeColors.lightSurfaceVariant,
+                                  LightModeColors.lightSurface,
+                                ],
                               ),
                         border: Border.all(
                           color: isActive
-                              ? LightModeColors.lightwarning.withOpacity(
-                                  0.3,
-                                )
+                              ? LightModeColors.lightwarning.withOpacity(0.3)
                               : LightModeColors.lightSurfaceVariant,
                           width: 1.5,
                         ),
@@ -702,15 +706,16 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
                                   ? const LinearGradient(
                                       colors: [
                                         LightModeColors.success,
-                                        LightModeColors.success
+                                        LightModeColors.success,
                                       ],
                                     )
                                   : isActive
                                   ? LinearGradient(
                                       colors: [
                                         LightModeColors.lightwarning,
-                                        LightModeColors.warning
-                                            .withValues(alpha: 0.8),
+                                        LightModeColors.warning.withValues(
+                                          alpha: 0.8,
+                                        ),
                                       ],
                                     )
                                   : LinearGradient(
@@ -720,7 +725,6 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
                                       ],
                                     ),
                               shape: BoxShape.circle,
-                              
                             ),
                             child: Icon(
                               isCompleted ? Icons.check_rounded : step.icon,
@@ -1597,7 +1601,7 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
           mode: LaunchMode.inAppBrowserView,
           browserConfiguration: const BrowserConfiguration(showTitle: true),
         );
-        _showSnackBar('Téléchargement du $contentType en cours...');
+        _showSnackBar('Ouverture du $contentType...');
         return;
       } catch (e) {
         // Fallback silently

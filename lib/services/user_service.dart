@@ -82,4 +82,13 @@ class UserService {
       return null;
     }
   }
+
+  Future<void> deleteUserProfile(String uid) async {
+    try {
+      await _firestore.collection(_collection).doc(uid).delete();
+    } catch (e) {
+      print('Error deleting user profile: $e');
+      rethrow;
+    }
+  }
 }

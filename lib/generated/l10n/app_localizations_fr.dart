@@ -922,4 +922,21 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get authErrorTooManyRequests =>
       'Trop de tentatives. Veuillez réessayer plus tard.';
+
+  @override
+  String get deleteAccount => 'Supprimer le compte';
+
+  @override
+  String get deleteAccountTitle => 'Confirmer la suppression du compte';
+
+  @override
+  String get deleteAccountConfirmation =>
+      'Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible et toutes vos données seront définitivement supprimées.';
+
+  @override
+  String get deleteAccountConfirm => 'Supprimer définitivement';
+
+  @override
+  String get recentLoginRequiredError =>
+      'Pour des raisons de sécurité, cette action nécessite une connexion récente. Veuillez vous déconnecter et vous reconnecter avant de supprimer votre compte.';
 }

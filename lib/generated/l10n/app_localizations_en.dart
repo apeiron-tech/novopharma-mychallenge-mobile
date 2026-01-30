@@ -911,4 +911,21 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get authErrorTooManyRequests =>
       'Too many requests. Please try again later.';
+
+  @override
+  String get deleteAccount => 'Delete Account';
+
+  @override
+  String get deleteAccountTitle => 'Confirm Account Deletion';
+
+  @override
+  String get deleteAccountConfirmation =>
+      'Are you sure you want to delete your account? This action is irreversible and all your data will be permanently removed.';
+
+  @override
+  String get deleteAccountConfirm => 'Permanently Delete';
+
+  @override
+  String get recentLoginRequiredError =>
+      'For security reasons, this action requires a recent login. Please log out and sign in again before deleting your account.';
 }

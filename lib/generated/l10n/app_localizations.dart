@@ -1759,6 +1759,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Too many requests. Please try again later.'**
   String get authErrorTooManyRequests;
+
+  /// No description provided for @deleteAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Account'**
+  String get deleteAccount;
+
+  /// No description provided for @deleteAccountTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Account Deletion'**
+  String get deleteAccountTitle;
+
+  /// No description provided for @deleteAccountConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete your account? This action is irreversible and all your data will be permanently removed.'**
+  String get deleteAccountConfirmation;
+
+  /// No description provided for @deleteAccountConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Permanently Delete'**
+  String get deleteAccountConfirm;
+
+  /// No description provided for @recentLoginRequiredError.
+  ///
+  /// In en, this message translates to:
+  /// **'For security reasons, this action requires a recent login. Please log out and sign in again before deleting your account.'**
+  String get recentLoginRequiredError;
 }
 
 class _AppLocalizationsDelegate
