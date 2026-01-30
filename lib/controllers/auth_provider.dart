@@ -53,6 +53,7 @@ class AuthProvider with ChangeNotifier {
       _fcmTokenSaved = false; // Reset on logout
     } else {
       _firebaseUser = user;
+      _hasSeenIntro = true; // Mark as seen since user is authenticated
       _appAuthState = AppAuthState.unknown;
       _userProfileSubscription = _userService
           .getUserProfile(user.uid)
@@ -95,6 +96,7 @@ class AuthProvider with ChangeNotifier {
   Future<String?> signIn(String email, String password) async {
     try {
       await _authService.signInWithEmailAndPassword(email, password);
+      // markIntroSeen is not needed here as _onAuthStateChanged will handle it
       return null; // Success
     } on FirebaseAuthException catch (e) {
       return e.code; // Return error code
@@ -169,6 +171,7 @@ class AuthProvider with ChangeNotifier {
   }
 
   Future<void> signOut() async {
+    markIntroSeen();
     await _authService.signOut();
   }
 
@@ -209,5 +212,13 @@ class AuthProvider with ChangeNotifier {
     } catch (e) {
       // Silently handle FCM token save errors
     }
+  }
+
+  bool _hasSeenIntro = false;
+  bool get hasSeenIntro => _hasSeenIntro;
+
+  void markIntroSeen() {
+    _hasSeenIntro = true;
+    notifyListeners();
   }
 }

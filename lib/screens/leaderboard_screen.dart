@@ -437,6 +437,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final currentUserId = authProvider.firebaseUser?.uid;
     final isCurrentUser = user['userId'] == currentUserId;
+    final pluxeeProvider = Provider.of<PluxeeRedemptionProvider>(context);
 
     Color medalColor;
     switch (position) {
@@ -501,7 +502,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
         ),
         const SizedBox(height: 4),
         Text(
-          '${user['points']} pts',
+          '${isCurrentUser ? pluxeeProvider.allTimePoints : user['points']} pts',
           style: TextStyle(
             color: LightModeColors.dashboardTextPrimary.withOpacity(0.8),
             fontSize: 10,
@@ -533,6 +534,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
   ) {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final currentUserId = authProvider.firebaseUser?.uid;
+    final pluxeeProvider = Provider.of<PluxeeRedemptionProvider>(context);
 
     return Container(
       decoration: BoxDecoration(
@@ -658,7 +660,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                       ),
                     ),
                     Text(
-                      '${user['points']} pts',
+                      '${isCurrentUser ? pluxeeProvider.allTimePoints : user['points']} pts',
                       style: TextStyle(
                         color: isCurrentUser
                             ? LightModeColors.warning
