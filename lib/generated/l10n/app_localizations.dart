@@ -638,6 +638,12 @@ abstract class AppLocalizations {
   /// **'Parapharmacy Manager'**
   String get responsableParapharmacie;
 
+  /// No description provided for @preparateurOfficine.
+  ///
+  /// In en, this message translates to:
+  /// **'Pharmacy Technician'**
+  String get preparateurOfficine;
+
   /// No description provided for @scanBarcodeHere.
   ///
   /// In en, this message translates to:

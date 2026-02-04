@@ -501,7 +501,7 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Text(
-                              'POINTS CUMULÉS TOTAL',
+                              'TOTAL POINTS CUMULÉS ',
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                 color: Colors.white,

@@ -89,6 +89,7 @@
     "pharmacienAssistant": "Assistant Pharmacist",
     "preparateur": "Pharmacy Technician",
     "responsableParapharmacie": "Parapharmacy Manager",
+    "preparateurOfficine": "Pharmacy Technician",
     "scanBarcodeHere": "Scan barcode here",
     "scannedProduct": "Product",
     "productDetailsAppearHere": "Product details will appear here.",
