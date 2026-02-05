@@ -50,6 +50,7 @@ class _SignupScreenState extends State<SignupScreen> {
     {'value': 'Pharmacien titulaire', 'key': 'pharmacienTitulaire'},
     {'value': 'Pharmacien assistant', 'key': 'pharmacienAssistant'},
     {'value': 'Responsable para', 'key': 'responsablePara'},
+    {'value': 'Préparateur', 'key': 'preparateurOfficine'},
   ];
 
   final List<String> _cities = [
@@ -1006,6 +1007,9 @@ class _SignupScreenState extends State<SignupScreen> {
             break;
           case 'responsablePara':
             labelText = l10n.responsableParapharmacie;
+            break;
+          case 'preparateurOfficine':
+            labelText = l10n.preparateurOfficine;
             break;
           default:
             labelText = position['key']!;
