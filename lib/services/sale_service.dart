@@ -123,4 +123,14 @@ class SaleService {
       return [];
     }
   }
+
+  Stream<List<Sale>> streamSales(String userId) {
+    return _firestore
+        .collection(_collection)
+        .where('userId', isEqualTo: userId)
+        .snapshots()
+        .map((snapshot) {
+          return snapshot.docs.map((doc) => Sale.fromFirestore(doc)).toList();
+        });
+  }
 }
