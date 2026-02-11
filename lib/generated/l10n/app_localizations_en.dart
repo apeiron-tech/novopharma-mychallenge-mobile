@@ -288,6 +288,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get responsableParapharmacie => 'Parapharmacy Manager';
 
   @override
+  String get preparateurOfficine => 'Pharmacy Technician';
+
+  @override
   String get scanBarcodeHere => 'Scan barcode here';
 
   @override

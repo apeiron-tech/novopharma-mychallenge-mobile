@@ -118,7 +118,7 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
             ],
           ),
           content: const Text(
-            'Vos ventes sont vérifiées tous les 2 mois. Après validation, vos points sont automatiquement ajoutés à votre solde de points utilisables et peuvent être échangés en crédits Pluxee.',
+            'Après validation, vos points sont automatiquement ajoutés à votre solde de points utilisables et peuvent être échangés en crédits Pluxee.',
             style: TextStyle(
               fontSize: 15,
               height: 1.5,

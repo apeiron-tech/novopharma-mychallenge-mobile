@@ -293,6 +293,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get responsableParapharmacie => 'Responsable parapharmacie';
 
   @override
+  String get preparateurOfficine => 'Préparateur·rice';
+
+  @override
   String get scanBarcodeHere => 'Scannez le code-barres ici';
 
   @override
