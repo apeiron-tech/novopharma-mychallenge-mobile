@@ -1490,6 +1490,15 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
         orElse: () => throw Exception('Quiz non trouvé'),
       );
 
+      // Check attempt limit
+      final attempts = quizProvider.userAttempts[quiz.id] ?? 0;
+      if (attempts >= quiz.attemptLimit) {
+        _showSnackBar(
+          'Vous avez atteint la limite de tentatives pour ce quiz (${attempts}/${quiz.attemptLimit})',
+        );
+        return;
+      }
+
       // Navigate to quiz question screen
       final result = await Navigator.push(
         context,
