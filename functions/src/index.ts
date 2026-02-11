@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable max-len */
-import {onDocumentCreated} from "firebase-functions/v2/firestore";
+import {onDocumentUpdated} from "firebase-functions/v2/firestore";
 import * as admin from "firebase-admin";
 import * as logger from "firebase-functions/logger";
 
@@ -15,14 +15,23 @@ export {onNewTrainingCreated, onNewBadgeCreated, onUserBadgeAwarded} from "./not
  * NEW: Cloud Function to process sales for badge awards.
  * Triggers when a new sale is created.
  */
-export const processSaleForBadgeAwards = onDocumentCreated("sales/{saleId}", async (event) => {
-  const snapshot = event.data;
-  if (!snapshot) {
+export const processSaleForBadgeAwards = onDocumentUpdated("sales/{saleId}", async (event) => {
+  const change = event.data;
+  if (!change) {
     logger.error("No data associated with the event for badge processing.");
     return;
   }
 
-  const sale = snapshot.data();
+  const before = change.before.data();
+  const after = change.after.data();
+
+  // Process only if status changed to 'approved'
+  if (before?.status === "approved" || after?.status !== "approved") {
+    logger.info(`Sale ${event.params.saleId} status is not newly approved. Skipping.`);
+    return;
+  }
+
+  const sale = after;
   const {userId, productId, quantity, totalPrice} = sale;
 
   if (!userId || !productId) {
@@ -201,14 +210,23 @@ function isSaleEligibleForBadgeScope(sale: any, product: any, scope: any): boole
  *    as 'completed' for that user and awards them the specified reward points.
  * 8. All operations include detailed logging for easier debugging.
  */
-export const processSaleForGoalProgress = onDocumentCreated("sales/{saleId}", async (event) => {
-  const snapshot = event.data;
-  if (!snapshot) {
+export const processSaleForGoalProgress = onDocumentUpdated("sales/{saleId}", async (event) => {
+  const change = event.data;
+  if (!change) {
     logger.error("No data associated with the event.");
     return;
   }
 
-  const sale = snapshot.data();
+  const before = change.before.data();
+  const after = change.after.data();
+
+  // Process only if status changed to 'approved'
+  if (before?.status === "approved" || after?.status !== "approved") {
+    logger.info(`Sale ${event.params.saleId} status is not newly approved. Skipping.`);
+    return;
+  }
+
+  const sale = after;
   const {userId, pharmacyId, productId, quantity, totalPrice} = sale;
   const {saleId} = event.params;
 

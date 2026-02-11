@@ -9,8 +9,21 @@ import 'package:intl/intl.dart';
 import 'package:novopharma/generated/l10n/app_localizations.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class BadgesScreen extends StatelessWidget {
+class BadgesScreen extends StatefulWidget {
   const BadgesScreen({super.key});
+
+  @override
+  State<BadgesScreen> createState() => _BadgesScreenState();
+}
+
+class _BadgesScreenState extends State<BadgesScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<BadgeProvider>().refreshBadges();
+    });
+  }
 
   void _showBadgeDetails(BuildContext context, BadgeDisplayInfo badgeInfo) {
     final l10n = AppLocalizations.of(context)!;
@@ -362,8 +375,7 @@ class BadgesScreen extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         // Reward Card - handles different reward types
-        if (badge.rewardType != null)
-          _buildRewardCard(badge, context, l10n),
+        if (badge.rewardType != null) _buildRewardCard(badge, context, l10n),
         _buildDateRangeCard(startDate, endDate, context),
       ],
     );
@@ -460,7 +472,9 @@ class BadgesScreen extends StatelessWidget {
           }
           break;
         case 'custom':
-          cardColor = const Color(0xFFFF9800); // Orange color for custom rewards
+          cardColor = const Color(
+            0xFFFF9800,
+          ); // Orange color for custom rewards
           iconData = Icons.card_giftcard_outlined;
           title = l10n.customRewardLabel;
           value = badge.customReward ?? 'Custom Reward';
@@ -470,7 +484,13 @@ class BadgesScreen extends StatelessWidget {
           return const SizedBox.shrink();
       }
 
-      return _buildRewardCardContent(cardColor, iconData, title, value, context);
+      return _buildRewardCardContent(
+        cardColor,
+        iconData,
+        title,
+        value,
+        context,
+      );
     }
   }
 
@@ -508,11 +528,7 @@ class BadgesScreen extends StatelessWidget {
                   color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(
-                  iconData,
-                  color: Colors.white,
-                  size: 32,
-                ),
+                child: Icon(iconData, color: Colors.white, size: 32),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -566,9 +582,11 @@ class BadgesScreen extends StatelessWidget {
   // Helper method to fetch reward by ID
   Future<models_reward.Reward?> _getRewardById(String rewardId) async {
     try {
-      final rewardRef = FirebaseFirestore.instance.collection('rewards').doc(rewardId);
+      final rewardRef = FirebaseFirestore.instance
+          .collection('rewards')
+          .doc(rewardId);
       final rewardDoc = await rewardRef.get();
-      
+
       if (rewardDoc.exists) {
         return models_reward.Reward.fromFirestore(rewardDoc);
       }
@@ -748,9 +766,13 @@ class BadgesScreen extends StatelessWidget {
 
           return CustomScrollView(
             slivers: [
-              _buildSectionHeader('${l10n.badgeAwarded} (${awardedBadges.length})'),
+              _buildSectionHeader(
+                '${l10n.badgeAwarded} (${awardedBadges.length})',
+              ),
               _buildGrid(awardedBadges, context),
-              _buildSectionHeader('${l10n.badgeLocked} (${lockedBadges.length})'),
+              _buildSectionHeader(
+                '${l10n.badgeLocked} (${lockedBadges.length})',
+              ),
               _buildGrid(lockedBadges, context),
               const SliverToBoxAdapter(child: SizedBox(height: 20)),
             ],

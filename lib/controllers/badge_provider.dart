@@ -30,6 +30,7 @@ class BadgeProvider with ChangeNotifier {
   StreamSubscription? _badgesSubscription;
   StreamSubscription? _userBadgesSubscription;
   StreamSubscription? _userBadgesFromSubcollectionSubscription;
+  StreamSubscription? _salesSubscription;
 
   // Flags to track initial data load
   bool _badgesInitialized = false;
@@ -60,6 +61,11 @@ class BadgeProvider with ChangeNotifier {
 
   List<BadgeDisplayInfo> get badges => _badges;
   bool get isLoading => _isLoading;
+
+  void refreshBadges() {
+    _cancelSubscriptions();
+    _listenToBadges();
+  }
 
   void _listenToBadges() {
     if (_authProvider.userProfile == null) return;
@@ -117,6 +123,23 @@ class BadgeProvider with ChangeNotifier {
             userId,
           );
         });
+
+    // Listen to sales changes to update progress dynamically
+    _salesSubscription = _saleService.streamSales(userId).listen((sales) {
+      // When sales change, we simply re-process the existing badge data
+      // This will trigger _calculateDynamicProgress with the new sales data
+      if (_badgesInitialized &&
+          _collectionInitialized &&
+          _subcollectionInitialized) {
+        print('[BadgeProvider] Sales updated, recalculating progress...');
+        _mergeAndProcessBadges(
+          allBadges,
+          userBadgesFromCollection,
+          userBadgesFromSubcollection,
+          userId,
+        );
+      }
+    });
   }
 
   void _mergeAndProcessBadges(
@@ -220,45 +243,114 @@ class BadgeProvider with ChangeNotifier {
   }
 
   Future<double> _calculateProgress(Badge badge, String userId) async {
-    // Handle old structure
-    if (badge.progressMetric != null) {
-      switch (badge.progressMetric) {
-        case 'sales_booster':
-          return await _calculateSalesBoosterProgress(userId);
+    // 1. Try to fetch stored progress from Firestore (Backend/Cloud Function source)
+    // Note: acquisitionRules is non-nullable in the Badge model
+    try {
+      final progressDoc = await _badgeService.getUserBadgeProgress(
+        userId,
+        badge.id,
+      );
+
+      if (progressDoc != null && progressDoc.exists) {
+        final data = progressDoc.data() as Map<String, dynamic>?;
+        final progressValue =
+            (data?['progressValue'] as num?)?.toDouble() ?? 0.0;
+        final targetValue = badge.acquisitionRules.targetValue;
+
+        if (targetValue == 0) return 1.0;
+        return (progressValue / targetValue).clamp(0.0, 1.0);
+      }
+    } catch (e) {
+      print('[BadgeProvider] Error fetching stored progress: $e');
+    }
+
+    // 2. Fallback: Calculate progress dynamically on the client side
+    return await _calculateDynamicProgress(badge, userId);
+  }
+
+  /// Calculates progress in real-time by aggregating local data (Sales)
+  Future<double> _calculateDynamicProgress(Badge badge, String userId) async {
+    try {
+      // Handle "Old" Method: Sales Booster specific logic
+      if (badge.progressMetric == 'sales_booster') {
+        return await _calculateSalesBoosterProgress(userId);
+      }
+
+      // Handle "New" Method: Generic Acquisition Rules
+      final rules = badge.acquisitionRules;
+      final timeframe = rules.timeframe;
+
+      // 1. Fetch relevant sales for the time period
+      final sales = await _saleService.getSalesHistory(
+        userId,
+        startDate: timeframe.startDate,
+        endDate: timeframe.endDate,
+      );
+
+      // 2. Filter sales based on Scope (Brands, Categories, Products)
+      final relevantSales = sales.where((sale) {
+        // Only count approved sales
+        if (sale.status != 'approved') return false;
+
+        final scope = rules.scope;
+
+        // If specific brands are required, check if sale matches
+        if (scope.brands.isNotEmpty) {
+          final saleBrand = sale.productBrandSnapshot;
+          if (saleBrand == null || !scope.brands.contains(saleBrand)) {
+            return false;
+          }
+        }
+
+        // If specific categories are required
+        if (scope.categories.isNotEmpty) {
+          final saleCategory = sale.productCategorySnapshot;
+          if (saleCategory == null ||
+              !scope.categories.contains(saleCategory)) {
+            return false;
+          }
+        }
+
+        // If specific products are required
+        if (scope.productIds.isNotEmpty &&
+            !scope.productIds.contains(sale.productId)) {
+          return false;
+        }
+
+        return true;
+      }).toList();
+
+      // 3. Calculate total based on Metric
+      double currentTotal = 0.0;
+      switch (rules.metric) {
+        case 'revenue':
+          currentTotal = relevantSales.fold(
+            0,
+            (sum, sale) => sum + sale.totalPrice,
+          );
+          break;
+        case 'quantity':
+          currentTotal = relevantSales.fold(
+            0,
+            (sum, sale) => sum + sale.quantity,
+          );
+          break;
+        case 'points':
+          currentTotal = relevantSales.fold(
+            0,
+            (sum, sale) => sum + sale.pointsEarned,
+          );
+          break;
         default:
           return 0.0;
       }
+
+      if (rules.targetValue == 0) return 1.0;
+      return (currentTotal / rules.targetValue).clamp(0.0, 1.0);
+    } catch (e) {
+      print('[BadgeProvider] Error calculating dynamic progress: $e');
+      return 0.0;
     }
-
-    // Handle new structure - fetch from userBadgeProgress subcollection
-    if (badge.acquisitionRules != null) {
-      final rules = badge.acquisitionRules!;
-
-      try {
-        // Fetch progress from Firestore subcollection
-        final progressDoc = await _badgeService.getUserBadgeProgress(
-          userId,
-          badge.id,
-        );
-
-        if (progressDoc != null && progressDoc.exists) {
-          final data = progressDoc.data() as Map<String, dynamic>?;
-          final progressValue =
-              (data?['progressValue'] as num?)?.toDouble() ?? 0.0;
-
-          if (rules.targetValue == 0) return 1.0;
-          final progress = progressValue / rules.targetValue;
-          return progress.clamp(0.0, 1.0);
-        }
-
-        return 0.0; // No progress yet
-      } catch (e) {
-        print('[BadgeProvider] Error fetching badge progress: $e');
-        return 0.0;
-      }
-    }
-
-    return 0.0;
   }
 
   Future<double> _calculateSalesBoosterProgress(String userId) async {
@@ -267,25 +359,25 @@ class BadgeProvider with ChangeNotifier {
       final prevMonth = DateTime(now.year, now.month - 1, 1);
       final thisMonthStart = DateTime(now.year, now.month, 1);
 
-      final prevMonthSales = await _saleService.getSalesHistory(
+      final prevMonthSales = (await _saleService.getSalesHistory(
         userId,
         startDate: prevMonth,
         endDate: thisMonthStart.subtract(const Duration(days: 1)),
-      );
+      )).where((s) => s.status == 'approved').toList();
 
-      final thisMonthSales = await _saleService.getSalesHistory(
+      final thisMonthSales = (await _saleService.getSalesHistory(
         userId,
         startDate: thisMonthStart,
         endDate: now,
-      );
+      )).where((s) => s.status == 'approved').toList();
 
       final double prevMonthTotal = prevMonthSales.fold(
         0,
-        (sum, sale) => sum + (sale.totalPrice ?? 0.0),
+        (sum, sale) => sum + (sale.totalPrice),
       );
       final double thisMonthTotal = thisMonthSales.fold(
         0,
-        (sum, sale) => sum + (sale.totalPrice ?? 0.0),
+        (sum, sale) => sum + (sale.totalPrice),
       );
 
       if (prevMonthTotal == 0) return thisMonthTotal > 0 ? 1.0 : 0.0;
@@ -304,7 +396,9 @@ class BadgeProvider with ChangeNotifier {
   void _cancelSubscriptions() {
     _badgesSubscription?.cancel();
     _userBadgesSubscription?.cancel();
+
     _userBadgesFromSubcollectionSubscription?.cancel();
+    _salesSubscription?.cancel();
   }
 
   @override
