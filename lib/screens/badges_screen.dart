@@ -547,7 +547,7 @@ class _BadgesScreenState extends State<BadgesScreen> {
                     Text(
                       value,
                       style: GoogleFonts.inter(
-                        fontSize: 24,
+                        fontSize: 18,
                         fontWeight: FontWeight.w700,
                         color: Colors.white,
                         height: 1,

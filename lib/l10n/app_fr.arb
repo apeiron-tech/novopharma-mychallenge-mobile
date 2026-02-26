@@ -286,7 +286,7 @@
         }
     },
     "progress": "Progression",
-    "badgesLeft": "Badges restants",
+    "badgesLeft": "Badge(s) restant(s)",
     "target": "Cible",
     "eventPeriod": "Période de l'événement",
     "to": "à",
@@ -314,7 +314,7 @@
     "noBadgesInCategory": "Aucun badge dans cette catégorie pour le moment.",
     "pointsLabel": "Points accordées",
     "rewardLabel": "Récompense",
-    "customRewardLabel": "Récompense personnalisée",
+    "customRewardLabel": "Récompense",
     "manualSale": "Vente manuelle",
     "searchProducts": "Rechercher des produits...",
     "quizResults": "Résultats du quiz",

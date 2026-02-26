@@ -94,7 +94,32 @@ class GoalService {
 
       log('Total unique goals after merging: ${relevantGoals.length}');
 
-      final goalList = relevantGoals.values.toList();
+      var goalList = relevantGoals.values.toList();
+
+      if (pharmacy.clientCategory == 'Pharmacie' ||
+          pharmacy.clientCategory.isEmpty) {
+        goalList = goalList
+            .where(
+              (goal) => goal.criteria.clientCategories.contains('Pharmacie'),
+            )
+            .toList();
+
+        print(
+          'Filtered goals for client category Pharmacie: ${goalList.length}',
+        );
+      } else if (pharmacy.clientCategory == 'Para-Pharmacie') {
+        goalList = goalList
+            .where(
+              (goal) =>
+                  goal.criteria.clientCategories.contains('Para-Pharmacie'),
+            )
+            .toList();
+
+        print(
+          'Filtered goals for client category Para-Pharmacie: ${goalList.length}',
+        );
+      }
+
       if (goalList.isEmpty) {
         log('No relevant goals found for this user after merge.');
         return [];

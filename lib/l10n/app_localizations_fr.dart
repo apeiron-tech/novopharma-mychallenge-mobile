@@ -12,7 +12,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get welcomeBack => 'Bon retour';
 
   @override
-  String get signInToAccessAccount => 'Connectez-vous pour accéder à votre compte';
+  String get signInToAccessAccount =>
+      'Connectez-vous pour accéder à votre compte';
 
   @override
   String get email => 'E-mail';
@@ -39,7 +40,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get createAccount => 'Créer un compte';
 
   @override
-  String get joinCommunity => 'Rejoignez la communauté des récompenses de la pharmacie';
+  String get joinCommunity =>
+      'Rejoignez la communauté des récompenses de la pharmacie';
 
   @override
   String get uploadProfilePicture => 'Télécharger une photo de profil';
@@ -69,7 +71,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get confirmPassword => 'Confirmez le mot de passe';
 
   @override
-  String get agreeToTerms => 'J\'accepte les conditions d\'utilisation et la politique de confidentialité';
+  String get agreeToTerms =>
+      'J\'accepte les conditions d\'utilisation et la politique de confidentialité';
 
   @override
   String get iAccept => 'J\'accepte ';
@@ -78,7 +81,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get byContinuingYouAgree => 'En continuant, vous acceptez ';
 
   @override
-  String get termsAndPrivacy => 'les conditions d\'utilisation et la politique de confidentialité';
+  String get termsAndPrivacy =>
+      'les conditions d\'utilisation et la politique de confidentialité';
 
   @override
   String get alreadyHaveAccount => 'Vous avez déjà un compte? ';
@@ -96,7 +100,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get resetPassword => 'Réinitialiser le mot de passe';
 
   @override
-  String get resetPasswordInstructions => 'Entrez votre adresse e-mail et nous vous enverrons un lien pour réinitialiser votre mot de passe.';
+  String get resetPasswordInstructions =>
+      'Entrez votre adresse e-mail et nous vous enverrons un lien pour réinitialiser votre mot de passe.';
 
   @override
   String get sendResetLink => 'Envoyer le lien de réinitialisation';
@@ -105,10 +110,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get checkYourEmail => 'Vérifiez votre e-mail';
 
   @override
-  String get passwordResetLinkSent => 'Nous avons envoyé un lien de réinitialisation de mot de passe à :';
+  String get passwordResetLinkSent =>
+      'Nous avons envoyé un lien de réinitialisation de mot de passe à :';
 
   @override
-  String get passwordResetExpiration => 'Vérifiez votre e-mail et cliquez sur le lien pour réinitialiser votre mot de passe. Le lien expirera dans 24 heures.';
+  String get passwordResetExpiration =>
+      'Vérifiez votre e-mail et cliquez sur le lien pour réinitialiser votre mot de passe. Le lien expirera dans 24 heures.';
 
   @override
   String get sendAgain => 'Renvoyer';
@@ -120,7 +127,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get accountPendingApproval => 'Compte en attente d\'approbation';
 
   @override
-  String get accountPendingApprovalMessage => 'Votre compte a été créé avec succès et est en attente d\'approbation par un administrateur. Veuillez revenir plus tard.';
+  String get accountPendingApprovalMessage =>
+      'Votre compte a été créé avec succès et est en attente d\'approbation par un administrateur. Veuillez revenir plus tard.';
 
   @override
   String get logOut => 'Se déconnecter';
@@ -232,7 +240,8 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get viewRewardPointsHistory => 'Voir l\'historique des points de récompense';
+  String get viewRewardPointsHistory =>
+      'Voir l\'historique des points de récompense';
 
   @override
   String get redeemYourPoints => 'Échanger mes points';
@@ -250,7 +259,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get confirmDeletion => 'Confirmer la suppression';
 
   @override
-  String get confirmDeletionMessage => 'Êtes-vous sûr de vouloir supprimer cette vente ? Cette action est irréversible.';
+  String get confirmDeletionMessage =>
+      'Êtes-vous sûr de vouloir supprimer cette vente ? Cette action est irréversible.';
 
   @override
   String get delete => 'Supprimer';
@@ -286,7 +296,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get scannedProduct => 'Produit';
 
   @override
-  String get productDetailsAppearHere => 'Les détails du produit apparaîtront ici.';
+  String get productDetailsAppearHere =>
+      'Les détails du produit apparaîtront ici.';
 
   @override
   String get saleDetails => 'Détails de la vente';
@@ -441,7 +452,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get eligiblePharmacies => 'Pharmacies éligibles';
 
   @override
-  String get noSpecificCriteria => 'Cet objectif s\'applique à toutes les ventes.';
+  String get noSpecificCriteria =>
+      'Cet objectif s\'applique à toutes les ventes.';
 
   @override
   String activeGoalsCount(int count) {
@@ -512,13 +524,15 @@ class AppLocalizationsFr extends AppLocalizations {
   String get howItWorks => 'Échanger mes points – Comment ça marche ?';
 
   @override
-  String get choosePointsToConvert => 'Choisissez le nombre de points que vous souhaitez convertir';
+  String get choosePointsToConvert =>
+      'Choisissez le nombre de points que vous souhaitez convertir';
 
   @override
   String get submitForReview => 'Validez votre demande en un clic';
 
   @override
-  String get onceApproved => 'Votre demande sera prise en charge et une réponse vous sera communiquée sous 72 heures ouvrées.';
+  String get onceApproved =>
+      'Votre demande sera prise en charge et une réponse vous sera communiquée sous 72 heures ouvrées.';
 
   @override
   String conversionRate(int points) {
@@ -541,7 +555,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get noRedemptionHistory => 'Aucun historique d\'échange';
 
   @override
-  String get noRedemptionHistoryMessage => 'Vous n\'avez pas encore fait de demande d\'échange.';
+  String get noRedemptionHistoryMessage =>
+      'Vous n\'avez pas encore fait de demande d\'échange.';
 
   @override
   String get pointsToRedeem => 'Points à échanger';
@@ -561,7 +576,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get submitRequest => 'Soumettre la demande';
 
   @override
-  String get requestSubmittedSuccess => 'Demande soumise avec succès ! Elle sera examinée par un administrateur.';
+  String get requestSubmittedSuccess =>
+      'Demande soumise avec succès ! Elle sera examinée par un administrateur.';
 
   @override
   String get requestedDate => 'Demandé';
@@ -592,7 +608,8 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String pointsPendingApproval(double points) {
-    final intl.NumberFormat pointsNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final intl.NumberFormat pointsNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
     final String pointsString = pointsNumberFormat.format(points);
 
     return '$pointsString points en attente d\'approbation';
@@ -602,7 +619,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get productNotAvailable => 'Produit non disponible';
 
   @override
-  String get productNotAvailableMessage => 'Ce produit n\'est pas disponible pour le moment. Veuillez réessayer plus tard.';
+  String get productNotAvailableMessage =>
+      'Ce produit n\'est pas disponible pour le moment. Veuillez réessayer plus tard.';
 
   @override
   String get goBack => 'Retour';
@@ -656,7 +674,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get progress => 'Progression';
 
   @override
-  String get badgesLeft => 'Badges restants';
+  String get badgesLeft => 'Badge(s) restant(s)';
 
   @override
   String get target => 'Cible';
@@ -706,7 +724,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get noBadgesAvailable => 'Aucun badge disponible.';
 
   @override
-  String get noBadgesInCategory => 'Aucun badge dans cette catégorie pour le moment.';
+  String get noBadgesInCategory =>
+      'Aucun badge dans cette catégorie pour le moment.';
 
   @override
   String get pointsLabel => 'Points accordées';
@@ -715,7 +734,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get rewardLabel => 'Récompense';
 
   @override
-  String get customRewardLabel => 'Récompense personnalisée';
+  String get customRewardLabel => 'Récompense';
 
   @override
   String get manualSale => 'Vente manuelle';

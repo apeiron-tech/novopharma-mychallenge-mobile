@@ -10,23 +10,16 @@ class LeaderboardProvider with ChangeNotifier {
   bool _isLoading = true;
   bool get isLoading => _isLoading;
 
-  String _selectedPeriod = 'weekly';
-  String get selectedPeriod => _selectedPeriod;
+  LeaderboardProvider();
 
-  LeaderboardProvider() {
-    // Fetch initial data
-    fetchLeaderboard(_selectedPeriod);
-  }
-
-  Future<void> fetchLeaderboard(String period) async {
+  Future<void> fetchLeaderboard([String? currentUserId]) async {
     // Defer the state update to after the build phase
     Future.microtask(() {
-      _selectedPeriod = period;
       _isLoading = true;
       notifyListeners();
     });
 
-    _leaderboardData = await _leaderboardService.getLeaderboard(period);
+    _leaderboardData = await _leaderboardService.getLeaderboard(currentUserId);
 
     _isLoading = false;
     notifyListeners();

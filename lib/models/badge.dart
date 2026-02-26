@@ -71,6 +71,26 @@ class Timeframe {
   }
 }
 
+class VisibilityCriteria {
+  final List<String> clientCategories;
+  final List<String> pharmacyIds;
+  final List<String> zones;
+
+  VisibilityCriteria({
+    required this.clientCategories,
+    required this.pharmacyIds,
+    required this.zones,
+  });
+
+  factory VisibilityCriteria.fromMap(Map<String, dynamic> map) {
+    return VisibilityCriteria(
+      clientCategories: List<String>.from(map['clientCategories'] ?? []),
+      pharmacyIds: List<String>.from(map['pharmacyIds'] ?? []),
+      zones: List<String>.from(map['zones'] ?? []),
+    );
+  }
+}
+
 class Badge {
   final String id;
   final String name;
@@ -84,8 +104,10 @@ class Badge {
   final DateTime updatedAt;
   final int? points; // Points awarded when badge is earned
   final String? rewardType; // Type of reward: 'points', 'custom', or 'reward'
-  final String? customReward; // Custom reward description when rewardType is 'custom'
+  final String?
+  customReward; // Custom reward description when rewardType is 'custom'
   final String? rewardId; // ID of the reward when rewardType is 'reward'
+  final VisibilityCriteria visibilityCriteria;
 
   // Old structure fields (for backward compatibility)
   final String? progressMetric;
@@ -106,6 +128,7 @@ class Badge {
     this.rewardType,
     this.customReward,
     this.rewardId,
+    required this.visibilityCriteria,
     // Old (optional for backward compatibility)
     this.progressMetric,
     this.criteria,
@@ -142,6 +165,9 @@ class Badge {
       rewardType: data['rewardType'] as String?,
       customReward: data['customReward'] as String?,
       rewardId: data['rewardId'] as String?,
+      visibilityCriteria: VisibilityCriteria.fromMap(
+        data['visibilityCriteria'] as Map<String, dynamic>? ?? {},
+      ),
       // Old structure fields
       progressMetric: data['progressMetric'],
       criteria: data['criteria'] as Map<String, dynamic>?,
