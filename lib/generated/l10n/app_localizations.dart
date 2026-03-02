@@ -1331,7 +1331,7 @@ abstract class AppLocalizations {
   /// No description provided for @badgesLeft.
   ///
   /// In en, this message translates to:
-  /// **'Badges Left'**
+  /// **'Badge(s) Left'**
   String get badgesLeft;
 
   /// No description provided for @target.
@@ -1457,7 +1457,7 @@ abstract class AppLocalizations {
   /// No description provided for @customRewardLabel.
   ///
   /// In en, this message translates to:
-  /// **'Custom Reward'**
+  /// **'Reward'**
   String get customRewardLabel;
 
   /// No description provided for @manualSale.

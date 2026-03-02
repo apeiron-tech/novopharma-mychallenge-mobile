@@ -69,7 +69,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get confirmPassword => 'Confirm Password';
 
   @override
-  String get agreeToTerms => 'I agree to the Terms of Service and Privacy Policy';
+  String get agreeToTerms =>
+      'I agree to the Terms of Service and Privacy Policy';
 
   @override
   String get iAccept => 'I accept ';
@@ -96,7 +97,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get resetPassword => 'Reset Password';
 
   @override
-  String get resetPasswordInstructions => 'Enter your email address and we\'ll send you a link to reset your password.';
+  String get resetPasswordInstructions =>
+      'Enter your email address and we\'ll send you a link to reset your password.';
 
   @override
   String get sendResetLink => 'Send Reset Link';
@@ -108,7 +110,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get passwordResetLinkSent => 'We\'ve sent a password reset link to:';
 
   @override
-  String get passwordResetExpiration => 'Check your email and click the link to reset your password. The link will expire in 24 hours.';
+  String get passwordResetExpiration =>
+      'Check your email and click the link to reset your password. The link will expire in 24 hours.';
 
   @override
   String get sendAgain => 'Send Again';
@@ -120,7 +123,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get accountPendingApproval => 'Account Pending Approval';
 
   @override
-  String get accountPendingApprovalMessage => 'Your account has been created successfully and is waiting for an administrator to approve it. Please check back later.';
+  String get accountPendingApprovalMessage =>
+      'Your account has been created successfully and is waiting for an administrator to approve it. Please check back later.';
 
   @override
   String get logOut => 'Log Out';
@@ -250,7 +254,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get confirmDeletion => 'Confirm Deletion';
 
   @override
-  String get confirmDeletionMessage => 'Are you sure you want to delete this sale? This action cannot be undone.';
+  String get confirmDeletionMessage =>
+      'Are you sure you want to delete this sale? This action cannot be undone.';
 
   @override
   String get delete => 'Delete';
@@ -512,13 +517,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get howItWorks => 'Redeem My Points – How Does It Work?';
 
   @override
-  String get choosePointsToConvert => 'Choose the number of points you wish to convert';
+  String get choosePointsToConvert =>
+      'Choose the number of points you wish to convert';
 
   @override
   String get submitForReview => 'Validate your request with one click';
 
   @override
-  String get onceApproved => 'Your request will be processed and a response will be provided within 72 business hours.';
+  String get onceApproved =>
+      'Your request will be processed and a response will be provided within 72 business hours.';
 
   @override
   String conversionRate(int points) {
@@ -541,7 +548,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noRedemptionHistory => 'No Redemption History';
 
   @override
-  String get noRedemptionHistoryMessage => 'You have not made any redemption requests yet.';
+  String get noRedemptionHistoryMessage =>
+      'You have not made any redemption requests yet.';
 
   @override
   String get pointsToRedeem => 'Points to Redeem';
@@ -561,7 +569,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get submitRequest => 'Submit Request';
 
   @override
-  String get requestSubmittedSuccess => 'Request submitted successfully! It will be reviewed by an admin.';
+  String get requestSubmittedSuccess =>
+      'Request submitted successfully! It will be reviewed by an admin.';
 
   @override
   String get requestedDate => 'Requested';
@@ -592,7 +601,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String pointsPendingApproval(double points) {
-    final intl.NumberFormat pointsNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final intl.NumberFormat pointsNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
     final String pointsString = pointsNumberFormat.format(points);
 
     return '$pointsString points pending approval';
@@ -602,7 +612,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get productNotAvailable => 'Product Not Available';
 
   @override
-  String get productNotAvailableMessage => 'This product is not available at the moment. Please try again later.';
+  String get productNotAvailableMessage =>
+      'This product is not available at the moment. Please try again later.';
 
   @override
   String get goBack => 'Go Back';
@@ -656,7 +667,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get progress => 'Progress';
 
   @override
-  String get badgesLeft => 'Badges Left';
+  String get badgesLeft => 'Badge(s) Left';
 
   @override
   String get target => 'Target';
@@ -715,7 +726,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get rewardLabel => 'Reward';
 
   @override
-  String get customRewardLabel => 'Custom Reward';
+  String get customRewardLabel => 'Reward';
 
   @override
   String get manualSale => 'Manual Sale';

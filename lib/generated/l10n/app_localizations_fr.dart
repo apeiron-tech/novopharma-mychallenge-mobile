@@ -685,7 +685,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get progress => 'Progression';
 
   @override
-  String get badgesLeft => 'Badges restants';
+  String get badgesLeft => 'Badge(s) restant(s)';
 
   @override
   String get target => 'Cible';
@@ -751,7 +751,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get rewardLabel => 'Récompense';
 
   @override
-  String get customRewardLabel => 'Récompense personnalisée';
+  String get customRewardLabel => 'Récompense';
 
   @override
   String get manualSale => 'Vente manuelle';

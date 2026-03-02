@@ -5,10 +5,10 @@ import 'package:novopharma/models/user_badge.dart';
 import 'package:novopharma/services/badge_service.dart';
 import 'package:novopharma/services/user_badge_service.dart';
 import 'package:novopharma/services/sale_service.dart';
+import 'package:novopharma/services/pharmacy_service.dart';
 import 'package:novopharma/controllers/auth_provider.dart';
 import 'package:collection/collection.dart';
 
-// A wrapper class to hold merged badge data
 class BadgeDisplayInfo {
   final Badge badge;
   final UserBadge? userBadge; // Null if not awarded
@@ -211,6 +211,38 @@ class BadgeProvider with ChangeNotifier {
     print(
       '[BadgeProvider] Available user badges: ${userBadges.map((ub) => '${ub.badgeId}:${ub.badgeName}').join(', ')}',
     );
+
+    // Filter badges based on Pharmacy clientCategory
+    final userProfile = _authProvider.userProfile;
+    if (userProfile != null && userProfile.pharmacyId.isNotEmpty) {
+      final PharmacyService pharmacyService = PharmacyService();
+      final pharmacy = await pharmacyService.getPharmacy(
+        userProfile.pharmacyId,
+      );
+
+      if (pharmacy != null) {
+        if (pharmacy.clientCategory == 'Pharmacie' ||
+            pharmacy.clientCategory.isEmpty) {
+          allBadges = allBadges
+              .where(
+                (badge) =>
+                    badge.visibilityCriteria.clientCategories.contains(
+                      'Pharmacie',
+                    ) ||
+                    badge.visibilityCriteria.clientCategories.isEmpty,
+              )
+              .toList();
+        } else if (pharmacy.clientCategory == 'Para-Pharmacie') {
+          allBadges = allBadges
+              .where(
+                (badge) => badge.visibilityCriteria.clientCategories.contains(
+                  "Para-Pharmacie",
+                ),
+              )
+              .toList();
+        }
+      }
+    }
 
     final List<BadgeDisplayInfo> badgeInfos = [];
     for (final badge in allBadges) {

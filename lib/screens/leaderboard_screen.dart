@@ -28,7 +28,14 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
   @override
   void initState() {
     super.initState();
-    // Data is fetched automatically by the provider's constructor
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      final leaderboardProvider = Provider.of<LeaderboardProvider>(
+        context,
+        listen: false,
+      );
+      leaderboardProvider.fetchLeaderboard(authProvider.firebaseUser?.uid);
+    });
   }
 
   String _getInitials(String name) {
@@ -50,13 +57,6 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final List<String> tabs = [
-      l10n.daily,
-      l10n.weekly,
-      l10n.monthly,
-      l10n.yearly,
-    ];
-    final List<String> periods = ['daily', 'weekly', 'monthly', 'yearly'];
 
     return BottomNavigationScaffoldWrapper(
       currentIndex: 3, // Leaderboard tab index
@@ -81,8 +81,6 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                             leaderboardProvider.leaderboardData,
                             l10n,
                           ),
-                          const SizedBox(height: 20),
-                          _buildTabSelector(leaderboardProvider, tabs, periods),
                           const SizedBox(height: 20),
                           _buildTopThreeSection(
                             leaderboardProvider.leaderboardData,
@@ -132,52 +130,6 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
           color: LightModeColors.dashboardTextPrimary,
         ),
       ],
-    );
-  }
-
-  Widget _buildTabSelector(
-    LeaderboardProvider provider,
-    List<String> tabs,
-    List<String> periods,
-  ) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: List.generate(tabs.length, (index) {
-        final isActive = provider.selectedPeriod == periods[index];
-        return Expanded(
-          child: GestureDetector(
-            onTap: () {
-              provider.fetchLeaderboard(periods[index]);
-            },
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              margin: EdgeInsets.symmetric(
-                horizontal: index == 0 ? 0 : 4,
-                vertical: 0,
-              ),
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              decoration: BoxDecoration(
-                color: isActive
-                    ? LightModeColors.lightError
-                    : LightModeColors.novoPharmaLightGray,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Center(
-                child: Text(
-                  tabs[index],
-                  style: TextStyle(
-                    color: isActive
-                        ? Colors.white
-                        : LightModeColors.dashboardTextSecondary,
-                    fontSize: 14,
-                    fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        );
-      }),
     );
   }
 
@@ -660,7 +612,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                       ),
                     ),
                     Text(
-                      '${isCurrentUser ? pluxeeProvider.allTimePoints : user['points']} pts',
+                      '${user['points']} pts',
                       style: TextStyle(
                         color: isCurrentUser
                             ? LightModeColors.warning
