@@ -75,11 +75,13 @@ class VisibilityCriteria {
   final List<String> clientCategories;
   final List<String> pharmacyIds;
   final List<String> zones;
+  final int? forClientsTop;
 
   VisibilityCriteria({
     required this.clientCategories,
     required this.pharmacyIds,
     required this.zones,
+    this.forClientsTop,
   });
 
   factory VisibilityCriteria.fromMap(Map<String, dynamic> map) {
@@ -87,6 +89,7 @@ class VisibilityCriteria {
       clientCategories: List<String>.from(map['clientCategories'] ?? []),
       pharmacyIds: List<String>.from(map['pharmacyIds'] ?? []),
       zones: List<String>.from(map['zones'] ?? []),
+      forClientsTop: map['forClientsTop'] as int?,
     );
   }
 }

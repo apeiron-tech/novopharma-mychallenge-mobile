@@ -6,6 +6,7 @@ import 'package:novopharma/services/badge_service.dart';
 import 'package:novopharma/services/user_badge_service.dart';
 import 'package:novopharma/services/sale_service.dart';
 import 'package:novopharma/services/pharmacy_service.dart';
+import 'package:novopharma/services/leaderboard_service.dart';
 import 'package:novopharma/controllers/auth_provider.dart';
 import 'package:collection/collection.dart';
 
@@ -241,6 +242,32 @@ class BadgeProvider with ChangeNotifier {
               )
               .toList();
         }
+      }
+
+      // Check for top N visibility criteria
+      final hasTopBadges = allBadges.any(
+        (b) => (b.visibilityCriteria.forClientsTop ?? 0) > 0,
+      );
+      if (hasTopBadges) {
+        final LeaderboardService leaderboardService = LeaderboardService();
+        final leaderboard = await leaderboardService.getLeaderboard(userId);
+
+        int userRank = -1;
+        for (var entry in leaderboard) {
+          if (entry['userId'] == userId) {
+            userRank = entry['rank'];
+            break;
+          }
+        }
+
+        allBadges = allBadges.where((badge) {
+          final top = badge.visibilityCriteria.forClientsTop ?? 0;
+          if (top > 0) {
+            if (userRank == -1) return false;
+            return userRank <= top;
+          }
+          return true;
+        }).toList();
       }
     }
 

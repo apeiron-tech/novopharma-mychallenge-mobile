@@ -68,6 +68,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get yourPharmacy => 'Votre pharmacie';
 
   @override
+  String get pointOfSale => 'Point de vente';
+
+  @override
   String get confirmPassword => 'Confirmez le mot de passe';
 
   @override

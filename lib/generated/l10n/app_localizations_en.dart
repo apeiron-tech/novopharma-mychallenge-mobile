@@ -66,6 +66,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get yourPharmacy => 'Your Pharmacy';
 
   @override
+  String get pointOfSale => 'Point of Sale';
+
+  @override
   String get confirmPassword => 'Confirm Password';
 
   @override

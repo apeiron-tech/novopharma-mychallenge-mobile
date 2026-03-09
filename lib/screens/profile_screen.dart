@@ -456,6 +456,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 label: l10n.yourPharmacy,
                 value: user.pharmacy ?? 'N/A',
               ),
+              if (user.pointOfSale != null && user.pointOfSale!.isNotEmpty) ...[
+                const SizedBox(height: 12),
+                _buildInputPill(
+                  label: l10n.pointOfSale,
+                  value: user.pointOfSale,
+                ),
+              ],
             ],
           ),
         ),

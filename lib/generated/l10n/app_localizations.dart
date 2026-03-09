@@ -212,6 +212,12 @@ abstract class AppLocalizations {
   /// **'Your Pharmacy'**
   String get yourPharmacy;
 
+  /// No description provided for @pointOfSale.
+  ///
+  /// In en, this message translates to:
+  /// **'Point of Sale'**
+  String get pointOfSale;
+
   /// No description provided for @confirmPassword.
   ///
   /// In en, this message translates to:

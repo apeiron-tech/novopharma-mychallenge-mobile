@@ -9,7 +9,7 @@ admin.initializeApp();
 const db = admin.firestore();
 
 // Export notification functions
-export {onNewTrainingCreated, onNewBadgeCreated, onUserBadgeAwarded} from "./notifications";
+export {onNewTrainingCreated, onNewBadgeCreated, onNewGoalCreated, onUserBadgeAwarded} from "./notifications";
 
 /**
  * NEW: Cloud Function to process sales for badge awards.
