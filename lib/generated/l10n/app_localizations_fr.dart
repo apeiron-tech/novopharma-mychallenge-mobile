@@ -68,6 +68,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get yourPharmacy => 'Votre pharmacie';
 
   @override
+  String get pointOfSale => 'Point de vente';
+
+  @override
   String get confirmPassword => 'Confirmez le mot de passe';
 
   @override
@@ -760,6 +763,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get searchProducts => 'Rechercher des produits...';
 
   @override
+  String get search => 'Rechercher...';
+
+  @override
   String get quizResults => 'Résultats du quiz';
 
   @override
@@ -942,4 +948,7 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get recentLoginRequiredError =>
       'Pour des raisons de sécurité, cette action nécessite une connexion récente. Veuillez vous déconnecter et vous reconnecter avant de supprimer votre compte.';
+
+  @override
+  String get saleSuccessMessage => 'Vente enregistrée avec succès!';
 }

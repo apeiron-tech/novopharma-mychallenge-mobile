@@ -56,7 +56,9 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
         ),
         backgroundColor: LightModeColors.lightPrimary,
         elevation: 0,
-        iconTheme: const IconThemeData(color: LightModeColors.lightPrimaryContainer),
+        iconTheme: const IconThemeData(
+          color: LightModeColors.lightPrimaryContainer,
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(20.0, 16.0, 20.0, 24.0),
@@ -147,15 +149,6 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
           icon: Icons.public_outlined,
           title: l10n.eligibleZones,
           items: criteria.zones,
-        ),
-      );
-    }
-    if (criteria.clientCategories.isNotEmpty) {
-      criteriaWidgets.add(
-        _buildCriteriaCard(
-          icon: Icons.groups_outlined,
-          title: l10n.eligibleClientCategories,
-          items: criteria.clientCategories,
         ),
       );
     }
@@ -251,7 +244,9 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
                       .map(
                         (item) => Chip(
                           label: Text(item, overflow: TextOverflow.ellipsis),
-                          backgroundColor: LightModeColors.warning.withOpacity(0.1),
+                          backgroundColor: LightModeColors.warning.withOpacity(
+                            0.1,
+                          ),
                           labelStyle: const TextStyle(
                             color: LightModeColors.warning,
                             fontWeight: FontWeight.w500,

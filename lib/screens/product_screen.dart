@@ -149,6 +149,19 @@ class _ProductScreenState extends State<ProductScreen> {
       );
       _saleService.createSale(newSale);
     }
+
+    // Show success message
+    if (mounted) {
+      final l10n = AppLocalizations.of(context)!;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.saleSuccessMessage),
+          backgroundColor: Colors.green,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    }
+
     Navigator.of(context).pop();
   }
 
@@ -865,17 +878,6 @@ class _ProductScreenState extends State<ProductScreen> {
                           fontSize: 13,
                           color: LightModeColors.dashboardTextSecondary,
                           fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const SizedBox(height: 2.0),
-                      Consumer<PluxeeRedemptionProvider>(
-                        builder: (context, pluxee, _) => Text(
-                          'Solde: ${pluxee.allTimePoints.toInt().toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]} ')} pts',
-                          style: const TextStyle(
-                            fontSize: 13,
-                            color: LightModeColors.success,
-                            fontWeight: FontWeight.bold,
-                          ),
                         ),
                       ),
                       const SizedBox(height: 4.0),

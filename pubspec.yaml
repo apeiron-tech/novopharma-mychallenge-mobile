@@ -63,6 +63,7 @@ dependencies:
   flutter_native_splash: ^2.4.3
   flutter_launcher_icons: ^0.13.1
   introduction_screen: ^4.0.0
+  dropdown_search: ^6.0.1
   
 dev_dependencies:
   flutter_test:

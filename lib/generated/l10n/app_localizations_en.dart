@@ -66,6 +66,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get yourPharmacy => 'Your Pharmacy';
 
   @override
+  String get pointOfSale => 'Point of Sale';
+
+  @override
   String get confirmPassword => 'Confirm Password';
 
   @override
@@ -752,6 +755,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get searchProducts => 'Search products...';
 
   @override
+  String get search => 'Search...';
+
+  @override
   String get quizResults => 'Quiz Results';
 
   @override
@@ -931,4 +937,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get recentLoginRequiredError =>
       'For security reasons, this action requires a recent login. Please log out and sign in again before deleting your account.';
+
+  @override
+  String get saleSuccessMessage => 'Sale recorded successfully!';
 }

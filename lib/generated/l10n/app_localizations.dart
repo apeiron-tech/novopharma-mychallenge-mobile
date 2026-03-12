@@ -212,6 +212,12 @@ abstract class AppLocalizations {
   /// **'Your Pharmacy'**
   String get yourPharmacy;
 
+  /// No description provided for @pointOfSale.
+  ///
+  /// In en, this message translates to:
+  /// **'Point of Sale'**
+  String get pointOfSale;
+
   /// No description provided for @confirmPassword.
   ///
   /// In en, this message translates to:
@@ -1472,6 +1478,12 @@ abstract class AppLocalizations {
   /// **'Search products...'**
   String get searchProducts;
 
+  /// No description provided for @search.
+  ///
+  /// In en, this message translates to:
+  /// **'Search...'**
+  String get search;
+
   /// No description provided for @quizResults.
   ///
   /// In en, this message translates to:
@@ -1795,6 +1807,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'For security reasons, this action requires a recent login. Please log out and sign in again before deleting your account.'**
   String get recentLoginRequiredError;
+
+  /// No description provided for @saleSuccessMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Sale recorded successfully!'**
+  String get saleSuccessMessage;
 }
 
 class _AppLocalizationsDelegate

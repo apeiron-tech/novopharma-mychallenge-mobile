@@ -358,7 +358,7 @@ class _BadgesScreenState extends State<BadgesScreen> {
               child: _buildInfoCard(
                 Icons.emoji_events_rounded,
                 l10n.badgesLeft,
-                '$badgesLeft',
+                badgesLeft > 0 || badgesLeft == 0 ? '$badgesLeft' : '∞',
                 const Color(0xFFF59E0B),
               ),
             ),

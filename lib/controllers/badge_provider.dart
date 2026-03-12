@@ -214,6 +214,8 @@ class BadgeProvider with ChangeNotifier {
 
     // Filter badges based on Pharmacy clientCategory
     final userProfile = _authProvider.userProfile;
+    String userCategory = '';
+
     if (userProfile != null && userProfile.pharmacyId.isNotEmpty) {
       final PharmacyService pharmacyService = PharmacyService();
       final pharmacy = await pharmacyService.getPharmacy(
@@ -221,28 +223,31 @@ class BadgeProvider with ChangeNotifier {
       );
 
       if (pharmacy != null) {
-        if (pharmacy.clientCategory == 'Pharmacie' ||
-            pharmacy.clientCategory.isEmpty) {
-          allBadges = allBadges
-              .where(
-                (badge) =>
-                    badge.visibilityCriteria.clientCategories.contains(
-                      'Pharmacie',
-                    ) ||
-                    badge.visibilityCriteria.clientCategories.isEmpty,
-              )
-              .toList();
-        } else if (pharmacy.clientCategory == 'Para-Pharmacie') {
-          allBadges = allBadges
-              .where(
-                (badge) => badge.visibilityCriteria.clientCategories.contains(
-                  "Para-Pharmacie",
-                ),
-              )
-              .toList();
-        }
+        userCategory = pharmacy.clientCategory;
       }
     }
+
+    allBadges = allBadges.where((badge) {
+      final categories = badge.visibilityCriteria.clientCategories;
+
+      if (categories.isEmpty ||
+          (categories.contains('Para-Pharmacie') &&
+              categories.contains('Pharmacie'))) {
+        return true;
+      }
+
+      if (categories.contains('Para-Pharmacie') &&
+          !categories.contains('Pharmacie')) {
+        return userCategory == 'Para-Pharmacie';
+      }
+
+      if (categories.contains('Pharmacie') &&
+          !categories.contains('Para-Pharmacie')) {
+        return userCategory == 'Pharmacie' || userCategory.isEmpty;
+      }
+
+      return false;
+    }).toList();
 
     final List<BadgeDisplayInfo> badgeInfos = [];
     for (final badge in allBadges) {
