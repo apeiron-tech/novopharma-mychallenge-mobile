@@ -404,7 +404,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildProfileInfo(UserModel user, l10n) {
     final formattedDob = user.dateOfBirth != null
         ? DateFormat('dd/MM/yyyy').format(user.dateOfBirth!)
-        : 'Not set';
+        : '';
 
     return Column(
       children: [
@@ -449,8 +449,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 value: '••••••••••••',
                 field: 'password',
               ),
-              const SizedBox(height: 12),
-              _buildInputPill(label: l10n.dateOfBirth, value: formattedDob),
+              if (user.dateOfBirth != null) ...[
+                const SizedBox(height: 12),
+                _buildInputPill(label: l10n.dateOfBirth, value: formattedDob),
+              ],
               const SizedBox(height: 12),
               _buildInputPill(
                 label: l10n.yourPharmacy,

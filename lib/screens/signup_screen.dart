@@ -14,6 +14,7 @@ import 'package:novopharma/generated/l10n/app_localizations.dart';
 import 'package:novopharma/utils/auth_error_handler.dart';
 import 'package:novopharma/widgets/terms_conditions_modal.dart';
 import 'package:novopharma/theme.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -957,23 +958,35 @@ class _SignupScreenState extends State<SignupScreen> {
         final filteredPharmacies = pharmacies
             .where((pharmacy) => pharmacy.clientCategory != 'Para-Pharmacie')
             .toList();
-        return DropdownButtonFormField<Pharmacy>(
-          value: _selectedPharmacy,
-          isExpanded: true,
-          decoration: _buildInputDecoration(
-            hintText: l10n.selectYourPharmacy,
-            prefixIcon: Icons.local_hospital_outlined,
+        return DropdownSearch<Pharmacy>(
+          items: (filter, loadProps) => filteredPharmacies
+              .where((p) =>
+                  p.name.toLowerCase().contains(filter.toLowerCase()))
+              .toList(),
+          itemAsString: (Pharmacy pharmacy) => pharmacy.name,
+          selectedItem: _selectedPharmacy,
+          compareFn: (item, selectedItem) => item.id == selectedItem.id,
+          decoratorProps: DropDownDecoratorProps(
+            decoration: _buildInputDecoration(
+              hintText: l10n.selectYourPharmacy,
+              prefixIcon: Icons.local_hospital_outlined,
+            ),
           ),
-          items: filteredPharmacies.map((pharmacy) {
-            return DropdownMenuItem<Pharmacy>(
-              value: pharmacy,
-              child: Text(
-                pharmacy.name,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
+          popupProps: PopupProps.menu(
+            showSearchBox: true,
+            searchFieldProps: TextFieldProps(
+              decoration: _buildInputDecoration(
+                hintText: l10n.search,
+                prefixIcon: Icons.search,
               ),
-            );
-          }).toList(),
+            ),
+            itemBuilder: (context, item, isSelected, isHighlighted) {
+              return ListTile(
+                title: Text(item.name),
+                selected: isSelected,
+              );
+            },
+          ),
           onChanged: (Pharmacy? newValue) {
             setState(() {
               _selectedPharmacy = newValue;
@@ -1032,19 +1045,26 @@ class _SignupScreenState extends State<SignupScreen> {
 
   Widget _buildCityDropdown() {
     final l10n = AppLocalizations.of(context)!;
-    return DropdownButtonFormField<String>(
-      value: _selectedCity,
-      isExpanded: true,
-      decoration: _buildInputDecoration(
-        hintText: l10n.selectYourCity,
-        prefixIcon: Icons.location_city,
+    return DropdownSearch<String>(
+      items: (filter, loadProps) => _cities
+          .where((city) => city.toLowerCase().contains(filter.toLowerCase()))
+          .toList(),
+      selectedItem: _selectedCity,
+      decoratorProps: DropDownDecoratorProps(
+        decoration: _buildInputDecoration(
+          hintText: l10n.selectYourCity,
+          prefixIcon: Icons.location_city,
+        ),
       ),
-      items: _cities.map((city) {
-        return DropdownMenuItem<String>(
-          value: city,
-          child: Text(city, overflow: TextOverflow.ellipsis, maxLines: 1),
-        );
-      }).toList(),
+      popupProps: PopupProps.menu(
+        showSearchBox: true,
+        searchFieldProps: TextFieldProps(
+          decoration: _buildInputDecoration(
+            hintText: l10n.search,
+            prefixIcon: Icons.search,
+          ),
+        ),
+      ),
       onChanged: (String? newValue) {
         setState(() {
           _selectedCity = newValue;

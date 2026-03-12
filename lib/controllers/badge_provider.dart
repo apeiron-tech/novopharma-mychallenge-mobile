@@ -6,7 +6,6 @@ import 'package:novopharma/services/badge_service.dart';
 import 'package:novopharma/services/user_badge_service.dart';
 import 'package:novopharma/services/sale_service.dart';
 import 'package:novopharma/services/pharmacy_service.dart';
-import 'package:novopharma/services/leaderboard_service.dart';
 import 'package:novopharma/controllers/auth_provider.dart';
 import 'package:collection/collection.dart';
 
@@ -215,6 +214,8 @@ class BadgeProvider with ChangeNotifier {
 
     // Filter badges based on Pharmacy clientCategory
     final userProfile = _authProvider.userProfile;
+    String userCategory = '';
+
     if (userProfile != null && userProfile.pharmacyId.isNotEmpty) {
       final PharmacyService pharmacyService = PharmacyService();
       final pharmacy = await pharmacyService.getPharmacy(
@@ -222,54 +223,31 @@ class BadgeProvider with ChangeNotifier {
       );
 
       if (pharmacy != null) {
-        if (pharmacy.clientCategory == 'Pharmacie' ||
-            pharmacy.clientCategory.isEmpty) {
-          allBadges = allBadges
-              .where(
-                (badge) =>
-                    badge.visibilityCriteria.clientCategories.contains(
-                      'Pharmacie',
-                    ) ||
-                    badge.visibilityCriteria.clientCategories.isEmpty,
-              )
-              .toList();
-        } else if (pharmacy.clientCategory == 'Para-Pharmacie') {
-          allBadges = allBadges
-              .where(
-                (badge) => badge.visibilityCriteria.clientCategories.contains(
-                  "Para-Pharmacie",
-                ),
-              )
-              .toList();
-        }
-      }
-
-      // Check for top N visibility criteria
-      final hasTopBadges = allBadges.any(
-        (b) => (b.visibilityCriteria.forClientsTop ?? 0) > 0,
-      );
-      if (hasTopBadges) {
-        final LeaderboardService leaderboardService = LeaderboardService();
-        final leaderboard = await leaderboardService.getLeaderboard(userId);
-
-        int userRank = -1;
-        for (var entry in leaderboard) {
-          if (entry['userId'] == userId) {
-            userRank = entry['rank'];
-            break;
-          }
-        }
-
-        allBadges = allBadges.where((badge) {
-          final top = badge.visibilityCriteria.forClientsTop ?? 0;
-          if (top > 0) {
-            if (userRank == -1) return false;
-            return userRank <= top;
-          }
-          return true;
-        }).toList();
+        userCategory = pharmacy.clientCategory;
       }
     }
+
+    allBadges = allBadges.where((badge) {
+      final categories = badge.visibilityCriteria.clientCategories;
+
+      if (categories.isEmpty ||
+          (categories.contains('Para-Pharmacie') &&
+              categories.contains('Pharmacie'))) {
+        return true;
+      }
+
+      if (categories.contains('Para-Pharmacie') &&
+          !categories.contains('Pharmacie')) {
+        return userCategory == 'Para-Pharmacie';
+      }
+
+      if (categories.contains('Pharmacie') &&
+          !categories.contains('Para-Pharmacie')) {
+        return userCategory == 'Pharmacie' || userCategory.isEmpty;
+      }
+
+      return false;
+    }).toList();
 
     final List<BadgeDisplayInfo> badgeInfos = [];
     for (final badge in allBadges) {

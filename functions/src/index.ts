@@ -9,7 +9,7 @@ admin.initializeApp();
 const db = admin.firestore();
 
 // Export notification functions
-export {onNewTrainingCreated, onNewBadgeCreated, onNewGoalCreated, onUserBadgeAwarded} from "./notifications";
+export {onNewTrainingCreated, onNewBadgeCreated, onNewGoalCreated, onUserBadgeAwarded, onUserGoalCompleted} from "./notifications";
 
 /**
  * NEW: Cloud Function to process sales for badge awards.
@@ -88,6 +88,21 @@ export const processSaleForBadgeAwards = onDocumentUpdated("sales/{saleId}", asy
         continue;
       }
 
+      // Check forClientsTop restriction
+      const forClientsTop = badge.visibilityCriteria?.forClientsTop || 0;
+      if (forClientsTop > 0) {
+        const topUsersSnapshot = await db.collection("users")
+          .orderBy("points", "desc")
+          .limit(forClientsTop)
+          .get();
+
+        const topUserIds = topUsersSnapshot.docs.map((uDoc) => uDoc.id);
+        if (!topUserIds.includes(userId)) {
+          logger.info(`User ${userId} is not in the top ${forClientsTop} users by points. Skipping badge ${badgeId}.`);
+          continue;
+        }
+      }
+
       // 6. Check if sale meets scope criteria
       const isEligible = isSaleEligibleForBadgeScope(sale, product, rules.scope);
 
@@ -154,6 +169,15 @@ export const processSaleForBadgeAwards = onDocumentUpdated("sales/{saleId}", asy
             transaction.update(badgeRef, {
               winnerCount: admin.firestore.FieldValue.increment(1),
             });
+
+            // Increment user points with badge points
+            const badgePoints = freshBadge.points || 0;
+            if (badgePoints > 0) {
+              const userRef = db.collection("users").doc(userId);
+              transaction.update(userRef, {
+                points: admin.firestore.FieldValue.increment(badgePoints),
+              });
+            }
 
             logger.info(`✅ Successfully awarded badge ${badgeId} to user ${userId}!`);
           });
