@@ -1,6 +1,39 @@
-/* eslint-disable indent */
 import * as functions from "firebase-functions/v1";
 import * as admin from "firebase-admin";
+import {CloudTasksClient} from "@google-cloud/tasks";
+
+const tasksClient = new CloudTasksClient();
+// Use the actual Firebase project ID and region where functions are deployed
+const PROJECT_ID = process.env.GCLOUD_PROJECT || "pharmadefi-b352b";
+const LOCATION = "us-central1"; // Must match both Cloud Tasks queue region AND function deployment region
+const QUEUE = "notifications-queue";
+
+/**
+ * Helper to create a Cloud Task for scheduled notifications
+ */
+async function createTask(docId: string, scheduledDate: Date) {
+    const queuePath = tasksClient.queuePath(PROJECT_ID, LOCATION, QUEUE);
+    // Dynamic URL based on project and location
+    const url = `https://${LOCATION}-${PROJECT_ID}.cloudfunctions.net/processScheduledNotification`;
+    
+    const task = {
+        httpRequest: {
+            httpMethod: "POST" as const,
+            url,
+            body: Buffer.from(JSON.stringify({docId})).toString("base64"),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        },
+        scheduleTime: {
+            // scheduleTime expects a Timestamp object or a date in seconds
+            seconds: Math.floor(scheduledDate.getTime() / 1000),
+        },
+    };
+
+    await tasksClient.createTask({parent: queuePath, task});
+    console.log(`Task created for notification ${docId} at ${scheduledDate.toISOString()}`);
+}
 
 // Don't initialize here - it's initialized in index.ts
 
@@ -1081,163 +1114,200 @@ export const onNewCustomNotificationCreated = functions.firestore
         console.log(`New custom notification created: ${docId}`);
 
         try {
-            const dbRef = admin.firestore();
-            const [usersSnapshot, pharmaciesSnapshot] = await Promise.all([
-                dbRef.collection("users").get(),
-                dbRef.collection("pharmacies").get(),
-            ]);
+            // Check if scheduling is required
+            if (notifMsg.scheduledAt) {
+                const scheduledDate = notifMsg.scheduledAt.toDate();
+                const nowInSeconds = Math.floor(Date.now() / 1000);
+                const scheduledInSeconds = Math.floor(scheduledDate.getTime() / 1000);
 
-            const pharmacyCategoryMap = new Map<string, string>();
-            pharmaciesSnapshot.docs.forEach((doc) => {
-                const data = doc.data();
-                pharmacyCategoryMap.set(
-                    doc.id,
-                    data.clientCategory || "Pharmacie"
-                );
-            });
-
-            const batch = admin.firestore().batch();
-            let batchCount = 0;
-            interface FcmNotification {
-                token: string;
-                notification: {
-                    title: string;
-                    body: string;
-                };
-                data: {
-                    type: string;
-                    resourceId: string;
-                    click_action: string;
-                };
-            }
-            const notifications: FcmNotification[] = [];
-
-            const targetRoles = notifMsg.roles || [];
-            const targetPharmacies = notifMsg.pharmacyIds || [];
-            const targetClientCategories = notifMsg.clientCategories || [];
-            const targetCities = notifMsg.cities || [];
-            const targetUserIds = notifMsg.userIds || [];
-
-            for (const userDoc of usersSnapshot.docs) {
-                const userId = userDoc.id;
-                const userData = userDoc.data();
-                const fcmToken = userData.fcmToken;
-
-                let isEligible = true;
-
-                if (targetUserIds.length > 0 &&
-                    !targetUserIds.includes(userId)) {
-                    isEligible = false;
-                }
-                if (targetRoles.length > 0 &&
-                    !targetRoles.includes(userData.role)) {
-                    isEligible = false;
-                }
-                if (targetPharmacies.length > 0 &&
-                    !targetPharmacies.includes(userData.pharmacyId)) {
-                    isEligible = false;
-                }
-                if (targetCities.length > 0 &&
-                    !targetCities.includes(userData.city)) {
-                    isEligible = false;
-                }
-                if (targetClientCategories.length > 0) {
-                    const uPhId = userData.pharmacyId;
-                    const uCat = uPhId ?
-                        (pharmacyCategoryMap.get(uPhId) || "Pharmacie") :
-                        "Pharmacie";
-                    if (!targetClientCategories.includes(uCat)) {
-                        isEligible = false;
-                    }
-                }
-
-                if (!isEligible) continue;
-
-                const notificationRef = admin.firestore()
-                    .collection("users")
-                    .doc(userId)
-                    .collection("notifications")
-                    .doc();
-
-                batch.set(notificationRef, {
-                    userId: userId,
-                    title: notifMsg.title,
-                    body: notifMsg.description,
-                    type: "customNotification",
-                    resourceId: docId,
-                    imageUrl: notifMsg.imageUrl || null,
-                    isRead: false,
-                    createdAt: admin.firestore.FieldValue.serverTimestamp(),
-                });
-                batchCount++;
-
-                const userTokens: string[] = userData.fcmTokens ||
-                    (fcmToken ? [fcmToken] : []);
-                userTokens.forEach((token) => {
-                    notifications.push({
-                        token: token,
-                        notification: {
-                            title: notifMsg.title,
-                            body: notifMsg.description,
-                        },
-                        data: {
-                            type: "customNotification",
-                            resourceId: docId,
-                            click_action: "FLUTTER_NOTIFICATION_CLICK",
-                        },
-                    });
-                });
-            }
-
-            if (batchCount > 0) await batch.commit();
-            console.log(`Created ${batchCount} notification documents`);
-
-            if (notifications.length > 0) {
-                const messages = notifications.map((notif) => ({
-                    token: notif.token,
-                    notification: notif.notification,
-                    data: notif.data,
-                    android: {
-                        priority: "high" as const,
-                        notification: {
-                            channelId: "novopharma_channel",
-                            sound: "default",
-                        },
-                    },
-                    apns: {
-                        payload: {
-                            aps: {
-                                sound: "default",
-                                badge: 1,
-                            },
-                        },
-                    },
-                }));
-
-                const chunkSize = 500;
-                for (let i = 0; i < messages.length; i += chunkSize) {
-                    const chunk = messages.slice(i, i + chunkSize);
-                    await admin.messaging().sendEach(chunk);
+                // If date is in the future, schedule a task
+                if (scheduledInSeconds > nowInSeconds) {
+                    await createTask(docId, scheduledDate);
+                    await admin.firestore()
+                        .collection("customNotifications")
+                        .doc(docId).update({status: "scheduled"});
+                    return {success: true, scheduled: true};
                 }
             }
 
-            await admin.firestore()
-                .collection("customNotifications")
-                .doc(docId).update({
-                    status: "sent",
-                    sentCount: batchCount,
-                    sentAt: admin.firestore.FieldValue.serverTimestamp(),
-                });
-
-            return {success: true, sentCount: batchCount};
+            // Otherwise, send immediately
+            return await sendCustomNotificationLogic(docId, notifMsg);
         } catch (error) {
-            console.error("Error sending custom notifications:", error);
-            await admin.firestore()
-                .collection("customNotifications")
-                .doc(docId).update({
-                    status: "failed",
-                    error: String(error),
-                });
+            console.error("Error in custom notification trigger:", error);
             return {success: false, error};
         }
     });
+
+/**
+ * Target for Cloud Tasks to process scheduled notifications
+ */
+export const processScheduledNotification = functions.https
+    .onRequest(async (req, res) => {
+        const {docId} = req.body;
+
+        if (!docId) {
+            res.status(400).send("Missing docId");
+            return;
+        }
+
+        try {
+            const snap = await admin.firestore()
+                .collection("customNotifications")
+                .doc(docId).get();
+            const notifMsg = snap.data();
+
+            if (!notifMsg) {
+                res.status(404).send("Notification not found");
+                return;
+            }
+
+            await sendCustomNotificationLogic(docId, notifMsg);
+            res.status(200).send("OK");
+        } catch (error) {
+            console.error("Cloud Task Error:", error);
+            res.status(500).send(String(error));
+        }
+    });
+
+/**
+ * Unified logic to send custom notifications
+ */
+async function sendCustomNotificationLogic(docId: string, notifMsg: any) {
+    const dbRef = admin.firestore();
+    const [usersSnapshot, pharmaciesSnapshot] = await Promise.all([
+        dbRef.collection("users").get(),
+        dbRef.collection("pharmacies").get(),
+    ]);
+
+    const pharmacyCategoryMap = new Map<string, string>();
+    pharmaciesSnapshot.docs.forEach((doc) => {
+        const data = doc.data();
+        pharmacyCategoryMap.set(
+            doc.id,
+            data.clientCategory || "Pharmacie"
+        );
+    });
+
+    const batch = admin.firestore().batch();
+    let batchCount = 0;
+    const notifications: any[] = [];
+
+    const targetRoles = notifMsg.roles || [];
+    const targetPharmacies = notifMsg.pharmacyIds || [];
+    const targetClientCategories = notifMsg.clientCategories || [];
+    const targetCities = notifMsg.cities || [];
+    const targetUserIds = notifMsg.userIds || [];
+
+    for (const userDoc of usersSnapshot.docs) {
+        const userId = userDoc.id;
+        const userData = userDoc.data();
+        const fcmToken = userData.fcmToken;
+
+        let isEligible = true;
+
+        // --- NEW IMPROVED LOGIC ---
+        // 1. Specific User Selection (If userIds provided, ONLY these users are considered)
+        if (targetUserIds && targetUserIds.length > 0) {
+            if (!targetUserIds.includes(userId)) {
+                isEligible = false;
+            }
+            // If they are in the list, they are eligible (ignoring other filters for maximum precision)
+        } else {
+            // 2. Global Filters (Only applied if NO specific userIds are provided)
+            if (targetRoles.length > 0 && !targetRoles.includes(userData.role)) {
+                isEligible = false;
+            }
+            if (targetPharmacies.length > 0 && !targetPharmacies.includes(userData.pharmacyId)) {
+                isEligible = false;
+            }
+            if (targetCities.length > 0 && !targetCities.includes(userData.city)) {
+                isEligible = false;
+            }
+            if (targetClientCategories.length > 0) {
+                const uPhId = userData.pharmacyId;
+                const uCat = (uPhId && pharmacyCategoryMap.get(uPhId)) || "Pharmacie";
+                if (!targetClientCategories.includes(uCat)) {
+                    isEligible = false;
+                }
+            }
+        }
+
+        if (!isEligible) continue;
+
+        const notificationRef = admin.firestore()
+            .collection("users")
+            .doc(userId)
+            .collection("notifications")
+            .doc();
+
+        batch.set(notificationRef, {
+            userId: userId,
+            title: notifMsg.title,
+            body: notifMsg.description,
+            type: "customNotification",
+            resourceId: docId,
+            imageUrl: notifMsg.imageUrl || null,
+            isRead: false,
+            createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        });
+        batchCount++;
+
+        const userTokens: string[] = userData.fcmTokens || (fcmToken ? [fcmToken] : []);
+        userTokens.forEach((token) => {
+            notifications.push({
+                token: token,
+                notification: {
+                    title: notifMsg.title,
+                    body: notifMsg.description,
+                },
+                data: {
+                    type: "customNotification",
+                    resourceId: docId,
+                    click_action: "FLUTTER_NOTIFICATION_CLICK",
+                },
+            });
+        });
+    }
+
+    if (batchCount > 0) await batch.commit();
+    console.log(`Created ${batchCount} notification documents`);
+
+    if (notifications.length > 0) {
+        const messages = notifications.map((notif) => ({
+            token: notif.token,
+            notification: notif.notification,
+            data: notif.data,
+            android: {
+                priority: "high" as const,
+                notification: {
+                    channelId: "novopharma_channel",
+                    sound: "default",
+                },
+            },
+            apns: {
+                payload: {
+                    aps: {
+                        sound: "default",
+                        badge: 1,
+                    },
+                },
+            },
+        }));
+
+        const chunkSize = 500;
+        for (let i = 0; i < messages.length; i += chunkSize) {
+            const chunk = messages.slice(i, i + chunkSize);
+            await admin.messaging().sendEach(chunk);
+        }
+    }
+
+    await admin.firestore()
+        .collection("customNotifications")
+        .doc(docId).update({
+            status: "sent",
+            sentCount: batchCount,
+            sentAt: admin.firestore.FieldValue.serverTimestamp(),
+        });
+
+    return {success: true, sentCount: batchCount};
+}
