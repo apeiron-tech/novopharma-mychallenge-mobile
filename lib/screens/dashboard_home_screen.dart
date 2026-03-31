@@ -17,6 +17,8 @@ import 'package:novopharma/widgets/bottom_navigation_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:novopharma/generated/l10n/app_localizations.dart';
 import 'package:novopharma/theme.dart';
+import 'package:novopharma/services/popup_service.dart';
+import 'package:novopharma/widgets/popup_dialog.dart';
 
 class DashboardHomeScreen extends StatefulWidget {
   const DashboardHomeScreen({super.key});
@@ -85,6 +87,9 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
         Future.microtask(
           () => notificationProvider.initializeNotifications(userId),
         );
+
+        // Check for active popups
+        _checkAndShowPopup(authProvider.userProfile);
       } else {
         print('⚠️ [DASHBOARD] No userId found for notifications');
       }
@@ -288,6 +293,13 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
           _hasCalculatedYearPoints = true;
         });
       }
+    }
+  }
+
+  Future<void> _checkAndShowPopup(UserModel? user) async {
+    final popup = await PopupService().checkAndGetActivePopup(user);
+    if (popup != null && mounted) {
+      showPremiumPopup(context, popup);
     }
   }
 

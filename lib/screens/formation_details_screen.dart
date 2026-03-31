@@ -7,6 +7,8 @@ import 'package:novopharma/models/blog_post.dart';
 import 'package:novopharma/controllers/quiz_provider.dart';
 import 'package:novopharma/controllers/auth_provider.dart';
 import 'package:novopharma/screens/quiz_question_screen.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:novopharma/services/chottu_link_service.dart';
 import 'package:novopharma/theme.dart';
 
 // Helper class for formation steps
@@ -1634,8 +1636,24 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
     }
   }
 
-  void _shareFormation() {
-    _showSnackBar('Partage de la formation: ${widget.formation.title}');
+  void _shareFormation() async {
+    _showSnackBar('Génération du lien de partage...');
+
+    try {
+      final String? link = await ChottuLinkService().createFormationLink(
+        widget.formation.id,
+      );
+
+      if (link != null) {
+        await Share.share(
+          'Consultez cette formation sur MyChallenge : ${widget.formation.title}\n\nLien : $link',
+        );
+      } else {
+        _showSnackBar('Erreur lors de la génération du lien');
+      }
+    } catch (e) {
+      _showSnackBar('Erreur lors du partage');
+    }
   }
 
   void _completeStep(int stepIndex) {
