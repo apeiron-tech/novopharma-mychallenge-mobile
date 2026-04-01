@@ -8,21 +8,48 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:novopharma/generated/l10n/app_localizations.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 
 class BadgesScreen extends StatefulWidget {
-  const BadgesScreen({super.key});
+  final String? initialBadgeId;
+  const BadgesScreen({super.key, this.initialBadgeId});
 
   @override
   State<BadgesScreen> createState() => _BadgesScreenState();
 }
 
 class _BadgesScreenState extends State<BadgesScreen> {
+  bool _initialBadgeHandled = false;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<BadgeProvider>().refreshBadges();
     });
+  }
+
+  void _checkInitialBadge(BadgeProvider provider) {
+    if (_initialBadgeHandled || widget.initialBadgeId == null || provider.isLoading) {
+      return;
+    }
+
+    final badgeInfo = provider.badges.firstWhereOrNull(
+      (b) => b.badge.id == widget.initialBadgeId,
+    );
+
+    if (badgeInfo != null) {
+      _initialBadgeHandled = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _showBadgeDetails(context, badgeInfo);
+        }
+      });
+    } else {
+      // If not found yet, maybe it will be in next update? 
+      // But usually provider.isLoading = false means we have everything.
+      _initialBadgeHandled = true; 
+    }
   }
 
   void _showBadgeDetails(BuildContext context, BadgeDisplayInfo badgeInfo) {
@@ -751,6 +778,11 @@ class _BadgesScreenState extends State<BadgesScreen> {
         builder: (context, provider, child) {
           if (provider.isLoading) {
             return const Center(child: CircularProgressIndicator());
+          }
+
+          // Check for initial badge detail trigger
+          if (widget.initialBadgeId != null && !_initialBadgeHandled) {
+            _checkInitialBadge(provider);
           }
 
           if (provider.badges.isEmpty) {

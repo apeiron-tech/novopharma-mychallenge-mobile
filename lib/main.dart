@@ -18,6 +18,7 @@ import 'package:novopharma/controllers/formation_provider.dart';
 import 'package:novopharma/controllers/actualite_provider.dart';
 import 'package:novopharma/controllers/notification_provider.dart';
 import 'package:novopharma/services/notification_service.dart';
+import 'package:novopharma/services/chottu_link_service.dart';
 import 'package:novopharma/firebase_options.dart';
 import 'package:novopharma/navigation.dart';
 import 'package:novopharma/navigation_observer.dart';
@@ -29,16 +30,29 @@ import 'package:novopharma/screens/goals_screen.dart';
 import 'package:novopharma/screens/barcode_scanner_screen.dart';
 import 'package:novopharma/screens/login_screen.dart';
 import 'package:novopharma/screens/pluxee_redemption_screen.dart';
+import 'package:novopharma/screens/formations_screen.dart';
+import 'package:novopharma/screens/actualites_screen.dart';
+import 'package:novopharma/screens/badges_screen.dart';
 import 'package:novopharma/screens/formation_details_screen.dart';
 import 'package:novopharma/screens/splash_screen.dart';
 import 'package:novopharma/screens/manual_sale_screen.dart';
 import 'package:novopharma/screens/product_screen.dart';
+import 'package:novopharma/screens/sales_history_screen.dart';
 import 'package:novopharma/models/blog_post.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:chottu_link/chottu_link.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  /// ✅ Initialize the ChottuLink SDK
+  await ChottuLink.init(apiKey: dotenv.env['CHOTTULINK_API_KEY'] ?? '');
+
+  // Initialize ChottuLink handling
+  ChottuLinkService().initialize();
 
   // Initialize notification service
   await NotificationService().initialize();
@@ -144,6 +158,16 @@ class NovoPharmaApp extends StatelessWidget {
         '/login': (context) => const LoginScreen(),
         '/rewards': (context) => const PluxeeRedemptionScreen(),
         '/manual-sale': (context) => const ManualSaleScreen(),
+        '/formations': (context) => const FormationsScreen(),
+        '/history': (context) => const SalesHistoryScreen(),
+        '/sales-history': (context) => const SalesHistoryScreen(),
+        '/badges': (context) {
+          final args =
+              ModalRoute.of(context)?.settings.arguments
+                  as Map<String, dynamic>?;
+          return BadgesScreen(initialBadgeId: args?['id']);
+        },
+        '/actualites': (context) => const ActualitesScreen(),
         '/product': (context) {
           final args =
               ModalRoute.of(context)?.settings.arguments
