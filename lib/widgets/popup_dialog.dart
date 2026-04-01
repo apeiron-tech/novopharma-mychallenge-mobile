@@ -13,7 +13,8 @@ class PopupDialog extends StatefulWidget {
   State<PopupDialog> createState() => _PopupDialogState();
 }
 
-class _PopupDialogState extends State<PopupDialog> with SingleTickerProviderStateMixin {
+class _PopupDialogState extends State<PopupDialog>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
   Timer? _displayTimer;
@@ -70,22 +71,24 @@ class _PopupDialogState extends State<PopupDialog> with SingleTickerProviderStat
     return Center(
       child: ScaleTransition(
         scale: _scaleAnimation,
-        child: Container(
-          width: MediaQuery.of(context).size.width * 0.85,
-          constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height * 0.7,
-          ),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(24),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.3),
-                blurRadius: 20,
-                offset: const Offset(0, 10),
-              ),
-            ],
-          ),
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.85,
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.7,
+            ),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(24),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.3),
+                  blurRadius: 20,
+                  offset: const Offset(0, 10),
+                ),
+              ],
+            ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(24),
             child: Stack(
@@ -102,29 +105,39 @@ class _PopupDialogState extends State<PopupDialog> with SingleTickerProviderStat
                             ? Image.network(
                                 widget.popup.imageUrl,
                                 fit: BoxFit.cover,
-                                loadingBuilder: (context, child, loadingProgress) {
-                                  if (loadingProgress == null) return child;
-                                  return Container(
-                                    color: LightModeColors.lightSurfaceVariant,
-                                    child: const Center(
-                                      child: CircularProgressIndicator(),
-                                    ),
-                                  );
-                                },
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return Container(
+                                        color:
+                                            LightModeColors.lightSurfaceVariant,
+                                        child: const Center(
+                                          child: CircularProgressIndicator(),
+                                        ),
+                                      );
+                                    },
                                 errorBuilder: (context, error, stackTrace) {
                                   return Container(
                                     color: LightModeColors.lightSurfaceVariant,
-                                    child: const Icon(Icons.broken_image, size: 50, color: Colors.grey),
+                                    child: const Icon(
+                                      Icons.broken_image,
+                                      size: 50,
+                                      color: Colors.grey,
+                                    ),
                                   );
                                 },
                               )
                             : Container(
                                 color: LightModeColors.lightPrimary,
-                                child: const Icon(Icons.campaign, size: 80, color: Colors.white),
+                                child: const Icon(
+                                  Icons.campaign,
+                                  size: 80,
+                                  color: Colors.white,
+                                ),
                               ),
                       ),
                     ),
-                    
+
                     // Text details part
                     Padding(
                       padding: const EdgeInsets.all(20),
@@ -150,7 +163,7 @@ class _PopupDialogState extends State<PopupDialog> with SingleTickerProviderStat
                             overflow: TextOverflow.ellipsis,
                           ),
                           const SizedBox(height: 20),
-                          
+
                           // Action Button
                           SizedBox(
                             width: double.infinity,
@@ -161,7 +174,9 @@ class _PopupDialogState extends State<PopupDialog> with SingleTickerProviderStat
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12,
+                                ),
                               ),
                               child: const Text(
                                 "En savoir plus",
@@ -177,7 +192,7 @@ class _PopupDialogState extends State<PopupDialog> with SingleTickerProviderStat
                     ),
                   ],
                 ),
-                
+
                 // Close button (X)
                 Positioned(
                   top: 12,
@@ -190,25 +205,36 @@ class _PopupDialogState extends State<PopupDialog> with SingleTickerProviderStat
                         color: Colors.black.withOpacity(0.5),
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(Icons.close, color: Colors.white, size: 20),
+                      child: const Icon(
+                        Icons.close,
+                        color: Colors.white,
+                        size: 20,
+                      ),
                     ),
                   ),
                 ),
-                
+
                 // Timer badge if duration exists
                 if (_remainingSeconds != null)
                   Positioned(
                     top: 12,
                     left: 12,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 6,
+                      ),
                       decoration: BoxDecoration(
                         color: LightModeColors.lightPrimary.withOpacity(0.9),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Row(
                         children: [
-                          const Icon(Icons.timer_outlined, color: Colors.white, size: 14),
+                          const Icon(
+                            Icons.timer_outlined,
+                            color: Colors.white,
+                            size: 14,
+                          ),
                           const SizedBox(width: 4),
                           Text(
                             "$_remainingSeconds s",
@@ -227,8 +253,9 @@ class _PopupDialogState extends State<PopupDialog> with SingleTickerProviderStat
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }
 
 void showPremiumPopup(BuildContext context, PopupModel popup) {

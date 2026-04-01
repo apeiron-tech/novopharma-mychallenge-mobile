@@ -177,6 +177,161 @@ export const onNewTrainingCreated = functions.firestore
     });
 
 /**
+ * Sends a notification to all users when a quiz is added or updated for a formation
+ */
+export const onFormationQuizUpdated = functions.firestore
+    .document("blogPosts/{postId}")
+    .onUpdate(async (change, context) => {
+        const before = change.before.data();
+        const after = change.after.data();
+        const postId = context.params.postId;
+
+        // Check if type is formation
+        if (after?.type !== "formation") {
+            return {success: true, skipped: true, reason: "Not a formation"};
+        }
+
+        // Check notification toggle
+        if (after?.notification === false) {
+            console.log(`Post ${postId} has notification disabled, skipping`);
+            return {success: true, skipped: true, reason: "Notification disabled"};
+        }
+
+        // Check if quizId changed and a new quiz is assigned
+        const quizBefore = before?.linkedQuizId;
+        const quizAfter = after?.linkedQuizId;
+
+        // Trigger only if quizAfter is present and differs from quizBefore
+        if (!quizAfter || quizBefore === quizAfter) {
+            console.log(`Post ${postId} quizId not newly updated, skipping`);
+            return {success: true, skipped: true, reason: "Quiz not changed or empty"};
+        }
+
+        console.log(`Formation ${postId} quiz updated from ${quizBefore} to ${quizAfter}, sending notifications`);
+
+        try {
+            // Get quiz details to include in message
+            let quizTitle = "un nouveau quiz";
+            const quizDoc = await admin.firestore().collection("quizzes").doc(quizAfter).get();
+            if (quizDoc.exists) {
+                quizTitle = quizDoc.data()?.title || quizTitle;
+            }
+
+            const notifTitle = "Nouveau quiz disponible !";
+            const notifBody = `Le quiz "${quizTitle}" a été ajouté à la formation : ${after.title}`;
+            const notifType = "newTraining"; // Using same type as new training for consistent mobile handling
+
+            const postTitle = after?.title;
+            const isTestDev = typeof postTitle === "string" &&
+                postTitle.toLowerCase().includes("test dev");
+
+            // Get all users
+            const usersSnapshot = await admin
+                .firestore()
+                .collection("users")
+                .get();
+
+            const batch = admin.firestore().batch();
+            const notifications: Array<{
+                token: string;
+                notification: admin.messaging.Notification;
+                data: { [key: string]: string };
+            }> = [];
+
+            for (const userDoc of usersSnapshot.docs) {
+                const userId = userDoc.id;
+                const userData = userDoc.data();
+                const fcmToken = userData.fcmToken;
+
+                // Filter users if test dev
+                if (isTestDev && (!userData.email ||
+                    !userData.email.includes("testdev"))) {
+                    continue; // Skip non-test users for test dev posts
+                }
+
+                // Create notification document
+                const notificationRef = admin
+                    .firestore()
+                    .collection("users")
+                    .doc(userId)
+                    .collection("notifications")
+                    .doc();
+
+                batch.set(notificationRef, {
+                    userId: userId,
+                    title: notifTitle,
+                    body: notifBody,
+                    type: notifType,
+                    resourceId: postId,
+                    imageUrl: after?.coverImageUrl || after?.imageUrl || null,
+                    isRead: false,
+                    createdAt: admin.firestore.FieldValue.serverTimestamp(),
+                });
+
+                // Prepare FCM message if user has a token
+                const userTokens = userData.fcmTokens ||
+                    (fcmToken ? [fcmToken] : []);
+                userTokens.forEach((token: string) => {
+                    notifications.push({
+                        token: token,
+                        notification: {
+                            title: notifTitle,
+                            body: notifBody,
+                        },
+                        data: {
+                            type: notifType,
+                            resourceId: postId,
+                            click_action: "FLUTTER_NOTIFICATION_CLICK",
+                        },
+                    });
+                });
+            }
+
+            // Commit all notification documents
+            await batch.commit();
+            console.log(
+                `Created ${usersSnapshot.docs.length} notification documents`
+            );
+
+            // Send FCM messages
+            if (notifications.length > 0) {
+                const messages = notifications.map((notif) => ({
+                    token: notif.token,
+                    notification: notif.notification,
+                    data: notif.data,
+                    android: {
+                        priority: "high" as const,
+                        notification: {
+                            channelId: "novopharma_channel",
+                            sound: "default",
+                        },
+                    },
+                    apns: {
+                        payload: {
+                            aps: {
+                                sound: "default",
+                                badge: 1,
+                            },
+                        },
+                    },
+                }));
+
+                // Split into chunks of 500
+                for (let i = 0; i < messages.length; i += 500) {
+                    const chunk = messages.slice(i, i + 500);
+                    const response = await admin.messaging().sendEach(chunk);
+                    console.log(`Chunk sent: ${response.successCount} success`);
+                }
+            }
+
+            return {success: true};
+        } catch (error) {
+            console.error("Error sending formation updated notifications:", error);
+            return {success: false, error};
+        }
+    });
+
+/**
  * Sends a notification to filtered users when a new badge is created.
  * Filtering is based on badge.visibilityCriteria.clientCategories:
  *  - "Pharmacie" or "" => only users in Pharmacie pharmacies
