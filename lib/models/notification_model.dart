@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-enum NotificationType { newTraining, newBadge, achievement, reminder }
+enum NotificationType { newTraining, newBadge, achievement, reminder, newGoal, goalCompleted, newActualite }
 
 class NotificationModel {
   final String id;
@@ -57,10 +57,16 @@ class NotificationModel {
     switch (type) {
       case 'newTraining':
         return NotificationType.newTraining;
+      case 'newActualite':
+        return NotificationType.newActualite;
       case 'newBadge':
         return NotificationType.newBadge;
       case 'achievement':
         return NotificationType.achievement;
+      case 'newGoal':
+        return NotificationType.newGoal;
+      case 'goalCompleted':
+        return NotificationType.goalCompleted;
       case 'reminder':
         return NotificationType.reminder;
       default:

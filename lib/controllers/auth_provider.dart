@@ -172,6 +172,13 @@ class AuthProvider with ChangeNotifier {
 
   Future<void> signOut() async {
     markIntroSeen();
+    if (_firebaseUser != null) {
+      try {
+        await _notificationService.removeFCMToken(_firebaseUser!.uid);
+      } catch (e) {
+        // Silently handle errors, e.g. no internet
+      }
+    }
     await _authService.signOut();
   }
 

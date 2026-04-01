@@ -8,6 +8,8 @@ import 'package:novopharma/screens/formation_details_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:novopharma/screens/actualites_screen.dart';
+import 'package:novopharma/screens/goals_screen.dart';
 import '../theme.dart';
 import '../generated/l10n/app_localizations.dart';
 
@@ -229,6 +231,25 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     );
                   }
                 }
+              } else if (notification.type == NotificationType.newActualite) {
+                if (context.mounted) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ActualitesScreen(),
+                    ),
+                  );
+                }
+              } else if (notification.type == NotificationType.newGoal ||
+                  notification.type == NotificationType.goalCompleted) {
+                if (context.mounted) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const GoalsScreen(),
+                    ),
+                  );
+                }
               } else if (notification.type == NotificationType.newBadge ||
                   notification.type == NotificationType.achievement) {
                 // Navigate to badges screen
@@ -329,10 +350,15 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     switch (type) {
       case NotificationType.newTraining:
         return Icons.school_rounded;
+      case NotificationType.newActualite:
+        return Icons.article_rounded;
       case NotificationType.newBadge:
         return Icons.military_tech_rounded;
       case NotificationType.achievement:
         return Icons.emoji_events_rounded;
+      case NotificationType.newGoal:
+      case NotificationType.goalCompleted:
+        return Icons.flag_rounded;
       case NotificationType.reminder:
         return Icons.notifications_active_rounded;
     }
@@ -342,10 +368,15 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     switch (type) {
       case NotificationType.newTraining:
         return LightModeColors.lightPrimary;
+      case NotificationType.newActualite:
+        return LightModeColors.novoPharmaBlue;
       case NotificationType.newBadge:
         return LightModeColors.warning;
       case NotificationType.achievement:
         return LightModeColors.success;
+      case NotificationType.newGoal:
+      case NotificationType.goalCompleted:
+        return LightModeColors.novoPharmaBlue;
       case NotificationType.reminder:
         return LightModeColors.lightSecondary;
     }
