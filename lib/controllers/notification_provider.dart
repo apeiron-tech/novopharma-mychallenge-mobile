@@ -61,6 +61,11 @@ class NotificationProvider with ChangeNotifier {
     switch (notification.type) {
       case NotificationType.newTraining:
         return '/formation/${notification.resourceId}';
+      case NotificationType.newActualite:
+        return '/actualites'; // Assume a route could be added or handled manually
+      case NotificationType.newGoal:
+      case NotificationType.goalCompleted:
+        return '/goals';
       case NotificationType.newBadge:
         return '/badges'; // Navigate to badges screen, could highlight specific badge
       case NotificationType.achievement:

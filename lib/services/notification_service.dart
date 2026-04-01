@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter/material.dart';
 import 'package:novopharma/models/notification_model.dart';
+import 'package:novopharma/navigation.dart';
+import 'package:novopharma/screens/notifications_screen.dart';
 
 class NotificationService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -56,6 +59,15 @@ class NotificationService {
 
     // Handle background messages
     FirebaseMessaging.onMessageOpenedApp.listen(_handleNotificationOpen);
+
+    // Handle terminated state message
+    RemoteMessage? initialMessage = await _messaging.getInitialMessage();
+    if (initialMessage != null) {
+      // Delay navigation slightly to let app initialize
+      Future.delayed(const Duration(milliseconds: 500), () {
+        _handleNotificationOpen(initialMessage);
+      });
+    }
   }
 
   // Save FCM token to user document
@@ -63,8 +75,19 @@ class NotificationService {
     String? token = await _messaging.getToken();
     if (token != null) {
       await _firestore.collection('users').doc(userId).update({
-        'fcmToken': token,
+        'fcmToken': token, // Keep for backward compatibility
+        'fcmTokens': FieldValue.arrayUnion([token]),
         'fcmTokenUpdatedAt': FieldValue.serverTimestamp(),
+      });
+    }
+  }
+
+  // Remove FCM token from user document
+  Future<void> removeFCMToken(String userId) async {
+    String? token = await _messaging.getToken();
+    if (token != null) {
+      await _firestore.collection('users').doc(userId).update({
+        'fcmTokens': FieldValue.arrayRemove([token]),
       });
     }
   }
@@ -184,13 +207,25 @@ class NotificationService {
   // Handle notification tap
   void _onNotificationTapped(NotificationResponse response) {
     print('[NotificationService] Notification tapped: ${response.payload}');
-    // Navigation will be handled by the provider/controller
+    final BuildContext? context = appNavigatorKey.currentContext;
+    if (context != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const NotificationsScreen()),
+      );
+    }
   }
 
   // Handle notification opened from background
   void _handleNotificationOpen(RemoteMessage message) {
     print('[NotificationService] Notification opened: ${message.messageId}');
-    // Navigation will be handled by the provider/controller
+    final BuildContext? context = appNavigatorKey.currentContext;
+    if (context != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const NotificationsScreen()),
+      );
+    }
   }
 
   // Subscribe to topic (optional, for broadcast notifications)
