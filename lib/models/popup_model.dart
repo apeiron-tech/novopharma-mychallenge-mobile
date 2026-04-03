@@ -12,6 +12,7 @@ class PopupModel {
   final DateTime startDate;
   final String status;
   final String title;
+  final int order;
   final DateTime updatedAt;
 
   PopupModel({
@@ -26,6 +27,7 @@ class PopupModel {
     required this.startDate,
     required this.status,
     required this.title,
+    this.order = 0,
     required this.updatedAt,
   });
 
@@ -43,6 +45,7 @@ class PopupModel {
       startDate: (data['startDate'] as Timestamp).toDate(),
       status: data['status'] ?? 'inactive',
       title: data['title'] ?? '',
+      order: (data['order'] as num?)?.toInt() ?? 0,
       updatedAt: (data['updatedAt'] as Timestamp).toDate(),
     );
   }
