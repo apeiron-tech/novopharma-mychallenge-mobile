@@ -8,6 +8,9 @@ class Product {
   final String description;
   final double price;
   final double points;
+  final double pointsPharmacie;
+  final double pointsParaPharmacie;
+  final bool pointsUnified;
   final String sku;
   final int stock;
   final String protocol;
@@ -27,6 +30,9 @@ class Product {
     required this.description,
     required this.price,
     required this.points,
+    required this.pointsPharmacie,
+    required this.pointsParaPharmacie,
+    required this.pointsUnified,
     required this.sku,
     required this.stock,
     required this.protocol,
@@ -72,6 +78,9 @@ class Product {
       description: data['description'] ?? '',
       price: parseDouble(data['price']),
       points: parseDouble(data['points']),
+      pointsPharmacie: parseDouble(data['pointsPharmacie']),
+      pointsParaPharmacie: parseDouble(data['pointsParaPharmacie']),
+      pointsUnified: data['pointsUnified'] ?? true, // Default to true
       sku: data['sku'] ?? '',
       stock: parseInt(data['stock']),
       protocol: data['protocol'] ?? '',
@@ -83,5 +92,18 @@ class Product {
       clientCode: parseInt(data['clientCode']),
       status: data['status'] ?? 'enabled', // Add status field
     );
+  }
+
+  double getPoints(String? pharmacyCategory) {
+    if (pointsUnified) {
+      return points;
+    }
+
+    if (pharmacyCategory == 'Para-Pharmacie') {
+      return pointsParaPharmacie;
+    }
+
+    // Default to Pharmacie points if category is Pharmacie or unknown
+    return pointsPharmacie;
   }
 }
