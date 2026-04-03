@@ -297,9 +297,9 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
   }
 
   Future<void> _checkAndShowPopup(UserModel? user) async {
-    final popup = await PopupService().checkAndGetActivePopup(user);
-    if (popup != null && mounted) {
-      showPremiumPopup(context, popup);
+    final popups = await PopupService().checkAndGetActivePopups(user);
+    if (popups.isNotEmpty && mounted) {
+      showPremiumPopup(context, popups);
     }
   }
 

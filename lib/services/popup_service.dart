@@ -21,13 +21,15 @@ import 'package:novopharma/navigation.dart';
 class PopupService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<PopupModel?> checkAndGetActivePopup(UserModel? user) async {
+  Future<List<PopupModel>> checkAndGetActivePopups(UserModel? user) async {
     if (user == null) {
       debugPrint('[POPUP] User is null');
-      return null;
+      return [];
     }
     final now = DateTime.now();
-    debugPrint('[POPUP] Checking for active popup at $now');
+    debugPrint('[POPUP] Checking for active popups at $now');
+
+    List<PopupModel> validPopups = [];
 
     // Fetch user's category from pharmacy
     String userCategory = '';
@@ -48,7 +50,7 @@ class PopupService {
 
       debugPrint('[POPUP] Found ${snapshot.docs.length} active popups in database');
 
-      if (snapshot.docs.isEmpty) return null;
+      if (snapshot.docs.isEmpty) return [];
 
       for (var doc in snapshot.docs) {
         final popup = PopupModel.fromFirestore(doc);
@@ -81,8 +83,8 @@ class PopupService {
         }
 
         if (shouldShow) {
-          debugPrint('[POPUP] Match found! Showing "${popup.title}"');
-          return popup;
+          debugPrint('[POPUP] Match found: "${popup.title}" (order: ${popup.order})');
+          validPopups.add(popup);
         } else {
           debugPrint('[POPUP] Skipping "${popup.title}": Category mismatch (Popup: $popupCategories, User: "$userCategory")');
         }
@@ -90,7 +92,11 @@ class PopupService {
     } catch (e) {
       debugPrint('Error fetching popups: $e');
     }
-    return null;
+
+    // Sort by order ascending
+    validPopups.sort((a, b) => a.order.compareTo(b.order));
+    
+    return validPopups;
   }
 
   static void handleRedirection(BuildContext? context, String link) async {
