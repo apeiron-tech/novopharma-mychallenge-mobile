@@ -83,10 +83,19 @@ class PopupService {
         }
 
         if (shouldShow) {
+          // Additional filter for "test dev" popups
+          final isTestDevPopup = popup.title.toLowerCase().contains("test dev");
+          if (isTestDevPopup && !user.email.toLowerCase().contains("testdev")) {
+            debugPrint('[POPUP] Skipping "${popup.title}": Test Dev popup and user is not test dev');
+            shouldShow = false;
+          }
+        }
+
+        if (shouldShow) {
           debugPrint('[POPUP] Match found: "${popup.title}" (order: ${popup.order})');
           validPopups.add(popup);
         } else {
-          debugPrint('[POPUP] Skipping "${popup.title}": Category mismatch (Popup: $popupCategories, User: "$userCategory")');
+          debugPrint('[POPUP] Skipping "${popup.title}": filter active');
         }
       }
     } catch (e) {
