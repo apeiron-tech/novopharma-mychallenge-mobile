@@ -19,6 +19,7 @@ import 'package:novopharma/generated/l10n/app_localizations.dart';
 import 'package:novopharma/theme.dart';
 import 'package:novopharma/services/popup_service.dart';
 import 'package:novopharma/widgets/popup_dialog.dart';
+import 'package:novopharma/screens/challenges_list_screen.dart';
 
 class DashboardHomeScreen extends StatefulWidget {
   const DashboardHomeScreen({super.key});
@@ -441,7 +442,6 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
   ) {
     final totalPoints = user?.points ?? 0;
     final pendingPoints = user?.pendingPluxeePoints ?? 0;
-    final currentYear = DateTime.now().year;
     final allTimePoints = pluxeeRedemption.allTimePoints;
 
     return Column(
@@ -776,6 +776,7 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
         _buildLeaderboardCard(context, l10n),
         _buildGoalsCard(context, l10n),
         _buildBadgesCard(context, l10n),
+        _buildChallengesCard(context, l10n),
       ],
     );
   }
@@ -1005,6 +1006,66 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
                     l10n.lastBadge,
                     textAlign: TextAlign.center,
                     style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: LightModeColors.dashboardTextPrimary,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildChallengesCard(BuildContext context, AppLocalizations l10n) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: LightModeColors.lightOutlineVariant),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(16),
+        child: InkWell(
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const ChallengesListScreen()),
+          ),
+          borderRadius: BorderRadius.circular(16),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: const BoxDecoration(
+                    color: LightModeColors.lightPrimary,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.emoji_events_rounded,
+                    color: Colors.white,
+                    size: 40,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Expanded(
+                  child: const Text(
+                    "Challenges",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                       color: LightModeColors.dashboardTextPrimary,
