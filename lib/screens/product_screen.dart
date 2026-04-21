@@ -111,8 +111,9 @@ class _ProductScreenState extends State<ProductScreen> {
     );
   }
 
-  void _submitSale(Product product, UserModel user) {
+  void _submitSale(Product product, UserModel user, String? pharmacyCategory) {
     final int quantity = _quantityNotifier.value;
+    final double unitPoints = product.getPoints(pharmacyCategory);
     final double totalPrice = product.price * quantity;
 
     if (widget.sale != null) {
@@ -124,7 +125,7 @@ class _ProductScreenState extends State<ProductScreen> {
         productId: product.id,
         productNameSnapshot: product.name,
         quantity: quantity,
-        pointsEarned: product.points * quantity,
+        pointsEarned: unitPoints * quantity,
         saleDate: widget.sale!.saleDate, // Keep original sale date
         totalPrice: totalPrice,
         status: widget.sale!.status, // Keep original status
@@ -142,7 +143,7 @@ class _ProductScreenState extends State<ProductScreen> {
         productId: product.id,
         productNameSnapshot: product.name,
         quantity: quantity,
-        pointsEarned: product.points * quantity,
+        pointsEarned: unitPoints * quantity,
         saleDate: DateTime.now(),
         totalPrice: totalPrice,
         status: 'pending',
@@ -233,7 +234,11 @@ class _ProductScreenState extends State<ProductScreen> {
                       const SizedBox(height: 24),
 
                       // Sale Details Card (Quantity & Price)
-                      _buildModernSaleCard(l10n, product),
+                      _buildModernSaleCard(
+                        l10n,
+                        product,
+                        pharmacy.clientCategory,
+                      ),
                       const SizedBox(height: 24),
 
                       // Description
@@ -299,7 +304,12 @@ class _ProductScreenState extends State<ProductScreen> {
                   ),
                 ),
               ),
-              _buildModernActionBar(l10n, product, user),
+              _buildModernActionBar(
+                l10n,
+                product,
+                user,
+                pharmacy.clientCategory,
+              ),
             ],
           );
         },
@@ -402,7 +412,11 @@ class _ProductScreenState extends State<ProductScreen> {
     );
   }
 
-  Widget _buildModernSaleCard(AppLocalizations l10n, Product product) {
+  Widget _buildModernSaleCard(
+    AppLocalizations l10n,
+    Product product,
+    String? pharmacyCategory,
+  ) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -537,7 +551,8 @@ class _ProductScreenState extends State<ProductScreen> {
               ValueListenableBuilder<int>(
                 valueListenable: _quantityNotifier,
                 builder: (context, quantity, child) {
-                  final pointsEarned = product.points * quantity;
+                  final pointsEarned =
+                      product.getPoints(pharmacyCategory) * quantity;
                   // Format to remove trailing .0 for whole numbers
                   final pointsText = pointsEarned % 1 == 0
                       ? pointsEarned.toInt().toString()
@@ -843,6 +858,7 @@ class _ProductScreenState extends State<ProductScreen> {
     AppLocalizations l10n,
     Product product,
     UserModel user,
+    String? pharmacyCategory,
   ) {
     return Container(
       padding: const EdgeInsets.all(20),
@@ -900,7 +916,7 @@ class _ProductScreenState extends State<ProductScreen> {
             const SizedBox(height: 16), // Space between price and button
             // Button row at the bottom, centered
             ElevatedButton(
-              onPressed: () => _submitSale(product, user),
+              onPressed: () => _submitSale(product, user, pharmacyCategory),
               style: ElevatedButton.styleFrom(
                 backgroundColor: LightModeColors.lightError,
                 foregroundColor: LightModeColors.lightOnError,

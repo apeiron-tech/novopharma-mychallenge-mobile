@@ -3,6 +3,11 @@ import 'package:novopharma/models/product.dart';
 import 'package:novopharma/services/product_service.dart';
 import 'package:novopharma/generated/l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:provider/provider.dart';
+import 'package:novopharma/controllers/auth_provider.dart';
+import 'package:novopharma/services/user_service.dart';
+import 'package:novopharma/services/pharmacy_service.dart';
+import 'package:novopharma/models/user_model.dart';
 import '../theme.dart';
 
 class ManualSaleScreen extends StatefulWidget {
@@ -14,8 +19,11 @@ class ManualSaleScreen extends StatefulWidget {
 
 class _ManualSaleScreenState extends State<ManualSaleScreen> {
   final ProductService _productService = ProductService();
+  final UserService _userService = UserService();
+  final PharmacyService _pharmacyService = PharmacyService();
   List<Product> _allProducts = [];
   List<Product> _filteredProducts = [];
+  String? _pharmacyCategory;
   final TextEditingController _searchController = TextEditingController();
   bool _isLoading = true;
 
@@ -38,7 +46,31 @@ class _ManualSaleScreenState extends State<ManualSaleScreen> {
 
   void _loadProducts() async {
     try {
-      final products = await _productService.getProducts();
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      final userId = authProvider.firebaseUser?.uid;
+
+      if (userId == null) {
+        setState(() => _isLoading = false);
+        return;
+      }
+
+      final results = await Future.wait([
+        _productService.getProducts(),
+        _userService.getUser(userId),
+      ]);
+
+      final products = results[0] as List<Product>;
+      final user = results[1] as UserModel?;
+
+      if (user != null && user.pharmacyId.isNotEmpty) {
+        final pharmacies = await _pharmacyService.getPharmaciesByIds([
+          user.pharmacyId,
+        ]);
+        if (pharmacies.isNotEmpty) {
+          _pharmacyCategory = pharmacies.first.clientCategory;
+        }
+      }
+
       // Filter only enabled products
       _allProducts = products.where((product) => product.isEnabled).toList();
       _filteredProducts = _allProducts;
@@ -283,7 +315,7 @@ class _ManualSaleScreenState extends State<ManualSaleScreen> {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
-                                '${product.points} pts',
+                                '${product.getPoints(_pharmacyCategory)} pts',
                                 style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
