@@ -386,5 +386,24 @@
     "deleteAccountConfirmation": "Are you sure you want to delete your account? This action is irreversible and all your data will be permanently removed.",
     "deleteAccountConfirm": "Permanently Delete",
     "recentLoginRequiredError": "For security reasons, this action requires a recent login. Please log out and sign in again before deleting your account.",
-    "saleSuccessMessage": "Sale recorded successfully!"
+    "saleSuccessMessage": "Sale recorded successfully!",
+    "giftAvailableTitle": "Gift Available!",
+    "giftAvailableMessage": "This pharmacy has assigned gifts. Do you want to offer one to the customer?",
+    "noThanks": "No, thanks",
+    "yesOffer": "Yes, offer",
+    "offerGift": "Offer a Gift",
+    "selectGift": "Select a gift",
+    "giftQuantityHint": "Number of gifts",
+    "fieldRequired": "Required",
+    "fieldInvalid": "Invalid",
+    "insufficientStock": "Insufficient stock",
+    "clientInfoOptional": "Customer Information (Optional)",
+    "confirm": "Confirm",
+    "giftRecordedSuccess": "Gift recorded successfully",
+    "errorOccurred": "Error: {error}",
+    "@errorOccurred": {
+        "placeholders": {
+            "error": { "type": "String" }
+        }
+    }
 }

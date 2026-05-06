@@ -386,5 +386,24 @@
     "deleteAccountConfirmation": "Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible et toutes vos données seront définitivement supprimées.",
     "deleteAccountConfirm": "Supprimer définitivement",
     "recentLoginRequiredError": "Pour des raisons de sécurité, cette action nécessite une connexion récente. Veuillez vous déconnecter et vous reconnecter avant de supprimer votre compte.",
-    "saleSuccessMessage": "Vente enregistrée avec succès!"
+    "saleSuccessMessage": "Vente enregistrée avec succès!",
+    "giftAvailableTitle": "Cadeau disponible !",
+    "giftAvailableMessage": "Cette pharmacie a des cadeaux assignés. Voulez-vous en offrir un au client ?",
+    "noThanks": "Non, merci",
+    "yesOffer": "Oui, offrir",
+    "offerGift": "Offrir un cadeau",
+    "selectGift": "Sélectionner le cadeau",
+    "giftQuantityHint": "Nombre de cadeaux",
+    "fieldRequired": "Requis",
+    "fieldInvalid": "Invalide",
+    "insufficientStock": "Stock insuffisant",
+    "clientInfoOptional": "Informations client (Optionnel)",
+    "confirm": "Confirmer",
+    "giftRecordedSuccess": "Cadeau enregistré avec succès",
+    "errorOccurred": "Erreur: {error}",
+    "@errorOccurred": {
+        "placeholders": {
+            "error": { "type": "String" }
+        }
+    }
 }

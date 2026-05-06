@@ -940,4 +940,49 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get saleSuccessMessage => 'Sale recorded successfully!';
+
+  @override
+  String get giftAvailableTitle => 'Gift Available!';
+
+  @override
+  String get giftAvailableMessage =>
+      'This pharmacy has assigned gifts. Do you want to offer one to the customer?';
+
+  @override
+  String get noThanks => 'No, thanks';
+
+  @override
+  String get yesOffer => 'Yes, offer';
+
+  @override
+  String get offerGift => 'Offer a Gift';
+
+  @override
+  String get selectGift => 'Select a gift';
+
+  @override
+  String get giftQuantityHint => 'Number of gifts';
+
+  @override
+  String get fieldRequired => 'Required';
+
+  @override
+  String get fieldInvalid => 'Invalid';
+
+  @override
+  String get insufficientStock => 'Insufficient stock';
+
+  @override
+  String get clientInfoOptional => 'Customer Information (Optional)';
+
+  @override
+  String get confirm => 'Confirm';
+
+  @override
+  String get giftRecordedSuccess => 'Gift recorded successfully';
+
+  @override
+  String errorOccurred(String error) {
+    return 'Error: $error';
+  }
 }

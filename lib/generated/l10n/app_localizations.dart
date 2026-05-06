@@ -1813,6 +1813,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sale recorded successfully!'**
   String get saleSuccessMessage;
+
+  /// No description provided for @giftAvailableTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Gift Available!'**
+  String get giftAvailableTitle;
+
+  /// No description provided for @giftAvailableMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This pharmacy has assigned gifts. Do you want to offer one to the customer?'**
+  String get giftAvailableMessage;
+
+  /// No description provided for @noThanks.
+  ///
+  /// In en, this message translates to:
+  /// **'No, thanks'**
+  String get noThanks;
+
+  /// No description provided for @yesOffer.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, offer'**
+  String get yesOffer;
+
+  /// No description provided for @offerGift.
+  ///
+  /// In en, this message translates to:
+  /// **'Offer a Gift'**
+  String get offerGift;
+
+  /// No description provided for @selectGift.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a gift'**
+  String get selectGift;
+
+  /// No description provided for @giftQuantityHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Number of gifts'**
+  String get giftQuantityHint;
+
+  /// No description provided for @fieldRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get fieldRequired;
+
+  /// No description provided for @fieldInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid'**
+  String get fieldInvalid;
+
+  /// No description provided for @insufficientStock.
+  ///
+  /// In en, this message translates to:
+  /// **'Insufficient stock'**
+  String get insufficientStock;
+
+  /// No description provided for @clientInfoOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer Information (Optional)'**
+  String get clientInfoOptional;
+
+  /// No description provided for @confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get confirm;
+
+  /// No description provided for @giftRecordedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Gift recorded successfully'**
+  String get giftRecordedSuccess;
+
+  /// No description provided for @errorOccurred.
+  ///
+  /// In en, this message translates to:
+  /// **'Error: {error}'**
+  String errorOccurred(String error);
 }
 
 class _AppLocalizationsDelegate
