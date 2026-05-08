@@ -6,7 +6,7 @@ class SaleService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final String _collection = 'sales';
 
-  Future<void> createSale(Sale sale) async {
+  Future<String> createSale(Sale sale) async {
     //final userRef = _firestore.collection('users').doc(sale.userId);
     final saleRef = _firestore.collection(_collection).doc();
 
@@ -35,6 +35,8 @@ class SaleService {
 
     log('[SaleService] ✅ Sale created successfully at: sales/${saleRef.id}');
     log('[SaleService] Waiting for Cloud Function to process goal progress...');
+    
+    return saleRef.id;
   }
 
   Future<void> updateSale(Sale oldSale, Sale newSale) async {

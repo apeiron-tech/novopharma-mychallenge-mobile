@@ -951,4 +951,49 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get saleSuccessMessage => 'Vente enregistrée avec succès!';
+
+  @override
+  String get giftAvailableTitle => 'Cadeau disponible !';
+
+  @override
+  String get giftAvailableMessage =>
+      'Cette pharmacie a des cadeaux assignés. Voulez-vous en offrir un au client ?';
+
+  @override
+  String get noThanks => 'Non, merci';
+
+  @override
+  String get yesOffer => 'Oui, offrir';
+
+  @override
+  String get offerGift => 'Offrir un cadeau';
+
+  @override
+  String get selectGift => 'Sélectionner le cadeau';
+
+  @override
+  String get giftQuantityHint => 'Nombre de cadeaux';
+
+  @override
+  String get fieldRequired => 'Requis';
+
+  @override
+  String get fieldInvalid => 'Invalide';
+
+  @override
+  String get insufficientStock => 'Stock insuffisant';
+
+  @override
+  String get clientInfoOptional => 'Informations client (Optionnel)';
+
+  @override
+  String get confirm => 'Confirmer';
+
+  @override
+  String get giftRecordedSuccess => 'Cadeau enregistré avec succès';
+
+  @override
+  String errorOccurred(String error) {
+    return 'Erreur: $error';
+  }
 }

@@ -16,6 +16,9 @@ import 'package:novopharma/services/product_service.dart';
 import 'package:novopharma/services/user_service.dart';
 import 'package:novopharma/generated/l10n/app_localizations.dart';
 import 'package:novopharma/services/sale_service.dart';
+import 'package:novopharma/services/gift_service.dart';
+import 'package:novopharma/models/gift.dart';
+import 'package:novopharma/models/gift_assignment.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../theme.dart';
 
@@ -111,10 +114,13 @@ class _ProductScreenState extends State<ProductScreen> {
     );
   }
 
-  void _submitSale(Product product, UserModel user, String? pharmacyCategory) {
+  Future<void> _submitSale(Product product, UserModel user, String? pharmacyCategory) async {
+    final l10n = AppLocalizations.of(context)!;
     final int quantity = _quantityNotifier.value;
     final double unitPoints = product.getPoints(pharmacyCategory);
     final double totalPrice = product.price * quantity;
+
+    String? createdSaleId;
 
     if (widget.sale != null) {
       // Update existing sale
@@ -134,6 +140,7 @@ class _ProductScreenState extends State<ProductScreen> {
         context,
         listen: false,
       ).updateSale(widget.sale!, updatedSale);
+      createdSaleId = widget.sale!.id;
     } else {
       // Create new sale
       final newSale = Sale(
@@ -148,12 +155,154 @@ class _ProductScreenState extends State<ProductScreen> {
         totalPrice: totalPrice,
         status: 'pending',
       );
-      _saleService.createSale(newSale);
+      createdSaleId = await _saleService.createSale(newSale);
+    }
+
+    // Check for gifts if it's a new sale or existing sale
+    final giftService = GiftService();
+    final assignments = await giftService.getAssignmentsForPharmacy(user.pharmacyId);
+    
+    List<Map<String, dynamic>> validGiftsData = [];
+    
+    for (var assignment in assignments) {
+      final gift = await giftService.getGiftById(assignment.giftId);
+      if (gift != null && gift.status == 'active') {
+        bool isValid = true;
+        
+        if (gift.listProducts.isNotEmpty && !gift.listProducts.contains(product.id)) {
+           isValid = false;
+        }
+        
+        if (isValid && gift.productCategory.isNotEmpty && !gift.productCategory.contains(product.category)) {
+           isValid = false;
+        }
+        
+        if (isValid && gift.productMarque.isNotEmpty && !gift.productMarque.contains(product.marque)) {
+           isValid = false;
+        }
+        
+        if (isValid) {
+           validGiftsData.add({
+             'assignment': assignment,
+             'gift': gift,
+           });
+        }
+      }
+    }
+    
+    if (validGiftsData.isNotEmpty) {
+      Map<String, Map<String, dynamic>> groupedGifts = {};
+      for (var data in validGiftsData) {
+        final assignment = data['assignment'] as GiftAssignment;
+        final giftId = assignment.giftId;
+        
+        if (!groupedGifts.containsKey(giftId)) {
+          groupedGifts[giftId] = {
+            'gift': data['gift'],
+            'assignment': assignment,
+            'totalStock': assignment.assignedStock,
+          };
+        } else {
+           groupedGifts[giftId]!['totalStock'] += assignment.assignedStock;
+           final existingAssignment = groupedGifts[giftId]!['assignment'] as GiftAssignment;
+           final existingCreatedAt = existingAssignment.createdAt ?? DateTime.now();
+           final currentCreatedAt = assignment.createdAt ?? DateTime.now();
+           if (currentCreatedAt.isBefore(existingCreatedAt)) {
+              groupedGifts[giftId]!['assignment'] = assignment;
+           }
+        }
+      }
+      
+      final availableGifts = groupedGifts.values.toList();
+      
+      final giveGift = await showDialog<bool>(
+        context: context,
+        builder: (context) => Dialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+          backgroundColor: LightModeColors.lightSurface,
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: LightModeColors.lightPrimary.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.card_giftcard_rounded,
+                    color: LightModeColors.lightPrimary,
+                    size: 48,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Text(
+                  l10n.giftAvailableTitle,
+                  style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: LightModeColors.dashboardTextPrimary,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  l10n.giftAvailableMessage,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    color: LightModeColors.dashboardTextSecondary,
+                  ),
+                ),
+                const SizedBox(height: 32),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () => Navigator.pop(context, false),
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: LightModeColors.lightOutline),
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                        ),
+                        child: Text(
+                          l10n.noThanks,
+                          style: const TextStyle(color: LightModeColors.dashboardTextSecondary),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () => Navigator.pop(context, true),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: LightModeColors.lightPrimary,
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                          elevation: 0,
+                        ),
+                        child: Text(
+                          l10n.yesOffer,
+                          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+      
+      if (giveGift == true && createdSaleId != null) {
+         await _showGiftSelectionDialog(availableGifts, createdSaleId, user.pharmacyId, user.uid, user.pointOfSale, giftService);
+      }
     }
 
     // Show success message
     if (mounted) {
-      final l10n = AppLocalizations.of(context)!;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(l10n.saleSuccessMessage),
@@ -164,6 +313,216 @@ class _ProductScreenState extends State<ProductScreen> {
     }
 
     Navigator.of(context).pop();
+  }
+
+  Future<void> _showGiftSelectionDialog(
+      List<Map<String, dynamic>> availableGifts,
+      String saleId,
+      String pharmacyId,
+      String userId,
+      String? pointOfSale,
+      GiftService giftService) async {
+    final l10n = AppLocalizations.of(context)!;
+    final formKey = GlobalKey<FormState>();
+    int quantityCount = 1;
+    String? nomClient;
+    String? prenomClient;
+    String? phoneNumber;
+    Map<String, dynamic>? selectedGiftData = availableGifts.first;
+
+    await showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Dialog(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+              backgroundColor: LightModeColors.lightSurface,
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: SingleChildScrollView(
+                  child: Form(
+                    key: formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: LightModeColors.lightPrimary.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: const Icon(Icons.card_giftcard, color: LightModeColors.lightPrimary, size: 24),
+                            ),
+                            const SizedBox(width: 12),
+                            Text(
+                              l10n.offerGift,
+                              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: LightModeColors.dashboardTextPrimary),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 24),
+                        
+                        Text(l10n.selectGift, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: LightModeColors.dashboardTextSecondary)),
+                        const SizedBox(height: 8),
+                        DropdownButtonFormField<Map<String, dynamic>>(
+                          value: selectedGiftData,
+                          isExpanded: true,
+                          decoration: InputDecoration(
+                            fillColor: LightModeColors.lightBackground,
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                          ),
+                          items: availableGifts.map((data) {
+                            final gift = data['gift'] as Gift;
+                            final totalStock = data['totalStock'] as int;
+                            return DropdownMenuItem(
+                              value: data,
+                              child: Text('${gift.title} (Stock: $totalStock)', style: const TextStyle(fontSize: 14)),
+                            );
+                          }).toList(),
+                          onChanged: (value) => setState(() => selectedGiftData = value),
+                        ),
+                        const SizedBox(height: 16),
+                        
+                        Text(l10n.quantity, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: LightModeColors.dashboardTextSecondary)),
+                        const SizedBox(height: 8),
+                        TextFormField(
+                          initialValue: '1',
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            fillColor: LightModeColors.lightBackground,
+                            hintText: l10n.giftQuantityHint,
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) return l10n.fieldRequired;
+                            final intVal = int.tryParse(value);
+                            if (intVal == null || intVal <= 0) return l10n.fieldInvalid;
+                            if (selectedGiftData != null) {
+                               final totalStock = selectedGiftData!['totalStock'] as int;
+                               if (intVal > totalStock) return l10n.insufficientStock;
+                            }
+                            return null;
+                          },
+                          onSaved: (value) => quantityCount = int.parse(value!),
+                        ),
+                        const SizedBox(height: 16),
+                        
+                        Text(l10n.clientInfoOptional, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: LightModeColors.dashboardTextSecondary)),
+                        const SizedBox(height: 8),
+                        TextFormField(
+                          decoration: InputDecoration(fillColor: LightModeColors.lightBackground, hintText: l10n.lastName, prefixIcon: const Icon(Icons.person_outline, size: 20)),
+                          onSaved: (value) => nomClient = value,
+                        ),
+                        const SizedBox(height: 12),
+                        TextFormField(
+                          decoration: InputDecoration(fillColor: LightModeColors.lightBackground, hintText: l10n.firstName, prefixIcon: const Icon(Icons.person_outline, size: 20)),
+                          onSaved: (value) => prenomClient = value,
+                        ),
+                        const SizedBox(height: 12),
+                        TextFormField(
+                          keyboardType: TextInputType.phone,
+                          decoration: InputDecoration(fillColor: LightModeColors.lightBackground, hintText: l10n.phone, prefixIcon: const Icon(Icons.phone_outlined, size: 20)),
+                          onSaved: (value) => phoneNumber = value,
+                        ),
+                        const SizedBox(height: 32),
+                        
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                style: TextButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 14)),
+                                child: Text(l10n.cancel, style: const TextStyle(color: LightModeColors.dashboardTextSecondary)),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: () async {
+                                  if (formKey.currentState!.validate()) {
+                                    formKey.currentState!.save();
+                                    if (selectedGiftData != null) {
+                                       final gift = selectedGiftData!['gift'] as Gift;
+                                       await _handleGiftSubmission(
+                                         saleId: saleId,
+                                         giftId: gift.id,
+                                         pharmacyId: pharmacyId,
+                                         quantity: quantityCount,
+                                         clientNom: nomClient,
+                                         clientPrenom: prenomClient,
+                                         clientPhone: phoneNumber,
+                                         userId: userId,
+                                         pointOfSale: pointOfSale,
+                                         giftService: giftService,
+                                         l10n: l10n,
+                                         context: context,
+                                       );
+                                    }
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: LightModeColors.lightPrimary,
+                                  padding: const EdgeInsets.symmetric(vertical: 14),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                                  elevation: 0,
+                                ),
+                                child: Text(l10n.confirm, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> _handleGiftSubmission(
+      {required String saleId,
+      required String giftId,
+      required String pharmacyId,
+      required int quantity,
+      required String? clientNom,
+      required String? clientPrenom,
+      required String? clientPhone,
+      required String userId,
+      required String? pointOfSale,
+      required GiftService giftService,
+      required AppLocalizations l10n,
+      required BuildContext context}) async {
+    try {
+      await giftService.saveGiftOperation(
+        saleId: saleId,
+        giftId: giftId,
+        pharmacyId: pharmacyId,
+        quantity: quantity,
+        clientNom: clientNom,
+        clientPrenom: clientPrenom,
+        clientPhone: clientPhone,
+        userId: userId,
+        pointOfSale: pointOfSale,
+      );
+      if (context.mounted) {
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(l10n.giftRecordedSuccess), backgroundColor: Colors.green));
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(l10n.errorOccurred(e.toString())), backgroundColor: Colors.red));
+      }
+    }
   }
 
   @override
