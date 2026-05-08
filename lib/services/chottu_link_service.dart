@@ -19,6 +19,8 @@ import 'package:novopharma/screens/formation_details_screen.dart';
 import 'package:novopharma/models/goal.dart';
 import 'package:novopharma/models/blog_post.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:novopharma/screens/challenges_list_screen.dart';
+import 'package:novopharma/screens/challenge_details_screen.dart';
 
 class ChottuLinkService {
   static final ChottuLinkService _instance = ChottuLinkService._internal();
@@ -177,6 +179,25 @@ class ChottuLinkService {
         context,
         MaterialPageRoute(builder: (context) => const SalesHistoryScreen()),
         (route) => false,
+      );
+    } else if (normalizedPath == '/challenges' || normalizedPath == '/challenge') {
+      final id = queryParams['id'];
+      if (id != null && id.isNotEmpty) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ChallengeDetailsScreen(challengeId: id)),
+        );
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const ChallengesListScreen()),
+        );
+      }
+    } else if (normalizedPath.startsWith('/challenge/id/')) {
+      final challengeId = normalizedPath.split('/').last;
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ChallengeDetailsScreen(challengeId: challengeId)),
       );
     } else if (normalizedPath == '/pluxee-credits') {
       Navigator.pushNamed(context, '/rewards');

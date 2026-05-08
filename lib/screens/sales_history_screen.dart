@@ -8,6 +8,8 @@ import 'package:provider/provider.dart';
 import 'package:novopharma/generated/l10n/app_localizations.dart';
 import 'package:novopharma/theme.dart';
 import 'package:novopharma/services/product_service.dart';
+import 'package:novopharma/services/gift_service.dart';
+import 'package:novopharma/models/gift.dart';
 
 class SalesHistoryScreen extends StatefulWidget {
   const SalesHistoryScreen({super.key});
@@ -161,6 +163,8 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
       return null;
     }
   }
+  
+  final GiftService _giftService = GiftService();
 
   @override
   Widget build(BuildContext context) {
@@ -405,12 +409,57 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                                     ),
                                   ),
                                   const SizedBox(height: 4),
+                                  FutureBuilder<Map<String, dynamic>?>(
+                                    future: _giftService.getGiftOperationBySaleId(sale.id),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData && snapshot.data != null) {
+                                        final giftId = snapshot.data!['giftId'];
+                                        final giftQty = snapshot.data!['quantity'] ?? 0;
+                                        
+                                        return FutureBuilder<Gift?>(
+                                          future: _giftService.getGiftById(giftId),
+                                          builder: (context, giftSnapshot) {
+                                            final giftTitle = giftSnapshot.data?.title ?? '...';
+                                            return Padding(
+                                              padding: const EdgeInsets.only(top: 4, bottom: 4),
+                                              child: Container(
+                                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                                decoration: BoxDecoration(
+                                                  color: LightModeColors.novoPharmaBlue.withOpacity(0.1),
+                                                  borderRadius: BorderRadius.circular(6),
+                                                  border: Border.all(color: LightModeColors.novoPharmaBlue.withOpacity(0.2)),
+                                                ),
+                                                child: Row(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    const Icon(Icons.card_giftcard_rounded, size: 12, color: LightModeColors.novoPharmaBlue),
+                                                    const SizedBox(width: 4),
+                                                    Flexible(
+                                                      child: Text(
+                                                        '$giftTitle (x$giftQty)',
+                                                        style: const TextStyle(
+                                                          fontSize: 11,
+                                                          fontWeight: FontWeight.bold,
+                                                          color: LightModeColors.novoPharmaBlue,
+                                                        ),
+                                                        overflow: TextOverflow.ellipsis,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      }
+                                      return const SizedBox.shrink();
+                                    },
+                                  ),
                                   Text(
                                     DateFormat.yMMMd().format(sale.saleDate),
                                     style: const TextStyle(
                                       fontSize: 13,
-                                      color: LightModeColors
-                                          .dashboardTextSecondary,
+                                      color: LightModeColors.dashboardTextSecondary,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
