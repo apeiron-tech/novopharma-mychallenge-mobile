@@ -56,13 +56,16 @@ class QuizProvider extends ChangeNotifier {
     }
   }
 
-  void startQuiz(Quiz quiz, VoidCallback onQuizEnd) {
+  void startQuiz(
+    Quiz quiz, {
+    required VoidCallback onQuizEnd,
+    VoidCallback? onQuestionTimerEnd,
+  }) {
     _activeQuizState = QuizState(
       quiz: quiz,
       quizTimeLeft: quiz.quizTimeLimitSeconds,
-      questionTimeLeft: quiz.questions.isNotEmpty
-          ? quiz.questions.first.timeLimitSeconds
-          : 0,
+      questionTimeLeft:
+          quiz.questions.isNotEmpty ? quiz.questions.first.timeLimitSeconds : 0,
     );
 
     _activeQuizState!.quizTimer = Timer.periodic(const Duration(seconds: 1), (
@@ -77,10 +80,10 @@ class QuizProvider extends ChangeNotifier {
       }
     });
 
-    _startQuestionTimer();
+    _startQuestionTimer(onQuestionTimerEnd);
   }
 
-  void _startQuestionTimer() {
+  void _startQuestionTimer(VoidCallback? onQuestionTimerEnd) {
     _activeQuizState?.questionTimer?.cancel();
     if (_activeQuizState == null ||
         _activeQuizState!.currentQuestionIndex >=
@@ -88,9 +91,8 @@ class QuizProvider extends ChangeNotifier {
       return;
     }
 
-    final question = _activeQuizState!
-        .quiz
-        .questions[_activeQuizState!.currentQuestionIndex];
+    final question =
+        _activeQuizState!.quiz.questions[_activeQuizState!.currentQuestionIndex];
     _activeQuizState!.questionTimeLeft = question.timeLimitSeconds;
     notifyListeners();
 
@@ -101,19 +103,24 @@ class QuizProvider extends ChangeNotifier {
           _activeQuizState!.questionTimeLeft--;
           notifyListeners();
         } else {
-          nextQuestion();
+          timer.cancel();
+          if (onQuestionTimerEnd != null) {
+            onQuestionTimerEnd();
+          } else {
+            nextQuestion();
+          }
         }
       },
     );
   }
 
-  void nextQuestion() {
+  void nextQuestion([VoidCallback? onQuestionTimerEnd]) {
     if (_activeQuizState == null) return;
 
     if (_activeQuizState!.currentQuestionIndex <
         _activeQuizState!.quiz.questions.length - 1) {
       _activeQuizState!.currentQuestionIndex++;
-      _startQuestionTimer();
+      _startQuestionTimer(onQuestionTimerEnd);
     } else {
       // Last question, stop timers
       _activeQuizState!.quizTimer?.cancel();

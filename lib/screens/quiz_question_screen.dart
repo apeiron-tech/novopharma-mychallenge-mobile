@@ -29,7 +29,11 @@ class _QuizQuestionScreenState extends State<QuizQuestionScreen> {
     _pageController = PageController();
     _quizProvider = Provider.of<QuizProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _quizProvider.startQuiz(widget.quiz, _submitQuiz);
+      _quizProvider.startQuiz(
+        widget.quiz,
+        onQuizEnd: _submitQuiz,
+        onQuestionTimerEnd: _nextPage,
+      );
     });
   }
 
@@ -49,7 +53,7 @@ class _QuizQuestionScreenState extends State<QuizQuestionScreen> {
         duration: const Duration(milliseconds: 400),
         curve: Curves.easeInOut,
       );
-      _quizProvider.nextQuestion();
+      _quizProvider.nextQuestion(_nextPage);
     } else {
       _submitQuiz();
     }

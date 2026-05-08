@@ -795,6 +795,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get explanation => 'Explanation';
 
   @override
+  String get noAnswerSelected => 'No answer selected';
+
+  @override
   String get chooseCorrectAnswer => 'Choose the correct answer';
 
   @override

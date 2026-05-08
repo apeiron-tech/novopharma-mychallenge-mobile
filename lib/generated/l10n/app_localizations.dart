@@ -1550,6 +1550,12 @@ abstract class AppLocalizations {
   /// **'Explanation'**
   String get explanation;
 
+  /// No description provided for @noAnswerSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'No answer selected'**
+  String get noAnswerSelected;
+
   /// No description provided for @chooseCorrectAnswer.
   ///
   /// In en, this message translates to:
