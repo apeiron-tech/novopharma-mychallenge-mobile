@@ -10,6 +10,8 @@ class Challenge {
   final DateTime endDate;
   final List<String> clientCategory;
   final List<String> productIds;
+  final bool hasSalePoints;
+  final double salePoints;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -23,6 +25,8 @@ class Challenge {
     required this.endDate,
     required this.clientCategory,
     required this.productIds,
+    required this.hasSalePoints,
+    required this.salePoints,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -39,6 +43,8 @@ class Challenge {
       endDate: (data['endDate'] as Timestamp?)?.toDate() ?? DateTime.now(),
       clientCategory: List<String>.from(data['clientCategory'] ?? []),
       productIds: List<String>.from(data['productIds'] ?? []),
+      hasSalePoints: data['hasSalePoints'] ?? false,
+      salePoints: (data['salePoints'] as num?)?.toDouble() ?? 0.0,
       createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
       updatedAt: (data['updatedAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
     );

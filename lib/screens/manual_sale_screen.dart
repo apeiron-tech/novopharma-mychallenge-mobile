@@ -8,6 +8,8 @@ import 'package:novopharma/controllers/auth_provider.dart';
 import 'package:novopharma/services/user_service.dart';
 import 'package:novopharma/services/pharmacy_service.dart';
 import 'package:novopharma/models/user_model.dart';
+import 'package:novopharma/models/challenge.dart';
+import 'package:novopharma/services/challenge_service.dart';
 import '../theme.dart';
 
 class ManualSaleScreen extends StatefulWidget {
@@ -21,8 +23,10 @@ class _ManualSaleScreenState extends State<ManualSaleScreen> {
   final ProductService _productService = ProductService();
   final UserService _userService = UserService();
   final PharmacyService _pharmacyService = PharmacyService();
+  final ChallengeService _challengeService = ChallengeService();
   List<Product> _allProducts = [];
   List<Product> _filteredProducts = [];
+  List<Challenge> _challenges = [];
   String? _pharmacyCategory;
   final TextEditingController _searchController = TextEditingController();
   bool _isLoading = true;
@@ -57,10 +61,12 @@ class _ManualSaleScreenState extends State<ManualSaleScreen> {
       final results = await Future.wait([
         _productService.getProducts(),
         _userService.getUser(userId),
+        _challengeService.getActiveChallengesList(),
       ]);
 
       final products = results[0] as List<Product>;
       final user = results[1] as UserModel?;
+      _challenges = results[2] as List<Challenge>;
 
       if (user != null && user.pharmacyId.isNotEmpty) {
         final pharmacies = await _pharmacyService.getPharmaciesByIds([
@@ -197,6 +203,23 @@ class _ManualSaleScreenState extends State<ManualSaleScreen> {
     );
   }
 
+  Challenge? _getMatchingChallenge(Product product) {
+    final now = DateTime.now();
+    final effectiveCategory = (_pharmacyCategory == null || _pharmacyCategory!.isEmpty) ? 'Pharmacie' : _pharmacyCategory!;
+
+    for (var challenge in _challenges) {
+      if (challenge.status == 'active' &&
+          challenge.hasSalePoints &&
+          challenge.productIds.contains(product.id) &&
+          !now.isBefore(challenge.startDate) &&
+          !now.isAfter(challenge.endDate) &&
+          challenge.clientCategory.contains(effectiveCategory)) {
+        return challenge;
+      }
+    }
+    return null;
+  }
+
   Widget _buildProductCard(Product product, AppLocalizations l10n) {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
@@ -305,23 +328,53 @@ class _ManualSaleScreenState extends State<ManualSaleScreen> {
                               ),
                             ),
                             const SizedBox(width: 12),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                color: LightModeColors.warningContainer,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Text(
-                                '${product.getPoints(_pharmacyCategory)} pts',
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: LightModeColors.warning,
-                                ),
-                              ),
+                            Builder(
+                              builder: (context) {
+                                final matchingChallenge = _getMatchingChallenge(product);
+                                final standardPoints = product.getPoints(_pharmacyCategory);
+                                final pointsToDisplay = matchingChallenge != null ? matchingChallenge.salePoints : standardPoints;
+                                
+                                return Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 4,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: matchingChallenge != null 
+                                        ? LightModeColors.success.withOpacity(0.12)
+                                        : LightModeColors.warningContainer,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      if (matchingChallenge != null) ...[
+                                        const Icon(Icons.celebration_outlined, color: LightModeColors.success, size: 14),
+                                        const SizedBox(width: 4),
+                                      ],
+                                      Text(
+                                        '${pointsToDisplay % 1 == 0 ? pointsToDisplay.toInt() : pointsToDisplay} pts',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          color: matchingChallenge != null ? LightModeColors.success : LightModeColors.warning,
+                                        ),
+                                      ),
+                                      if (matchingChallenge != null) ...[
+                                        const SizedBox(width: 4),
+                                        Text(
+                                          '(Std: $standardPoints)',
+                                          style: TextStyle(
+                                            fontSize: 10,
+                                            color: LightModeColors.success.withOpacity(0.7),
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ],
+                                    ],
+                                  ),
+                                );
+                              }
                             ),
                           ],
                         ),

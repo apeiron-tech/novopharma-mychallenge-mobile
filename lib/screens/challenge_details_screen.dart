@@ -129,7 +129,7 @@ class _ChallengeDetailsScreenState extends State<ChallengeDetailsScreen> {
                       const SizedBox(height: 24),
                       _buildSectionTitle("Produits du challenge"),
                       const SizedBox(height: 16),
-                      ...data.products.map((product) => _buildProductCard(context, product, data.userCategory)),
+                       ...data.products.map((product) => _buildProductCard(context, product, data.userCategory, challenge)),
                       const SizedBox(height: 40),
                     ],
                   ),
@@ -309,8 +309,18 @@ class _ChallengeDetailsScreenState extends State<ChallengeDetailsScreen> {
     );
   }
 
-  Widget _buildProductCard(BuildContext context, Product product, String? category) {
-    final points = product.getPoints(category);
+  Widget _buildProductCard(BuildContext context, Product product, String? category, Challenge challenge) {
+    final now = DateTime.now();
+    double points = product.getPoints(category);
+    
+    // Check if we should use challenge points
+    if (challenge.status == 'active' && 
+        challenge.hasSalePoints && 
+        !now.isBefore(challenge.startDate) && 
+        !now.isAfter(challenge.endDate) &&
+        (challenge.clientCategory.contains(category) || (category == 'Pharmacie' && challenge.clientCategory.contains('')))) {
+      points = challenge.salePoints;
+    }
     
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -387,7 +397,7 @@ class _ChallengeDetailsScreenState extends State<ChallengeDetailsScreen> {
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
-                          "${points.toStringAsFixed(0)} pts",
+                          "${points % 1 == 0 ? points.toInt() : points} pts",
                           style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,

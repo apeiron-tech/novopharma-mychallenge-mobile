@@ -19,6 +19,8 @@ import 'package:novopharma/services/sale_service.dart';
 import 'package:novopharma/services/gift_service.dart';
 import 'package:novopharma/models/gift.dart';
 import 'package:novopharma/models/gift_assignment.dart';
+import 'package:novopharma/models/challenge.dart';
+import 'package:novopharma/services/challenge_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../theme.dart';
 
@@ -29,6 +31,7 @@ class _ProductScreenData {
   final List<Goal> allGoals;
   final UserModel? user;
   final Pharmacy? pharmacy;
+  final List<Challenge> challenges;
 
   _ProductScreenData({
     this.product,
@@ -36,6 +39,7 @@ class _ProductScreenData {
     this.allGoals = const [],
     this.user,
     this.pharmacy,
+    this.challenges = const [],
   });
 }
 
@@ -55,6 +59,7 @@ class _ProductScreenState extends State<ProductScreen> {
   final UserService _userService = UserService();
   final PharmacyService _pharmacyService = PharmacyService();
   final SaleService _saleService = SaleService();
+  final ChallengeService _challengeService = ChallengeService();
 
   late Future<_ProductScreenData> _dataFuture;
   final ValueNotifier<int> _quantityNotifier = ValueNotifier(1);
@@ -86,12 +91,13 @@ class _ProductScreenState extends State<ProductScreen> {
     final userId = authProvider.firebaseUser?.uid;
     if (userId == null) return _ProductScreenData(product: product);
 
-    final [recommendedProducts, allGoals, user] = await Future.wait([
+    final [recommendedProducts, allGoals, user, challenges] = await Future.wait([
       product.recommendedWith.isNotEmpty
           ? _productService.getProductsByIds(product.recommendedWith)
           : Future.value(<Product>[]),
       _goalService.getUserGoals(),
       _userService.getUser(userId),
+      _challengeService.getActiveChallengesList(),
     ]);
 
     Pharmacy? pharmacy;
@@ -111,13 +117,48 @@ class _ProductScreenState extends State<ProductScreen> {
       allGoals: allGoals as List<Goal>,
       user: userModel,
       pharmacy: pharmacy,
+      challenges: challenges as List<Challenge>,
     );
   }
 
-  Future<void> _submitSale(Product product, UserModel user, String? pharmacyCategory) async {
+  double _getEffectivePoints(Product product, List<Challenge> challenges, String? pharmacyCategory) {
+    final now = DateTime.now();
+    final effectiveCategory = (pharmacyCategory == null || pharmacyCategory.isEmpty) ? 'Pharmacie' : pharmacyCategory;
+
+    for (var challenge in challenges) {
+      if (challenge.status == 'active' &&
+          challenge.hasSalePoints &&
+          challenge.productIds.contains(product.id) &&
+          !now.isBefore(challenge.startDate) &&
+          !now.isAfter(challenge.endDate) &&
+          challenge.clientCategory.contains(effectiveCategory)) {
+        return challenge.salePoints;
+      }
+    }
+    return product.getPoints(pharmacyCategory);
+  }
+
+  Challenge? _getMatchingChallenge(Product product, List<Challenge> challenges, String? pharmacyCategory) {
+    final now = DateTime.now();
+    final effectiveCategory = (pharmacyCategory == null || pharmacyCategory.isEmpty) ? 'Pharmacie' : pharmacyCategory;
+
+    for (var challenge in challenges) {
+      if (challenge.status == 'active' &&
+          challenge.hasSalePoints &&
+          challenge.productIds.contains(product.id) &&
+          !now.isBefore(challenge.startDate) &&
+          !now.isAfter(challenge.endDate) &&
+          challenge.clientCategory.contains(effectiveCategory)) {
+        return challenge;
+      }
+    }
+    return null;
+  }
+
+  Future<void> _submitSale(Product product, UserModel user, String? pharmacyCategory, List<Challenge> challenges) async {
     final l10n = AppLocalizations.of(context)!;
     final int quantity = _quantityNotifier.value;
-    final double unitPoints = product.getPoints(pharmacyCategory);
+    final double unitPoints = _getEffectivePoints(product, challenges, pharmacyCategory);
     final double totalPrice = product.price * quantity;
 
     String? createdSaleId;
@@ -597,6 +638,7 @@ class _ProductScreenState extends State<ProductScreen> {
                         l10n,
                         product,
                         pharmacy.clientCategory,
+                        data.challenges,
                       ),
                       const SizedBox(height: 24),
 
@@ -668,6 +710,7 @@ class _ProductScreenState extends State<ProductScreen> {
                 product,
                 user,
                 pharmacy.clientCategory,
+                data.challenges,
               ),
             ],
           );
@@ -775,7 +818,10 @@ class _ProductScreenState extends State<ProductScreen> {
     AppLocalizations l10n,
     Product product,
     String? pharmacyCategory,
+    List<Challenge> challenges,
   ) {
+    final activeChallenge = _getMatchingChallenge(product, challenges, pharmacyCategory);
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -910,24 +956,71 @@ class _ProductScreenState extends State<ProductScreen> {
               ValueListenableBuilder<int>(
                 valueListenable: _quantityNotifier,
                 builder: (context, quantity, child) {
-                  final pointsEarned =
-                      product.getPoints(pharmacyCategory) * quantity;
+                  final currentChallenge = _getMatchingChallenge(product, challenges, pharmacyCategory);
+                  final standardPoints = product.getPoints(pharmacyCategory);
+                  final pointsPerUnit = currentChallenge != null ? currentChallenge.salePoints : standardPoints;
+                  final pointsEarned = pointsPerUnit * quantity;
+                  
                   // Format to remove trailing .0 for whole numbers
                   final pointsText = pointsEarned % 1 == 0
                       ? pointsEarned.toInt().toString()
                       : pointsEarned.toString();
-                  return Text(
-                    pointsText,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: LightModeColors.success,
-                    ),
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        pointsText,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: LightModeColors.success,
+                        ),
+                      ),
+                      if (currentChallenge != null)
+                        Text(
+                          "($pointsPerUnit pts/u vs Standard: $standardPoints)",
+                          style: const TextStyle(
+                            fontSize: 11,
+                            color: LightModeColors.success,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                    ],
                   );
                 },
               ),
             ],
           ),
+          // Optional: Matching Challenge Badge
+          if (activeChallenge != null) ...[
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                color: LightModeColors.success.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: LightModeColors.success.withOpacity(0.2)),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.celebration_outlined, color: LightModeColors.success, size: 16),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      "Challenge: ${activeChallenge!.title}",
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: LightModeColors.success,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -1218,6 +1311,7 @@ class _ProductScreenState extends State<ProductScreen> {
     Product product,
     UserModel user,
     String? pharmacyCategory,
+    List<Challenge> challenges,
   ) {
     return Container(
       padding: const EdgeInsets.all(20),
@@ -1275,7 +1369,7 @@ class _ProductScreenState extends State<ProductScreen> {
             const SizedBox(height: 16), // Space between price and button
             // Button row at the bottom, centered
             ElevatedButton(
-              onPressed: () => _submitSale(product, user, pharmacyCategory),
+              onPressed: () => _submitSale(product, user, pharmacyCategory, challenges),
               style: ElevatedButton.styleFrom(
                 backgroundColor: LightModeColors.lightError,
                 foregroundColor: LightModeColors.lightOnError,
