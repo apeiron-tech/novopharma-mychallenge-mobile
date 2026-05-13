@@ -330,6 +330,7 @@
     "incorrectAnswer": "Mauvaise réponse",
     "yourAnswer": "Votre réponse",
     "explanation": "Explication",
+    "noAnswerSelected": "Aucune réponse sélectionnée",
     "chooseCorrectAnswer": "Choisissez la bonne réponse",
     "chooseCorrectAnswers": "Choisissez les bonnes réponses",
     "myInformation": "Mes informations",

@@ -803,6 +803,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get explanation => 'Explication';
 
   @override
+  String get noAnswerSelected => 'Aucune réponse sélectionnée';
+
+  @override
   String get chooseCorrectAnswer => 'Choisissez la bonne réponse';
 
   @override

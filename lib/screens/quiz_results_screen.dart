@@ -182,6 +182,17 @@ class _AnswerReviewCard extends StatelessWidget {
               AppLocalizations.of(context)!.questionNumber(questionNumber, question.text),
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
+            if (userAnswers.isEmpty) ...[
+              const SizedBox(height: 8),
+              Text(
+                AppLocalizations.of(context)!.noAnswerSelected,
+                style: const TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
+              ),
+            ],
             const SizedBox(height: 16),
             ...List.generate(question.options.length, (index) {
               final isUserAnswer = userAnswers.contains(index);
