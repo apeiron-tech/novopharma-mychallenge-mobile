@@ -20,6 +20,19 @@ class ChallengeService {
     });
   }
 
+  Future<List<Challenge>> getActiveChallengesList() async {
+    try {
+      final snapshot = await _firestore
+          .collection(_collection)
+          .where('status', isEqualTo: 'active')
+          .get();
+      return snapshot.docs.map((doc) => Challenge.fromFirestore(doc)).toList();
+    } catch (e) {
+      print('Error fetching active challenges list: $e');
+      return [];
+    }
+  }
+
   Future<Challenge?> getChallengeById(String id) async {
     try {
       final doc = await _firestore.collection(_collection).doc(id).get();
