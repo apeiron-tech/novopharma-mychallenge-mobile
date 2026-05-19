@@ -134,7 +134,9 @@ class PluxeeRedemptionService {
             print(
               '📱 [PluxeeService] Received ${querySnapshot.docs.length} documents from Firestore',
             );
-            final requests = querySnapshot.docs.map((doc) {
+            final requests = querySnapshot.docs
+                .where((doc) => (doc.data())['status'] != 'DELETED')
+                .map((doc) {
               print(
                 '📱 [PluxeeService] Document ID: ${doc.id}, Data: ${doc.data()}',
               );

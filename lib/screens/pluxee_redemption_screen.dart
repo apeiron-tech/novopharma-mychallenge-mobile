@@ -54,7 +54,7 @@ class _PluxeeRedemptionScreenState extends State<PluxeeRedemptionScreen> {
         ),
         child: StatefulBuilder(
           builder: (context, setModalState) {
-            final availablePoints = currentUser.availablePoints;
+            final availablePoints = currentUser.points - pluxeeProvider.totalPendingPoints;
             final pluxeeCredits = pluxeeProvider.calculatePluxeeCredits(
               _selectedPoints,
             );
@@ -124,13 +124,13 @@ class _PluxeeRedemptionScreenState extends State<PluxeeRedemptionScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    l10n.minimumRedemptionAmount(150),
+                    l10n.minimumRedemptionAmount(50),
                     style: GoogleFonts.inter(
                       fontSize: 12,
-                      color: _selectedPoints > 0 && _selectedPoints < 150
+                      color: _selectedPoints > 0 && _selectedPoints < 50
                           ? LightModeColors.lightError
                           : LightModeColors.dashboardTextSecondary,
-                      fontWeight: _selectedPoints > 0 && _selectedPoints < 150
+                      fontWeight: _selectedPoints > 0 && _selectedPoints < 50
                           ? FontWeight.w600
                           : FontWeight.normal,
                     ),
@@ -187,19 +187,25 @@ class _PluxeeRedemptionScreenState extends State<PluxeeRedemptionScreen> {
                             height: 50,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: LightModeColors.novoPharmaBlue.withOpacity(0.3)),
+                              border: Border.all(
+                                color: LightModeColors.novoPharmaBlue
+                                    .withOpacity(0.3),
+                              ),
                             ),
                             child: OutlinedButton(
                               onPressed: () => Navigator.pop(ctx),
                               style: OutlinedButton.styleFrom(
                                 backgroundColor: Colors.transparent,
-                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12,
+                                ),
                                 side: BorderSide.none,
                                 foregroundColor: LightModeColors.novoPharmaBlue,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                overlayColor: LightModeColors.novoPharmaBlue.withOpacity(0.1),
+                                overlayColor: LightModeColors.novoPharmaBlue
+                                    .withOpacity(0.1),
                               ),
                               child: Text(
                                 l10n.cancel,
@@ -219,10 +225,14 @@ class _PluxeeRedemptionScreenState extends State<PluxeeRedemptionScreen> {
                             height: 50,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
-                              boxShadow: _selectedPoints >= 150 && _selectedPoints <= availablePoints && !_isSubmitting
+                              boxShadow:
+                                  _selectedPoints >= 50 &&
+                                      _selectedPoints <= availablePoints &&
+                                      !_isSubmitting
                                   ? [
                                       BoxShadow(
-                                        color: LightModeColors.novoPharmaBlue.withOpacity(0.3),
+                                        color: LightModeColors.novoPharmaBlue
+                                            .withOpacity(0.3),
                                         blurRadius: 8,
                                         offset: const Offset(0, 4),
                                       ),
@@ -231,14 +241,16 @@ class _PluxeeRedemptionScreenState extends State<PluxeeRedemptionScreen> {
                             ),
                             child: ElevatedButton(
                               onPressed:
-                                  (_selectedPoints >= 150 &&
+                                  (_selectedPoints >= 50 &&
                                       _selectedPoints <= availablePoints &&
                                       !_isSubmitting)
                                   ? () async {
                                       setState(() => _isSubmitting = true);
 
                                       final error = await pluxeeProvider
-                                          .createRedemptionRequest(_selectedPoints);
+                                          .createRedemptionRequest(
+                                            _selectedPoints,
+                                          );
 
                                       setState(() => _isSubmitting = false);
 
@@ -253,8 +265,11 @@ class _PluxeeRedemptionScreenState extends State<PluxeeRedemptionScreen> {
                                               content: Text(
                                                 l10n.requestSubmittedSuccess,
                                               ),
-                                              backgroundColor: LightModeColors.success,
-                                              duration: const Duration(seconds: 3),
+                                              backgroundColor:
+                                                  LightModeColors.success,
+                                              duration: const Duration(
+                                                seconds: 3,
+                                              ),
                                             ),
                                           );
                                         } else {
@@ -263,7 +278,8 @@ class _PluxeeRedemptionScreenState extends State<PluxeeRedemptionScreen> {
                                           ).showSnackBar(
                                             SnackBar(
                                               content: Text(error),
-                                              backgroundColor: LightModeColors.lightError,
+                                              backgroundColor:
+                                                  LightModeColors.lightError,
                                             ),
                                           );
                                         }
@@ -271,22 +287,38 @@ class _PluxeeRedemptionScreenState extends State<PluxeeRedemptionScreen> {
                                     }
                                   : null,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: _selectedPoints >= 150 && _selectedPoints <= availablePoints && !_isSubmitting
+                                backgroundColor:
+                                    _selectedPoints >= 50 &&
+                                        _selectedPoints <= availablePoints &&
+                                        !_isSubmitting
                                     ? LightModeColors.novoPharmaBlue
                                     : Colors.grey.shade400,
                                 foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12,
+                                ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                shadowColor: _selectedPoints >= 150 && _selectedPoints <= availablePoints && !_isSubmitting
-                                    ? LightModeColors.novoPharmaBlue.withOpacity(0.3)
+                                shadowColor:
+                                    _selectedPoints >= 50 &&
+                                        _selectedPoints <= availablePoints &&
+                                        !_isSubmitting
+                                    ? LightModeColors.novoPharmaBlue
+                                          .withOpacity(0.3)
                                     : Colors.transparent,
-                                elevation: _selectedPoints >= 150 && _selectedPoints <= availablePoints && !_isSubmitting
+                                elevation:
+                                    _selectedPoints >= 50 &&
+                                        _selectedPoints <= availablePoints &&
+                                        !_isSubmitting
                                     ? 4.0
                                     : 0.0,
-                                overlayColor: _selectedPoints >= 150 && _selectedPoints <= availablePoints && !_isSubmitting
-                                    ? LightModeColors.novoPharmaBlue.withOpacity(0.2)
+                                overlayColor:
+                                    _selectedPoints >= 50 &&
+                                        _selectedPoints <= availablePoints &&
+                                        !_isSubmitting
+                                    ? LightModeColors.novoPharmaBlue
+                                          .withOpacity(0.2)
                                     : Colors.grey.shade400.withOpacity(0.2),
                               ),
                               child: _isSubmitting
@@ -296,9 +328,10 @@ class _PluxeeRedemptionScreenState extends State<PluxeeRedemptionScreen> {
                                         width: 20,
                                         child: CircularProgressIndicator(
                                           strokeWidth: 2,
-                                          valueColor: AlwaysStoppedAnimation<Color>(
-                                            Colors.white,
-                                          ),
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                                Colors.white,
+                                              ),
                                         ),
                                       ),
                                     )
@@ -371,8 +404,8 @@ class _PluxeeRedemptionScreenState extends State<PluxeeRedemptionScreen> {
             return Center(child: Text(l10n.signIn));
           }
 
-          final availablePoints = currentUser.availablePoints;
-          final pendingPoints = currentUser.pendingPluxeePoints;
+          final availablePoints = currentUser.points - pluxeeProvider.totalPendingPoints;
+          final pendingPoints = pluxeeProvider.totalPendingPoints;
 
           return SingleChildScrollView(
             child: Column(
@@ -380,7 +413,7 @@ class _PluxeeRedemptionScreenState extends State<PluxeeRedemptionScreen> {
                 // Header Section with Dark Gradient
                 Container(
                   width: double.infinity,
-      
+
                   padding: const EdgeInsets.symmetric(
                     horizontal: 24,
                     vertical: 40,
@@ -393,10 +426,14 @@ class _PluxeeRedemptionScreenState extends State<PluxeeRedemptionScreen> {
                           vertical: 8,
                         ),
                         decoration: BoxDecoration(
-                          color: LightModeColors.lightOnPrimary.withOpacity(0.1),
+                          color: LightModeColors.lightOnPrimary.withOpacity(
+                            0.1,
+                          ),
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
-                            color: LightModeColors.lightOnPrimary.withOpacity(0.2),
+                            color: LightModeColors.lightOnPrimary.withOpacity(
+                              0.2,
+                            ),
                             width: 1,
                           ),
                         ),
@@ -427,7 +464,7 @@ class _PluxeeRedemptionScreenState extends State<PluxeeRedemptionScreen> {
                             horizontal: 20,
                             vertical: 10,
                           ),
-                          
+
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -514,7 +551,6 @@ class _PluxeeRedemptionScreenState extends State<PluxeeRedemptionScreen> {
                           color: LightModeColors.dashboardTextPrimary,
                           fontSize: 24,
                           fontWeight: FontWeight.w800,
-                          
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -526,16 +562,15 @@ class _PluxeeRedemptionScreenState extends State<PluxeeRedemptionScreen> {
                         decoration: BoxDecoration(
                           color: LightModeColors.warning,
                           borderRadius: BorderRadius.circular(24),
-                         
                         ),
                         child: Column(
                           children: [
                             Container(
                               padding: const EdgeInsets.all(20),
                               decoration: BoxDecoration(
-                                color: LightModeColors.lightOnPrimary.withOpacity(0.2),
+                                color: LightModeColors.lightOnPrimary
+                                    .withOpacity(0.2),
                                 shape: BoxShape.circle,
-                                
                               ),
                               child: const Icon(
                                 Icons.card_giftcard_rounded,
@@ -557,17 +592,23 @@ class _PluxeeRedemptionScreenState extends State<PluxeeRedemptionScreen> {
                             const SizedBox(height: 4),
                             _buildInfoStep('2', l10n.submitForReview),
                             const SizedBox(height: 4),
-                            _buildInfoStep('3', Localizations.localeOf(context).languageCode == 'fr' 
-                                ? 'Votre demande sera prise en charge et une réponse vous sera communiquée sous 72 heures ouvrées.' 
-                                : 'Your request will be processed and a response will be provided within 72 business hours.'),
+                            _buildInfoStep(
+                              '3',
+                              Localizations.localeOf(context).languageCode ==
+                                      'fr'
+                                  ? 'Votre demande sera prise en charge et une réponse vous sera communiquée sous 72 heures ouvrées.'
+                                  : 'Your request will be processed and a response will be provided within 72 business hours.',
+                            ),
                             const SizedBox(height: 20),
                             Container(
                               padding: const EdgeInsets.all(16),
                               decoration: BoxDecoration(
-                                color: LightModeColors.lightOnPrimary.withOpacity(0.1),
+                                color: LightModeColors.lightOnPrimary
+                                    .withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(16),
                                 border: Border.all(
-                                  color: LightModeColors.lightOnPrimary.withOpacity(0.2),
+                                  color: LightModeColors.lightOnPrimary
+                                      .withOpacity(0.2),
                                   width: 1.5,
                                 ),
                               ),
@@ -577,7 +618,8 @@ class _PluxeeRedemptionScreenState extends State<PluxeeRedemptionScreen> {
                                   Container(
                                     padding: const EdgeInsets.all(8),
                                     decoration: BoxDecoration(
-                                      color: LightModeColors.lightOnPrimary.withOpacity(0.2),
+                                      color: LightModeColors.lightOnPrimary
+                                          .withOpacity(0.2),
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                     child: const Icon(
@@ -611,11 +653,8 @@ class _PluxeeRedemptionScreenState extends State<PluxeeRedemptionScreen> {
                       // Redeem Button with Blue Gradient
                       Container(
                         decoration: BoxDecoration(
-                          
-                          color:  LightModeColors.lightError,
+                          color: LightModeColors.lightError,
                           borderRadius: BorderRadius.circular(16),
-                          
-                              
                         ),
                         child: Material(
                           color: Colors.transparent,
@@ -679,7 +718,6 @@ class _PluxeeRedemptionScreenState extends State<PluxeeRedemptionScreen> {
             decoration: BoxDecoration(
               color: LightModeColors.lightOnPrimary.withOpacity(0.2),
               shape: BoxShape.circle,
-              
             ),
             child: Center(
               child: Text(

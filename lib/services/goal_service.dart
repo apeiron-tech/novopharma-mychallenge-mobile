@@ -88,6 +88,10 @@ class GoalService {
       final Map<String, Goal> relevantGoals = {};
       for (final snapshot in querySnapshots) {
         for (final doc in snapshot.docs) {
+          final data = doc.data();
+          if (data['status'] == 'DELETED') {
+            continue;
+          }
           relevantGoals[doc.id] = Goal.fromFirestore(doc);
         }
       }

@@ -70,6 +70,12 @@ class ActualiteProvider extends ChangeNotifier {
                         );
                         return null;
                       }
+                      if (data['status'] == 'DELETED') {
+                        print(
+                          '[ActualiteProvider] Document ${doc.id} is DELETED',
+                        );
+                        return null;
+                      }
 
                       print('[ActualiteProvider] Document data: $data');
                       print(

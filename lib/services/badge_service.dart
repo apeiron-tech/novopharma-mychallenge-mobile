@@ -20,6 +20,7 @@ class BadgeService {
           .get();
 
       final badges = querySnapshot.docs
+          .where((doc) => (doc.data() as Map<String, dynamic>)['status'] != 'DELETED')
           .map((doc) => Badge.fromFirestore(doc))
           .where(
             (badge) =>
@@ -129,6 +130,7 @@ class BadgeService {
       return _firestore.collection(_collection).orderBy('name').snapshots().map(
         (querySnapshot) {
           return querySnapshot.docs
+              .where((doc) => (doc.data() as Map<String, dynamic>)['status'] != 'DELETED')
               .map((doc) => Badge.fromFirestore(doc))
               .toList();
         },

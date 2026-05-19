@@ -118,6 +118,7 @@ class SaleService {
       final querySnapshot = await query.get();
       final List<Sale> sales = querySnapshot.docs
           .map((doc) => Sale.fromFirestore(doc))
+          .where((sale) => sale.status != 'DELETED')
           .toList();
       return sales;
     } catch (e) {
@@ -132,7 +133,10 @@ class SaleService {
         .where('userId', isEqualTo: userId)
         .snapshots()
         .map((snapshot) {
-          return snapshot.docs.map((doc) => Sale.fromFirestore(doc)).toList();
+          return snapshot.docs
+              .map((doc) => Sale.fromFirestore(doc))
+              .where((sale) => sale.status != 'DELETED')
+              .toList();
         });
   }
 }
