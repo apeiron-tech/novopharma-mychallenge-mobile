@@ -16,6 +16,7 @@ class BlogPostService {
           .snapshots()
           .map((querySnapshot) {
             return querySnapshot.docs
+                .where((doc) => (doc.data() as Map<String, dynamic>)['status'] != 'DELETED')
                 .map((doc) => BlogPost.fromFirestore(doc))
                 .toList();
           });
@@ -35,6 +36,7 @@ class BlogPostService {
           .snapshots()
           .map((querySnapshot) {
             return querySnapshot.docs
+                .where((doc) => (doc.data() as Map<String, dynamic>)['status'] != 'DELETED')
                 .map((doc) => BlogPost.fromFirestore(doc))
                 .toList();
           });
@@ -55,6 +57,7 @@ class BlogPostService {
           .snapshots()
           .map((querySnapshot) {
             return querySnapshot.docs
+                .where((doc) => (doc.data() as Map<String, dynamic>)['status'] != 'DELETED')
                 .map((doc) => BlogPost.fromFirestore(doc))
                 .toList();
           });
@@ -69,6 +72,10 @@ class BlogPostService {
     try {
       final doc = await _firestore.collection(_collection).doc(postId).get();
       if (doc.exists) {
+        final data = doc.data() as Map<String, dynamic>?;
+        if (data != null && data['status'] == 'DELETED') {
+          return null;
+        }
         return BlogPost.fromFirestore(doc);
       }
       return null;
@@ -89,7 +96,12 @@ class BlogPostService {
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
-        return BlogPost.fromFirestore(querySnapshot.docs.first);
+        final doc = querySnapshot.docs.first;
+        final data = doc.data() as Map<String, dynamic>?;
+        if (data != null && data['status'] == 'DELETED') {
+          return null;
+        }
+        return BlogPost.fromFirestore(doc);
       }
       return null;
     } catch (e) {
@@ -109,6 +121,7 @@ class BlogPostService {
           .snapshots()
           .map((querySnapshot) {
             return querySnapshot.docs
+                .where((doc) => (doc.data() as Map<String, dynamic>)['status'] != 'DELETED')
                 .map((doc) => BlogPost.fromFirestore(doc))
                 .toList();
           });
@@ -129,6 +142,7 @@ class BlogPostService {
           .snapshots()
           .map((querySnapshot) {
             return querySnapshot.docs
+                .where((doc) => (doc.data() as Map<String, dynamic>)['status'] != 'DELETED')
                 .map((doc) => BlogPost.fromFirestore(doc))
                 .where(
                   (post) => post.isActive,
@@ -154,6 +168,7 @@ class BlogPostService {
           .get();
 
       return querySnapshot.docs
+          .where((doc) => (doc.data() as Map<String, dynamic>)['status'] != 'DELETED')
           .map((doc) => BlogPost.fromFirestore(doc))
           .where(
             (post) =>
