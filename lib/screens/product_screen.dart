@@ -155,54 +155,355 @@ class _ProductScreenState extends State<ProductScreen> {
     return null;
   }
 
+  Future<bool> _showSaleConfirmationDialog({
+    required String productName,
+    required int quantity,
+    required double totalPrice,
+  }) async {
+    final l10n = AppLocalizations.of(context)!;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        backgroundColor: LightModeColors.lightSurface,
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: LightModeColors.lightPrimary.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.check_circle_outline,
+                  color: LightModeColors.lightPrimary,
+                  size: 48,
+                ),
+              ),
+              const SizedBox(height: 24),
+              const Text(
+                "Confirmer la vente",
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: LightModeColors.dashboardTextPrimary,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: LightModeColors.lightBackground,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Produit : ",
+                          style: TextStyle(fontWeight: FontWeight.bold, color: LightModeColors.dashboardTextSecondary),
+                        ),
+                        Expanded(
+                          child: Text(
+                            productName,
+                            style: const TextStyle(color: LightModeColors.dashboardTextPrimary),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        const Text(
+                          "Quantité : ",
+                          style: TextStyle(fontWeight: FontWeight.bold, color: LightModeColors.dashboardTextSecondary),
+                        ),
+                        Text(
+                          "$quantity",
+                          style: const TextStyle(color: LightModeColors.dashboardTextPrimary),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        const Text(
+                          "Prix total : ",
+                          style: TextStyle(fontWeight: FontWeight.bold, color: LightModeColors.dashboardTextSecondary),
+                        ),
+                        Text(
+                          "${totalPrice.toStringAsFixed(3)} TND",
+                          style: const TextStyle(fontWeight: FontWeight.bold, color: LightModeColors.lightPrimary),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+              const Text(
+                "Voulez-vous enregistrer cette vente ?",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 15,
+                  color: LightModeColors.dashboardTextSecondary,
+                ),
+              ),
+              const SizedBox(height: 24),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.pop(context, false),
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(color: LightModeColors.lightOutline),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                      ),
+                      child: Text(
+                        l10n.cancel,
+                        style: const TextStyle(color: LightModeColors.dashboardTextSecondary),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () => Navigator.pop(context, true),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: LightModeColors.lightPrimary,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                        elevation: 0,
+                      ),
+                      child: const Text(
+                        "Confirmer",
+                        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    return confirmed ?? false;
+  }
+
   Future<void> _submitSale(Product product, UserModel user, String? pharmacyCategory, List<Challenge> challenges) async {
     final l10n = AppLocalizations.of(context)!;
     final int quantity = _quantityNotifier.value;
     final double unitPoints = _getEffectivePoints(product, challenges, pharmacyCategory);
     final double totalPrice = product.price * quantity;
 
-    String? createdSaleId;
-
-    if (widget.sale != null) {
-      // Update existing sale
-      final updatedSale = Sale(
-        id: widget.sale!.id,
-        userId: user.uid,
-        pharmacyId: user.pharmacyId,
-        productId: product.id,
-        productNameSnapshot: product.name,
-        quantity: quantity,
-        pointsEarned: unitPoints * quantity,
-        saleDate: widget.sale!.saleDate, // Keep original sale date
-        totalPrice: totalPrice,
-        status: widget.sale!.status, // Keep original status
-      );
-      Provider.of<SalesHistoryProvider>(
-        context,
-        listen: false,
-      ).updateSale(widget.sale!, updatedSale);
-      createdSaleId = widget.sale!.id;
-    } else {
-      // Create new sale
-      final newSale = Sale(
-        id: '', // Firestore will generate ID
-        userId: user.uid,
-        pharmacyId: user.pharmacyId,
-        productId: product.id,
-        productNameSnapshot: product.name,
-        quantity: quantity,
-        pointsEarned: unitPoints * quantity,
-        saleDate: DateTime.now(),
-        totalPrice: totalPrice,
-        status: 'pending',
-      );
-      createdSaleId = await _saleService.createSale(newSale);
+    Future<String> performSave(int saveQty, double savePrice) async {
+      String saleId;
+      if (widget.sale != null) {
+        // Update existing sale
+        final updatedSale = Sale(
+          id: widget.sale!.id,
+          userId: user.uid,
+          pharmacyId: user.pharmacyId,
+          productId: product.id,
+          productNameSnapshot: product.name,
+          quantity: saveQty,
+          pointsEarned: unitPoints * saveQty,
+          saleDate: widget.sale!.saleDate, // Keep original sale date
+          totalPrice: savePrice,
+          status: widget.sale!.status, // Keep original status
+        );
+        Provider.of<SalesHistoryProvider>(
+          context,
+          listen: false,
+        ).updateSale(widget.sale!, updatedSale);
+        saleId = widget.sale!.id;
+      } else {
+        // Create new sale
+        final newSale = Sale(
+          id: '', // Firestore will generate ID
+          userId: user.uid,
+          pharmacyId: user.pharmacyId,
+          productId: product.id,
+          productNameSnapshot: product.name,
+          quantity: saveQty,
+          pointsEarned: unitPoints * saveQty,
+          saleDate: DateTime.now(),
+          totalPrice: savePrice,
+          status: 'pending',
+        );
+        saleId = await _saleService.createSale(newSale);
+      }
+      return saleId;
     }
 
     // Check for gifts if it's a new sale or existing sale
     final giftService = GiftService();
     final assignments = await giftService.getAssignmentsForPharmacy(user.pharmacyId);
-    
+
+    // 1. Check for Trade Offer Reminders
+    int finalQuantity = quantity;
+    double finalTotalPrice = totalPrice;
+    Gift? potentialTradeGift;
+    int? neededQty;
+    int? targetQty;
+    for (var assignment in assignments) {
+      final gift = await giftService.getGiftById(assignment.giftId);
+      if (gift != null && gift.status == 'active') {
+        bool matchesProduct = true;
+        if (gift.listProducts.isNotEmpty && !gift.listProducts.contains(product.id)) {
+          matchesProduct = false;
+        }
+        if (matchesProduct && gift.productCategory.isNotEmpty && !gift.productCategory.contains(product.category)) {
+          matchesProduct = false;
+        }
+        if (matchesProduct && gift.productMarque.isNotEmpty && !gift.productMarque.contains(product.marque)) {
+          matchesProduct = false;
+        }
+
+        if (matchesProduct) {
+          if (gift.thresholdType == 'products') {
+            final minQty = gift.minProductsCount ?? 1;
+            if (quantity < minQty) {
+              potentialTradeGift = gift;
+              neededQty = minQty - quantity;
+              targetQty = minQty;
+              break; // Just prompt for the first matching offer found
+            }
+          } else if (gift.thresholdType == 'amount') {
+            final minAmt = gift.minPurchaseAmount ?? 0.0;
+            if (totalPrice < minAmt && product.price > 0) {
+              final minQty = (minAmt / product.price).ceil();
+              if (quantity < minQty) {
+                potentialTradeGift = gift;
+                neededQty = minQty - quantity;
+                targetQty = minQty;
+                break; // Just prompt for the first matching offer found
+              }
+            }
+          }
+        }
+      }
+    }
+
+    if (potentialTradeGift != null && neededQty != null && neededQty > 0 && targetQty != null) {
+      final gift = potentialTradeGift;
+      final bool? adjustQuantity = await showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => Dialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+          backgroundColor: LightModeColors.lightSurface,
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: LightModeColors.warning.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.info_outline,
+                    color: LightModeColors.warning,
+                    size: 48,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  "Rappel Offre Trade",
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: LightModeColors.dashboardTextPrimary,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  gift.thresholdType == 'amount'
+                      ? "Ce produit fait partie de l'offre : ${gift.title}.\n\nVous pouvez vendre $neededQty produit(s) supplémentaire(s) pour atteindre le montant minimum de ${gift.minPurchaseAmount} TND et débloquer le cadeau."
+                      : "Ce produit fait partie de l'offre : ${gift.title}.\n\nVous pouvez vendre $neededQty produit(s) supplémentaire(s) pour débloquer le cadeau associé.",
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    color: LightModeColors.dashboardTextSecondary,
+                  ),
+                ),
+                const SizedBox(height: 32),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () => Navigator.pop(context, false),
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: LightModeColors.lightOutline),
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                        ),
+                        child: const Text(
+                          "Continuer sans cadeau",
+                          style: TextStyle(color: LightModeColors.dashboardTextSecondary, fontSize: 12),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () => Navigator.pop(context, true),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: LightModeColors.lightPrimary,
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                          elevation: 0,
+                        ),
+                        child: Text(
+                          "Ajuster à $targetQty",
+                          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 12),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      if (adjustQuantity == null) {
+        return; // User closed dialog with back button, cancel sale
+      }
+      if (adjustQuantity == true) {
+        _quantityNotifier.value = targetQty;
+        finalQuantity = targetQty;
+        finalTotalPrice = product.price * finalQuantity;
+      }
+    }
+
+    // 2. Show the "Confirmer la vente" dialog first (in all scenarios)
+    final confirmSale = await _showSaleConfirmationDialog(
+      productName: product.name,
+      quantity: finalQuantity,
+      totalPrice: finalTotalPrice,
+    );
+    if (!confirmSale) {
+      return; // Exit without saving if cancelled or back pressed
+    }
+
+    // 3. Evaluate valid/eligible gifts based on finalQuantity / finalTotalPrice
     List<Map<String, dynamic>> validGiftsData = [];
     
     for (var assignment in assignments) {
@@ -223,14 +524,34 @@ class _ProductScreenState extends State<ProductScreen> {
         }
         
         if (isValid) {
-           validGiftsData.add({
-             'assignment': assignment,
-             'gift': gift,
-           });
+           // Apply product count or purchase amount threshold conditions
+           bool isThresholdMet = true;
+           if (gift.thresholdType == 'products') {
+             final minQty = gift.minProductsCount ?? 1;
+             if (finalQuantity < minQty) {
+               isThresholdMet = false;
+             }
+           } else if (gift.thresholdType == 'amount') {
+             final minAmt = gift.minPurchaseAmount ?? 0.0;
+             if (finalTotalPrice < minAmt) {
+               isThresholdMet = false;
+             }
+           }
+
+           if (isThresholdMet) {
+             validGiftsData.add({
+               'assignment': assignment,
+               'gift': gift,
+             });
+           }
         }
       }
     }
+
+    // 4. Save the sale
+    final savedSaleId = await performSave(finalQuantity, finalTotalPrice);
     
+    // 5. If gifts are available, show the "confirm gift" popup
     if (validGiftsData.isNotEmpty) {
       Map<String, Map<String, dynamic>> groupedGifts = {};
       for (var data in validGiftsData) {
@@ -258,6 +579,7 @@ class _ProductScreenState extends State<ProductScreen> {
       
       final giveGift = await showDialog<bool>(
         context: context,
+        barrierDismissible: false,
         builder: (context) => Dialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
           backgroundColor: LightModeColors.lightSurface,
@@ -336,9 +658,18 @@ class _ProductScreenState extends State<ProductScreen> {
           ),
         ),
       );
-      
-      if (giveGift == true && createdSaleId != null) {
-         await _showGiftSelectionDialog(availableGifts, createdSaleId, user.pharmacyId, user.uid, user.pointOfSale, giftService);
+
+      if (giveGift == true) {
+         await _showGiftSelectionDialog(
+           availableGifts,
+           savedSaleId,
+           user.pharmacyId,
+           user.uid,
+           user.pointOfSale,
+           giftService,
+           finalQuantity,
+           finalTotalPrice,
+         );
       }
     }
 
@@ -362,14 +693,43 @@ class _ProductScreenState extends State<ProductScreen> {
       String pharmacyId,
       String userId,
       String? pointOfSale,
-      GiftService giftService) async {
+      GiftService giftService,
+      int quantity,
+      double totalPrice) async {
     final l10n = AppLocalizations.of(context)!;
     final formKey = GlobalKey<FormState>();
+    final quantityController = TextEditingController();
     int quantityCount = 1;
     String? nomClient;
     String? prenomClient;
     String? phoneNumber;
     Map<String, dynamic>? selectedGiftData = availableGifts.first;
+
+    // Helper function to calculate default gift quantity
+    int calculateDefaultQty(Map<String, dynamic> data) {
+      final gift = data['gift'] as Gift;
+      final totalStock = data['totalStock'] as int;
+      int calculated = 1;
+      if (gift.thresholdType == 'products') {
+        final minProducts = gift.minProductsCount ?? 1;
+        if (minProducts > 0) {
+          calculated = (gift.isCumulative ?? false) ? (quantity ~/ minProducts) : 1;
+        }
+      } else if (gift.thresholdType == 'amount') {
+        final minAmt = gift.minPurchaseAmount ?? 0.0;
+        if (minAmt > 0) {
+          calculated = (gift.isCumulative ?? false) ? (totalPrice ~/ minAmt) : 1;
+        }
+      }
+      if (calculated > totalStock) calculated = totalStock;
+      if (calculated < 1) calculated = 1;
+      return calculated;
+    }
+
+    // Set initial text
+    if (selectedGiftData != null) {
+      quantityController.text = '${calculateDefaultQty(selectedGiftData!)}';
+    }
 
     await showDialog(
       context: context,
@@ -425,14 +785,22 @@ class _ProductScreenState extends State<ProductScreen> {
                               child: Text('${gift.title} (Stock: $totalStock)', style: const TextStyle(fontSize: 14)),
                             );
                           }).toList(),
-                          onChanged: (value) => setState(() => selectedGiftData = value),
+                          onChanged: (value) {
+                            setState(() {
+                              selectedGiftData = value;
+                              if (value != null) {
+                                quantityController.text = '${calculateDefaultQty(value)}';
+                              }
+                            });
+                          },
                         ),
                         const SizedBox(height: 16),
                         
                         Text(l10n.quantity, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: LightModeColors.dashboardTextSecondary)),
                         const SizedBox(height: 8),
                         TextFormField(
-                          initialValue: '1',
+                          controller: quantityController,
+                          readOnly: true,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             fillColor: LightModeColors.lightBackground,
@@ -526,6 +894,7 @@ class _ProductScreenState extends State<ProductScreen> {
         );
       },
     );
+    quantityController.dispose();
   }
 
   Future<void> _handleGiftSubmission(

@@ -14,6 +14,10 @@ class Gift {
   final String title;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final int? minProductsCount;
+  final double? minPurchaseAmount;
+  final bool? isCumulative;
+  final String? thresholdType;
 
   Gift({
     required this.id,
@@ -29,6 +33,10 @@ class Gift {
     required this.title,
     this.createdAt,
     this.updatedAt,
+    this.minProductsCount,
+    this.minPurchaseAmount,
+    this.isCumulative,
+    this.thresholdType,
   });
 
   factory Gift.fromFirestore(DocumentSnapshot doc) {
@@ -47,6 +55,10 @@ class Gift {
       title: data['title'] ?? '',
       createdAt: data['createdAt'] != null ? (data['createdAt'] as Timestamp).toDate() : null,
       updatedAt: data['updatedAt'] != null ? (data['updatedAt'] as Timestamp).toDate() : null,
+      minProductsCount: data['minProductsCount'] as int?,
+      minPurchaseAmount: (data['minPurchaseAmount'] as num?)?.toDouble(),
+      isCumulative: data['isCumulative'] as bool?,
+      thresholdType: data['thresholdType'] as String?,
     );
   }
 }
