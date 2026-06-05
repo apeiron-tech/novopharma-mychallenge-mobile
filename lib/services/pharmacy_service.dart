@@ -13,7 +13,10 @@ class PharmacyService {
       if (snapshot.docs.isEmpty) {
         return [];
       }
-      return snapshot.docs.map((doc) => Pharmacy.fromFirestore(doc)).toList();
+      return snapshot.docs
+          .where((doc) => (doc.data() as Map<String, dynamic>)['status'] != 'DELETED')
+          .map((doc) => Pharmacy.fromFirestore(doc))
+          .toList();
     } catch (e) {
       // In a real app, you'd want to log this error
       print('Error fetching pharmacies: $e');
@@ -33,7 +36,10 @@ class PharmacyService {
       if (snapshot.docs.isEmpty) {
         return [];
       }
-      return snapshot.docs.map((doc) => Pharmacy.fromFirestore(doc)).toList();
+      return snapshot.docs
+          .where((doc) => (doc.data() as Map<String, dynamic>)['status'] != 'DELETED')
+          .map((doc) => Pharmacy.fromFirestore(doc))
+          .toList();
     } catch (e) {
       print('Error fetching pharmacies by ids: $e');
       return [];
@@ -45,6 +51,10 @@ class PharmacyService {
     try {
       final doc = await _firestore.collection('pharmacies').doc(id).get();
       if (doc.exists) {
+        final data = doc.data() as Map<String, dynamic>?;
+        if (data != null && data['status'] == 'DELETED') {
+          return null;
+        }
         return Pharmacy.fromFirestore(doc);
       }
       return null;

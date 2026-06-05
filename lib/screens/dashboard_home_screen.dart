@@ -441,7 +441,7 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
     PluxeeRedemptionProvider pluxeeRedemption,
   ) {
     final totalPoints = user?.points ?? 0;
-    final pendingPoints = user?.pendingPluxeePoints ?? 0;
+    final pendingPoints = pluxeeRedemption.totalPendingPoints;
     final allTimePoints = pluxeeRedemption.allTimePoints;
 
     return Column(
