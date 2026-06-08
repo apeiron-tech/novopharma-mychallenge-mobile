@@ -106,6 +106,43 @@ class _QuizQuestionScreenState extends State<QuizQuestionScreen> {
     }
   }
 
+  Future<void> _handleExitQuiz() async {
+    final locale = Localizations.localeOf(context).languageCode;
+    final isEn = locale == 'en';
+    final title = isEn ? 'Exit Quiz?' : 'Quitter le quiz ?';
+    final content = isEn
+        ? 'If you exit now, your current progress will be submitted and it will count as an attempt.'
+        : 'Si vous quittez maintenant, votre progression actuelle sera soumise et cela comptera comme une tentative.';
+    final cancelText = isEn ? 'Cancel' : 'Annuler';
+    final exitText = isEn ? 'Exit' : 'Quitter';
+
+    final bool? shouldExit = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(content),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(cancelText),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+            ),
+            child: Text(exitText),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldExit == true && mounted) {
+      _submitQuiz();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<QuizProvider>(
@@ -122,56 +159,63 @@ class _QuizQuestionScreenState extends State<QuizQuestionScreen> {
         final questionTimeLeft = state.questionTimeLeft;
         final totalQuestionTime = currentQuestion.timeLimitSeconds;
 
-        return Scaffold(
-          backgroundColor: const Color(0xFFF6F8FB),
-          appBar: AppBar(
+        return PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (didPop, result) async {
+            if (didPop) return;
+            await _handleExitQuiz();
+          },
+          child: Scaffold(
             backgroundColor: const Color(0xFFF6F8FB),
-            elevation: 0,
-            leading: IconButton(
-              icon: const Icon(Icons.close, color: Colors.black),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            title: Text(
-              'Question ${state.currentQuestionIndex + 1}/${widget.quiz.questions.length}',
-              style: const TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
+            appBar: AppBar(
+              backgroundColor: const Color(0xFFF6F8FB),
+              elevation: 0,
+              leading: IconButton(
+                icon: const Icon(Icons.close, color: Colors.black),
+                onPressed: _handleExitQuiz,
               ),
-            ),
-            actions: [
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 16.0),
-                  child: Text(
-                    '${(state.quizTimeLeft ~/ 60).toString().padLeft(2, '0')}:${(state.quizTimeLeft % 60).toString().padLeft(2, '0')}',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: Colors.black,
+              title: Text(
+                'Question ${state.currentQuestionIndex + 1}/${widget.quiz.questions.length}',
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              actions: [
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 16.0),
+                    child: Text(
+                      '${(state.quizTimeLeft ~/ 60).toString().padLeft(2, '0')}:${(state.quizTimeLeft % 60).toString().padLeft(2, '0')}',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          body: PageView.builder(
-            controller: _pageController,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: widget.quiz.questions.length,
-            itemBuilder: (context, index) {
-              final question = widget.quiz.questions[index];
-              return _buildQuestionPage(
-                question,
-                index,
-                questionTimeLeft,
-                totalQuestionTime,
-              );
-            },
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: _nextPage,
-            backgroundColor: LightModeColors.novoPharmaBlue,
-            child: const Icon(Icons.arrow_forward, color: Colors.white),
+              ],
+            ),
+            body: PageView.builder(
+              controller: _pageController,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: widget.quiz.questions.length,
+              itemBuilder: (context, index) {
+                final question = widget.quiz.questions[index];
+                return _buildQuestionPage(
+                  question,
+                  index,
+                  questionTimeLeft,
+                  totalQuestionTime,
+                );
+              },
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: _nextPage,
+              backgroundColor: LightModeColors.novoPharmaBlue,
+              child: const Icon(Icons.arrow_forward, color: Colors.white),
+            ),
           ),
         );
       },
