@@ -163,7 +163,7 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
       return null;
     }
   }
-  
+
   final GiftService _giftService = GiftService();
 
   @override
@@ -410,43 +410,120 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                                   ),
                                   const SizedBox(height: 4),
                                   FutureBuilder<Map<String, dynamic>?>(
-                                    future: _giftService.getGiftOperationBySaleId(sale.id),
+                                    future: _giftService
+                                        .getGiftOperationBySaleId(sale.id),
                                     builder: (context, snapshot) {
-                                      if (snapshot.hasData && snapshot.data != null) {
+                                      if (snapshot.hasData &&
+                                          snapshot.data != null) {
                                         final giftId = snapshot.data!['giftId'];
-                                        final giftQty = snapshot.data!['quantity'] ?? 0;
-                                        
+                                        final giftQty =
+                                            snapshot.data!['quantity'] ?? 0;
+                                        final saleIdsRaw =
+                                            snapshot.data!['saleIds'];
+                                        final List<dynamic> saleIds =
+                                            (saleIdsRaw is List &&
+                                                saleIdsRaw.isNotEmpty)
+                                            ? saleIdsRaw
+                                            : (snapshot.data!['saleId'] != null
+                                                  ? [snapshot.data!['saleId']]
+                                                  : []);
+                                        final bool isGrouped =
+                                            saleIds.length > 1;
+
+                                        final docId =
+                                            snapshot.data!['id'] ?? '';
+
                                         return FutureBuilder<Gift?>(
-                                          future: _giftService.getGiftById(giftId),
+                                          future: _giftService.getGiftById(
+                                            giftId,
+                                          ),
                                           builder: (context, giftSnapshot) {
-                                            final giftTitle = giftSnapshot.data?.title ?? '...';
+                                            final giftTitle =
+                                                giftSnapshot.data?.title ??
+                                                '...';
                                             return Padding(
-                                              padding: const EdgeInsets.only(top: 4, bottom: 4),
-                                              child: Container(
-                                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                                decoration: BoxDecoration(
-                                                  color: LightModeColors.novoPharmaBlue.withOpacity(0.1),
-                                                  borderRadius: BorderRadius.circular(6),
-                                                  border: Border.all(color: LightModeColors.novoPharmaBlue.withOpacity(0.2)),
-                                                ),
-                                                child: Row(
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  children: [
-                                                    const Icon(Icons.card_giftcard_rounded, size: 12, color: LightModeColors.novoPharmaBlue),
-                                                    const SizedBox(width: 4),
-                                                    Flexible(
-                                                      child: Text(
-                                                        '$giftTitle (x$giftQty)',
-                                                        style: const TextStyle(
-                                                          fontSize: 11,
-                                                          fontWeight: FontWeight.bold,
-                                                          color: LightModeColors.novoPharmaBlue,
+                                              padding: const EdgeInsets.only(
+                                                top: 4,
+                                                bottom: 4,
+                                              ),
+                                              child: Wrap(
+                                                spacing: 12,
+                                                runSpacing: 4,
+                                                crossAxisAlignment:
+                                                    WrapCrossAlignment.center,
+                                                children: [
+                                                  Container(
+                                                    padding:
+                                                        const EdgeInsets.symmetric(
+                                                          horizontal: 8,
+                                                          vertical: 4,
                                                         ),
-                                                        overflow: TextOverflow.ellipsis,
+                                                    decoration: BoxDecoration(
+                                                      color: LightModeColors
+                                                          .novoPharmaBlue
+                                                          .withOpacity(0.1),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                            6,
+                                                          ),
+                                                      border: Border.all(
+                                                        color: LightModeColors
+                                                            .novoPharmaBlue
+                                                            .withOpacity(0.2),
                                                       ),
                                                     ),
-                                                  ],
-                                                ),
+                                                    child: Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        const Icon(
+                                                          Icons
+                                                              .card_giftcard_rounded,
+                                                          size: 12,
+                                                          color: LightModeColors
+                                                              .novoPharmaBlue,
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 4,
+                                                        ),
+                                                        Flexible(
+                                                          child: Text(
+                                                            '$giftTitle (x$giftQty)',
+                                                            style: const TextStyle(
+                                                              fontSize: 11,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              color: LightModeColors
+                                                                  .novoPharmaBlue,
+                                                            ),
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Wrap(
+                                                    crossAxisAlignment:
+                                                        WrapCrossAlignment
+                                                            .center,
+                                                    spacing: 2,
+                                                    children: [
+                                                      Text(
+                                                        'ID Offre Cadeau: $docId',
+                                                        style: const TextStyle(
+                                                          fontSize: 11,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          color: LightModeColors
+                                                              .dashboardTextSecondary,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
                                               ),
                                             );
                                           },
@@ -459,7 +536,8 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                                     DateFormat.yMMMd().format(sale.saleDate),
                                     style: const TextStyle(
                                       fontSize: 13,
-                                      color: LightModeColors.dashboardTextSecondary,
+                                      color: LightModeColors
+                                          .dashboardTextSecondary,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
