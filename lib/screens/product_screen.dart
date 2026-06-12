@@ -47,7 +47,8 @@ class ProductScreen extends StatefulWidget {
   final String? sku;
   final String? id;
   final Sale? sale;
-  const ProductScreen({super.key, this.sku, this.id, this.sale});
+  final bool isSelectionMode;
+  const ProductScreen({super.key, this.sku, this.id, this.sale, this.isSelectionMode = false});
 
   @override
   State<ProductScreen> createState() => _ProductScreenState();
@@ -155,9 +156,266 @@ class _ProductScreenState extends State<ProductScreen> {
     return null;
   }
 
+  List<Product> _getEligibleProductsForGift(Gift gift, List<Product> allProducts) {
+    return allProducts.where((p) {
+      if (p.isDisabled) return false;
+      bool matches = true;
+      if (gift.listProducts.isNotEmpty && !gift.listProducts.contains(p.id)) {
+        matches = false;
+      }
+      if (matches && gift.productCategory.isNotEmpty && !gift.productCategory.contains(p.category)) {
+        matches = false;
+      }
+      if (matches && gift.productMarque.isNotEmpty && !gift.productMarque.contains(p.marque)) {
+        matches = false;
+      }
+      return matches;
+    }).toList();
+  }
+
+  Future<Map<Product, int>?> _showProductSelectionDialog({
+    required List<Product> eligibleProducts,
+    required Product primaryProduct,
+  }) async {
+    final Map<Product, int> selectedProducts = {};
+    final searchController = TextEditingController();
+    final listToShow = eligibleProducts.where((p) => p.id != primaryProduct.id).toList();
+
+    return showDialog<Map<Product, int>>(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            final query = searchController.text.toLowerCase();
+            final filteredList = listToShow.where((p) {
+              return p.name.toLowerCase().contains(query) ||
+                  p.marque.toLowerCase().contains(query) ||
+                  p.category.toLowerCase().contains(query);
+            }).toList();
+
+            return Dialog(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+              backgroundColor: LightModeColors.lightSurface,
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.9,
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.7,
+                ),
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Sélectionner les produits éligibles",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: LightModeColors.dashboardTextPrimary,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      "Choisissez un ou plusieurs produits éligibles et ajustez les quantités (appui long pour voir les détails).",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: LightModeColors.dashboardTextSecondary,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: searchController,
+                      onChanged: (_) => setState(() {}),
+                      decoration: InputDecoration(
+                        hintText: "Rechercher un produit...",
+                        prefixIcon: const Icon(Icons.search),
+                        fillColor: LightModeColors.lightBackground,
+                        filled: true,
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Expanded(
+                      child: filteredList.isEmpty
+                          ? const Center(
+                              child: Text(
+                                "Aucun produit éligible trouvé",
+                                style: TextStyle(color: LightModeColors.dashboardTextSecondary),
+                              ),
+                            )
+                          : ListView.builder(
+                              itemCount: filteredList.length,
+                              itemBuilder: (context, index) {
+                                final p = filteredList[index];
+                                final isSelected = selectedProducts.containsKey(p);
+                                final currentQty = selectedProducts[p] ?? 1;
+
+                                return Container(
+                                  margin: const EdgeInsets.only(bottom: 8),
+                                  decoration: BoxDecoration(
+                                    color: isSelected
+                                        ? LightModeColors.lightPrimary.withOpacity(0.08)
+                                        : Colors.transparent,
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(
+                                      color: isSelected
+                                          ? LightModeColors.lightPrimary
+                                          : Colors.grey.shade200,
+                                      width: isSelected ? 2 : 1,
+                                    ),
+                                  ),
+                                  child: ListTile(
+                                    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                                    leading: p.imageUrl.isNotEmpty
+                                        ? ClipRRect(
+                                            borderRadius: BorderRadius.circular(8),
+                                            child: CachedNetworkImage(
+                                              imageUrl: p.imageUrl,
+                                              width: 48,
+                                              height: 48,
+                                              fit: BoxFit.contain,
+                                              placeholder: (_, __) => const CircularProgressIndicator(),
+                                              errorWidget: (_, __, ___) => const Icon(Icons.image_not_supported_outlined),
+                                            ),
+                                          )
+                                        : const Icon(Icons.image_not_supported_outlined, size: 48),
+                                    title: Text(
+                                      p.name,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                        color: LightModeColors.dashboardTextPrimary,
+                                      ),
+                                    ),
+                                    subtitle: Text(
+                                      "${p.marque} • ${p.price.toStringAsFixed(3)} TND",
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: LightModeColors.dashboardTextSecondary,
+                                      ),
+                                    ),
+                                    trailing: isSelected
+                                        ? Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              IconButton(
+                                                icon: const Icon(Icons.remove_circle_outline, color: LightModeColors.warning, size: 20),
+                                                onPressed: () {
+                                                  setState(() {
+                                                    if (currentQty > 1) {
+                                                      selectedProducts[p] = currentQty - 1;
+                                                    } else {
+                                                      selectedProducts.remove(p);
+                                                    }
+                                                  });
+                                                },
+                                              ),
+                                              Text(
+                                                '$currentQty',
+                                                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                                              ),
+                                              IconButton(
+                                                icon: const Icon(Icons.add_circle_outline, color: LightModeColors.warning, size: 20),
+                                                onPressed: () {
+                                                  setState(() {
+                                                    selectedProducts[p] = currentQty + 1;
+                                                  });
+                                                },
+                                              ),
+                                            ],
+                                          )
+                                        : Checkbox(
+                                            value: false,
+                                            activeColor: LightModeColors.lightPrimary,
+                                            onChanged: (val) {
+                                              setState(() {
+                                                selectedProducts[p] = 1;
+                                              });
+                                            },
+                                          ),
+                                    onLongPress: () async {
+                                      final result = await Navigator.push<Map<Product, int>>(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ProductScreen(
+                                            id: p.id,
+                                            isSelectionMode: true,
+                                          ),
+                                        ),
+                                      );
+                                      if (result != null && result.isNotEmpty) {
+                                        setState(() {
+                                          selectedProducts[p] = result.values.first;
+                                        });
+                                      }
+                                    },
+                                    onTap: () {
+                                      setState(() {
+                                        if (isSelected) {
+                                          selectedProducts.remove(p);
+                                        } else {
+                                          selectedProducts[p] = 1;
+                                        }
+                                      });
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                    ),
+                    const SizedBox(height: 24),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: () => Navigator.pop(context),
+                            style: OutlinedButton.styleFrom(
+                              side: const BorderSide(color: LightModeColors.lightOutline),
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                            ),
+                            child: const Text(
+                              "Annuler",
+                              style: TextStyle(color: LightModeColors.dashboardTextSecondary),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: selectedProducts.isEmpty
+                                ? null
+                                : () => Navigator.pop(context, selectedProducts),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: LightModeColors.lightPrimary,
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                              elevation: 0,
+                            ),
+                            child: const Text(
+                              "Valider",
+                              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   Future<bool> _showSaleConfirmationDialog({
-    required String productName,
-    required int quantity,
+    required Map<Product, int> productsToSell,
     required double totalPrice,
   }) async {
     final l10n = AppLocalizations.of(context)!;
@@ -204,34 +462,47 @@ class _ProductScreenState extends State<ProductScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          "Produit : ",
-                          style: TextStyle(fontWeight: FontWeight.bold, color: LightModeColors.dashboardTextSecondary),
+                    ...productsToSell.entries.map((entry) {
+                      final p = entry.key;
+                      final qty = entry.value;
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  "Produit : ",
+                                  style: TextStyle(fontWeight: FontWeight.bold, color: LightModeColors.dashboardTextSecondary),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    p.name,
+                                    style: const TextStyle(color: LightModeColors.dashboardTextPrimary),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 4),
+                            Row(
+                              children: [
+                                const Text(
+                                  "Quantité : ",
+                                  style: TextStyle(fontWeight: FontWeight.bold, color: LightModeColors.dashboardTextSecondary),
+                                ),
+                                Text(
+                                  "$qty",
+                                  style: const TextStyle(color: LightModeColors.dashboardTextPrimary),
+                                ),
+                              ],
+                            ),
+                            if (productsToSell.length > 1) const Divider(),
+                          ],
                         ),
-                        Expanded(
-                          child: Text(
-                            productName,
-                            style: const TextStyle(color: LightModeColors.dashboardTextPrimary),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        const Text(
-                          "Quantité : ",
-                          style: TextStyle(fontWeight: FontWeight.bold, color: LightModeColors.dashboardTextSecondary),
-                        ),
-                        Text(
-                          "$quantity",
-                          style: const TextStyle(color: LightModeColors.dashboardTextPrimary),
-                        ),
-                      ],
-                    ),
+                      );
+                    }).toList(),
                     const SizedBox(height: 8),
                     Row(
                       children: [
@@ -306,44 +577,57 @@ class _ProductScreenState extends State<ProductScreen> {
     final double unitPoints = _getEffectivePoints(product, challenges, pharmacyCategory);
     final double totalPrice = product.price * quantity;
 
-    Future<String> performSave(int saveQty, double savePrice) async {
-      String saleId;
-      if (widget.sale != null) {
-        // Update existing sale
-        final updatedSale = Sale(
-          id: widget.sale!.id,
-          userId: user.uid,
-          pharmacyId: user.pharmacyId,
-          productId: product.id,
-          productNameSnapshot: product.name,
-          quantity: saveQty,
-          pointsEarned: unitPoints * saveQty,
-          saleDate: widget.sale!.saleDate, // Keep original sale date
-          totalPrice: savePrice,
-          status: widget.sale!.status, // Keep original status
-        );
-        Provider.of<SalesHistoryProvider>(
-          context,
-          listen: false,
-        ).updateSale(widget.sale!, updatedSale);
-        saleId = widget.sale!.id;
-      } else {
-        // Create new sale
-        final newSale = Sale(
-          id: '', // Firestore will generate ID
-          userId: user.uid,
-          pharmacyId: user.pharmacyId,
-          productId: product.id,
-          productNameSnapshot: product.name,
-          quantity: saveQty,
-          pointsEarned: unitPoints * saveQty,
-          saleDate: DateTime.now(),
-          totalPrice: savePrice,
-          status: 'pending',
-        );
-        saleId = await _saleService.createSale(newSale);
+    Future<List<String>> performSave(Map<Product, int> productsToSell) async {
+      List<String> saleIds = [];
+      for (var entry in productsToSell.entries) {
+        final p = entry.key;
+        final qty = entry.value;
+        final pUnitPoints = _getEffectivePoints(p, challenges, pharmacyCategory);
+        final pTotalPrice = p.price * qty;
+
+        String saleId;
+        if (widget.sale != null && p.id == product.id) {
+          // Update existing sale for primary product
+          final updatedSale = Sale(
+            id: widget.sale!.id,
+            userId: user.uid,
+            pharmacyId: user.pharmacyId,
+            productId: p.id,
+            productNameSnapshot: p.name,
+            quantity: qty,
+            pointsEarned: pUnitPoints * qty,
+            saleDate: widget.sale!.saleDate, // Keep original sale date
+            totalPrice: pTotalPrice,
+            productBrandSnapshot: p.marque,
+            productCategorySnapshot: p.category,
+            status: widget.sale!.status, // Keep original status
+          );
+          Provider.of<SalesHistoryProvider>(
+            context,
+            listen: false,
+          ).updateSale(widget.sale!, updatedSale);
+          saleId = widget.sale!.id;
+        } else {
+          // Create new sale
+          final newSale = Sale(
+            id: '', // Firestore will generate ID
+            userId: user.uid,
+            pharmacyId: user.pharmacyId,
+            productId: p.id,
+            productNameSnapshot: p.name,
+            quantity: qty,
+            pointsEarned: pUnitPoints * qty,
+            saleDate: DateTime.now(),
+            totalPrice: pTotalPrice,
+            productBrandSnapshot: p.marque,
+            productCategorySnapshot: p.category,
+            status: 'pending',
+          );
+          saleId = await _saleService.createSale(newSale);
+        }
+        saleIds.add(saleId);
       }
-      return saleId;
+      return saleIds;
     }
 
     // Check for gifts if it's a new sale or existing sale
@@ -352,7 +636,6 @@ class _ProductScreenState extends State<ProductScreen> {
 
     // 1. Check for Trade Offer Reminders
     int finalQuantity = quantity;
-    double finalTotalPrice = totalPrice;
     Gift? potentialTradeGift;
     int? neededQty;
     int? targetQty;
@@ -395,145 +678,272 @@ class _ProductScreenState extends State<ProductScreen> {
       }
     }
 
+    Map<Product, int> productsToSell = { product: quantity };
+
     if (potentialTradeGift != null && neededQty != null && neededQty > 0 && targetQty != null) {
       final gift = potentialTradeGift;
-      final bool? adjustQuantity = await showDialog<bool>(
+      final dynamic adjustResult = await showDialog<dynamic>(
         context: context,
         barrierDismissible: false,
         builder: (context) => Dialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
           backgroundColor: LightModeColors.lightSurface,
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: LightModeColors.warning.withOpacity(0.1),
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.info_outline,
-                    color: LightModeColors.warning,
-                    size: 48,
-                  ),
-                ),
-                const SizedBox(height: 24),
-                const Text(
-                  "Rappel Offre Trade",
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: LightModeColors.dashboardTextPrimary,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  gift.thresholdType == 'amount'
-                      ? "Ce produit fait partie de l'offre : ${gift.title}.\n\nVous pouvez vendre $neededQty produit(s) supplémentaire(s) pour atteindre le montant minimum de ${gift.minPurchaseAmount} TND et débloquer le cadeau."
-                      : "Ce produit fait partie de l'offre : ${gift.title}.\n\nVous pouvez vendre $neededQty produit(s) supplémentaire(s) pour débloquer le cadeau associé.",
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    color: LightModeColors.dashboardTextSecondary,
-                  ),
-                ),
-                const SizedBox(height: 32),
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: () => Navigator.pop(context, false),
-                        style: OutlinedButton.styleFrom(
-                          side: const BorderSide(color: LightModeColors.lightOutline),
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          clipBehavior: Clip.antiAlias,
+          child: Stack(
+            children: [
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (gift.imageUrl.isNotEmpty)
+                    CachedNetworkImage(
+                      imageUrl: gift.imageUrl,
+                      height: 180,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Container(
+                        height: 180,
+                        color: Colors.grey.shade100,
+                        child: const Center(
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: LightModeColors.lightPrimary,
+                          ),
                         ),
-                        child: const Text(
-                          "Continuer sans cadeau",
-                          style: TextStyle(color: LightModeColors.dashboardTextSecondary, fontSize: 12),
-                          textAlign: TextAlign.center,
+                      ),
+                      errorWidget: (context, url, error) => Container(
+                        height: 180,
+                        color: Colors.grey.shade100,
+                        child: const Icon(
+                          Icons.card_giftcard,
+                          size: 64,
+                          color: LightModeColors.dashboardTextSecondary,
+                        ),
+                      ),
+                    )
+                  else
+                    Padding(
+                      padding: const EdgeInsets.only(top: 24.0),
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: LightModeColors.warning.withOpacity(0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.info_outline,
+                          color: LightModeColors.warning,
+                          size: 48,
                         ),
                       ),
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () => Navigator.pop(context, true),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: LightModeColors.lightPrimary,
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                          elevation: 0,
+                  Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text(
+                          "Rappel Offre Trade",
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: LightModeColors.dashboardTextPrimary,
+                          ),
                         ),
-                        child: Text(
-                          "Ajuster à $targetQty",
-                          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 12),
+                        const SizedBox(height: 12),
+                        Text(
+                          gift.thresholdType == 'amount'
+                              ? "Ce produit fait partie de l'offre : ${gift.title}.\n\nVous pouvez vendre $neededQty produit(s) supplémentaire(s) pour atteindre le montant minimum de ${gift.minPurchaseAmount} TND et débloquer le cadeau."
+                              : "Ce produit fait partie de l'offre : ${gift.title}.\n\nVous pouvez vendre $neededQty produit(s) supplémentaire(s) pour débloquer le cadeau associé.",
                           textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            color: LightModeColors.dashboardTextSecondary,
+                          ),
                         ),
-                      ),
+                        if (gift.description.isNotEmpty) ...[
+                          const SizedBox(height: 12),
+                          Text(
+                            gift.description,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: LightModeColors.dashboardTextPrimary,
+                            ),
+                          ),
+                        ],
+                        const SizedBox(height: 24),
+                        ElevatedButton(
+                          onPressed: () async {
+                            final allProducts = await _productService.getProducts();
+                            final eligible = _getEligibleProductsForGift(gift, allProducts);
+                            if (context.mounted) {
+                              final selected = await _showProductSelectionDialog(
+                                eligibleProducts: eligible,
+                                primaryProduct: product,
+                              );
+                              if (selected != null) {
+                                Navigator.pop(context, selected);
+                              }
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: LightModeColors.lightPrimary,
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                            elevation: 0,
+                          ),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.add_shopping_cart, color: Colors.white),
+                              SizedBox(width: 8),
+                              Text(
+                                "Ajouter d'autres produits éligibles",
+                                style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 12),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: OutlinedButton(
+                                onPressed: () => Navigator.pop(context, false),
+                                style: OutlinedButton.styleFrom(
+                                  side: const BorderSide(color: LightModeColors.lightOutline),
+                                  padding: const EdgeInsets.symmetric(vertical: 14),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                                ),
+                                child: const Text(
+                                  "Continuer sans cadeau",
+                                  style: TextStyle(color: LightModeColors.dashboardTextSecondary, fontSize: 12),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: () => Navigator.pop(context, true),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: LightModeColors.lightPrimary,
+                                  padding: const EdgeInsets.symmetric(vertical: 14),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                                  elevation: 0,
+                                ),
+                                child: Text(
+                                  "Ajuster à $targetQty",
+                                  style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 12),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
+                ],
+              ),
+              Positioned(
+                top: 12,
+                right: 12,
+                child: GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: gift.imageUrl.isNotEmpty
+                          ? Colors.black.withOpacity(0.4)
+                          : Colors.grey.shade100,
+                      shape: BoxShape.circle,
+                    ),
+                    padding: const EdgeInsets.all(6),
+                    child: Icon(
+                      Icons.close,
+                      size: 20,
+                      color: gift.imageUrl.isNotEmpty
+                          ? Colors.white
+                          : LightModeColors.dashboardTextSecondary,
+                    ),
+                  ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       );
 
-      if (adjustQuantity == null) {
+      if (adjustResult == null) {
         return; // User closed dialog with back button, cancel sale
       }
-      if (adjustQuantity == true) {
+      if (adjustResult == true) {
         _quantityNotifier.value = targetQty;
         finalQuantity = targetQty;
-        finalTotalPrice = product.price * finalQuantity;
+        productsToSell[product] = finalQuantity;
+      } else if (adjustResult is Map<Product, int>) {
+        adjustResult.forEach((p, qty) {
+          productsToSell[p] = qty;
+          finalQuantity += qty;
+        });
       }
     }
 
+    double finalTotalPrice = 0.0;
+    productsToSell.forEach((p, qty) {
+      finalTotalPrice += p.price * qty;
+    });
+
     // 2. Show the "Confirmer la vente" dialog first (in all scenarios)
     final confirmSale = await _showSaleConfirmationDialog(
-      productName: product.name,
-      quantity: finalQuantity,
+      productsToSell: productsToSell,
       totalPrice: finalTotalPrice,
     );
     if (!confirmSale) {
       return; // Exit without saving if cancelled or back pressed
     }
 
-    // 3. Evaluate valid/eligible gifts based on finalQuantity / finalTotalPrice
+    // 3. Evaluate valid/eligible gifts based on productsToSell
     List<Map<String, dynamic>> validGiftsData = [];
     
     for (var assignment in assignments) {
       final gift = await giftService.getGiftById(assignment.giftId);
       if (gift != null && gift.status == 'active') {
-        bool isValid = true;
-        
-        if (gift.listProducts.isNotEmpty && !gift.listProducts.contains(product.id)) {
-           isValid = false;
+        int giftMatchingQty = 0;
+        double giftMatchingAmt = 0.0;
+
+        for (var entry in productsToSell.entries) {
+          final p = entry.key;
+          final qty = entry.value;
+
+          bool matchesProduct = true;
+          if (gift.listProducts.isNotEmpty && !gift.listProducts.contains(p.id)) {
+            matchesProduct = false;
+          }
+          if (matchesProduct && gift.productCategory.isNotEmpty && !gift.productCategory.contains(p.category)) {
+            matchesProduct = false;
+          }
+          if (matchesProduct && gift.productMarque.isNotEmpty && !gift.productMarque.contains(p.marque)) {
+            matchesProduct = false;
+          }
+
+          if (matchesProduct) {
+            giftMatchingQty += qty;
+            giftMatchingAmt += p.price * qty;
+          }
         }
-        
-        if (isValid && gift.productCategory.isNotEmpty && !gift.productCategory.contains(product.category)) {
-           isValid = false;
-        }
-        
-        if (isValid && gift.productMarque.isNotEmpty && !gift.productMarque.contains(product.marque)) {
-           isValid = false;
-        }
-        
-        if (isValid) {
-           // Apply product count or purchase amount threshold conditions
+
+        if (giftMatchingQty > 0) {
            bool isThresholdMet = true;
            if (gift.thresholdType == 'products') {
              final minQty = gift.minProductsCount ?? 1;
-             if (finalQuantity < minQty) {
+             if (giftMatchingQty < minQty) {
                isThresholdMet = false;
              }
            } else if (gift.thresholdType == 'amount') {
              final minAmt = gift.minPurchaseAmount ?? 0.0;
-             if (finalTotalPrice < minAmt) {
+             if (giftMatchingAmt < minAmt) {
                isThresholdMet = false;
              }
            }
@@ -549,7 +959,8 @@ class _ProductScreenState extends State<ProductScreen> {
     }
 
     // 4. Save the sale
-    final savedSaleId = await performSave(finalQuantity, finalTotalPrice);
+    final savedSaleIds = await performSave(productsToSell);
+    final savedSaleId = savedSaleIds.first;
     
     // 5. If gifts are available, show the "confirm gift" popup
     if (validGiftsData.isNotEmpty) {
@@ -662,7 +1073,7 @@ class _ProductScreenState extends State<ProductScreen> {
       if (giveGift == true) {
          await _showGiftSelectionDialog(
            availableGifts,
-           savedSaleId,
+           savedSaleIds,
            user.pharmacyId,
            user.uid,
            user.pointOfSale,
@@ -689,7 +1100,7 @@ class _ProductScreenState extends State<ProductScreen> {
 
   Future<void> _showGiftSelectionDialog(
       List<Map<String, dynamic>> availableGifts,
-      String saleId,
+      List<String> saleIds,
       String pharmacyId,
       String userId,
       String? pointOfSale,
@@ -857,7 +1268,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                     if (selectedGiftData != null) {
                                        final gift = selectedGiftData!['gift'] as Gift;
                                        await _handleGiftSubmission(
-                                         saleId: saleId,
+                                         saleIds: saleIds,
                                          giftId: gift.id,
                                          pharmacyId: pharmacyId,
                                          quantity: quantityCount,
@@ -898,7 +1309,7 @@ class _ProductScreenState extends State<ProductScreen> {
   }
 
   Future<void> _handleGiftSubmission(
-      {required String saleId,
+      {required List<String> saleIds,
       required String giftId,
       required String pharmacyId,
       required int quantity,
@@ -912,7 +1323,8 @@ class _ProductScreenState extends State<ProductScreen> {
       required BuildContext context}) async {
     try {
       await giftService.saveGiftOperation(
-        saleId: saleId,
+        saleId: saleIds.first,
+        saleIds: saleIds,
         giftId: giftId,
         pharmacyId: pharmacyId,
         quantity: quantity,
@@ -1738,10 +2150,12 @@ class _ProductScreenState extends State<ProductScreen> {
             const SizedBox(height: 16), // Space between price and button
             // Button row at the bottom, centered
             ElevatedButton(
-              onPressed: () => _submitSale(product, user, pharmacyCategory, challenges),
+              onPressed: widget.isSelectionMode
+                  ? () => Navigator.pop(context, {product: _quantityNotifier.value})
+                  : () => _submitSale(product, user, pharmacyCategory, challenges),
               style: ElevatedButton.styleFrom(
-                backgroundColor: LightModeColors.lightError,
-                foregroundColor: LightModeColors.lightOnError,
+                backgroundColor: widget.isSelectionMode ? LightModeColors.lightPrimary : LightModeColors.lightError,
+                foregroundColor: widget.isSelectionMode ? Colors.white : LightModeColors.lightOnError,
                 padding: const EdgeInsets.symmetric(
                   vertical: 18,
                   horizontal: 24,
@@ -1754,10 +2168,12 @@ class _ProductScreenState extends State<ProductScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.check_circle_outline, size: 20),
+                  Icon(widget.isSelectionMode ? Icons.add_shopping_cart : Icons.check_circle_outline, size: 20),
                   const SizedBox(width: 8),
                   Text(
-                    widget.sale != null ? l10n.updateSale : l10n.confirmSale,
+                    widget.isSelectionMode
+                        ? "Ajouter à la vente"
+                        : (widget.sale != null ? l10n.updateSale : l10n.confirmSale),
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,

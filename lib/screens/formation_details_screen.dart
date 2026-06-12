@@ -54,8 +54,8 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
     _steps = [
       if (widget.formation.hasVideo)
         FormationStep(
-          title: 'Vidéos de formation',
-          description: 'Regarder les vidéos de la formation',
+          title: 'La vidéo de formation',
+          description: 'Regarder la vidéo de formation',
           icon: Icons.play_circle_outline,
           isCompleted: false,
           onTap: () => _showVideosSection(),
@@ -743,7 +743,7 @@ class _FormationDetailsScreenState extends State<FormationDetailsScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  step.title,
+                                  '${index + 1} - ${step.title}',
                                   style: TextStyle(
                                     fontSize: 17,
                                     fontWeight: FontWeight.w700,
