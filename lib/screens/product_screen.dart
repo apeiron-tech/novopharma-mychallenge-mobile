@@ -688,115 +688,189 @@ class _ProductScreenState extends State<ProductScreen> {
         builder: (context) => Dialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
           backgroundColor: LightModeColors.lightSurface,
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: LightModeColors.warning.withOpacity(0.1),
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.info_outline,
-                    color: LightModeColors.warning,
-                    size: 48,
-                  ),
-                ),
-                const SizedBox(height: 24),
-                const Text(
-                  "Rappel Offre Trade",
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: LightModeColors.dashboardTextPrimary,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  gift.thresholdType == 'amount'
-                      ? "Ce produit fait partie de l'offre : ${gift.title}.\n\nVous pouvez vendre $neededQty produit(s) supplémentaire(s) pour atteindre le montant minimum de ${gift.minPurchaseAmount} TND et débloquer le cadeau."
-                      : "Ce produit fait partie de l'offre : ${gift.title}.\n\nVous pouvez vendre $neededQty produit(s) supplémentaire(s) pour débloquer le cadeau associé.",
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    color: LightModeColors.dashboardTextSecondary,
-                  ),
-                ),
-                const SizedBox(height: 24),
-                ElevatedButton(
-                  onPressed: () async {
-                    final allProducts = await _productService.getProducts();
-                    final eligible = _getEligibleProductsForGift(gift, allProducts);
-                    if (context.mounted) {
-                      final selected = await _showProductSelectionDialog(
-                        eligibleProducts: eligible,
-                        primaryProduct: product,
-                      );
-                      if (selected != null) {
-                        Navigator.pop(context, selected);
-                      }
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: LightModeColors.lightPrimary,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                    elevation: 0,
-                  ),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.add_shopping_cart, color: Colors.white),
-                      SizedBox(width: 8),
-                      Text(
-                        "Ajouter d'autres produits éligibles",
-                        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 12),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: () => Navigator.pop(context, false),
-                        style: OutlinedButton.styleFrom(
-                          side: const BorderSide(color: LightModeColors.lightOutline),
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          clipBehavior: Clip.antiAlias,
+          child: Stack(
+            children: [
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (gift.imageUrl.isNotEmpty)
+                    CachedNetworkImage(
+                      imageUrl: gift.imageUrl,
+                      height: 180,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Container(
+                        height: 180,
+                        color: Colors.grey.shade100,
+                        child: const Center(
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: LightModeColors.lightPrimary,
+                          ),
                         ),
-                        child: const Text(
-                          "Continuer sans cadeau",
-                          style: TextStyle(color: LightModeColors.dashboardTextSecondary, fontSize: 12),
-                          textAlign: TextAlign.center,
+                      ),
+                      errorWidget: (context, url, error) => Container(
+                        height: 180,
+                        color: Colors.grey.shade100,
+                        child: const Icon(
+                          Icons.card_giftcard,
+                          size: 64,
+                          color: LightModeColors.dashboardTextSecondary,
+                        ),
+                      ),
+                    )
+                  else
+                    Padding(
+                      padding: const EdgeInsets.only(top: 24.0),
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: LightModeColors.warning.withOpacity(0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.info_outline,
+                          color: LightModeColors.warning,
+                          size: 48,
                         ),
                       ),
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () => Navigator.pop(context, true),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: LightModeColors.lightPrimary,
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                          elevation: 0,
+                  Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text(
+                          "Rappel Offre Trade",
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: LightModeColors.dashboardTextPrimary,
+                          ),
                         ),
-                        child: Text(
-                          "Ajuster à $targetQty",
-                          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 12),
+                        const SizedBox(height: 12),
+                        Text(
+                          gift.thresholdType == 'amount'
+                              ? "Ce produit fait partie de l'offre : ${gift.title}.\n\nVous pouvez vendre $neededQty produit(s) supplémentaire(s) pour atteindre le montant minimum de ${gift.minPurchaseAmount} TND et débloquer le cadeau."
+                              : "Ce produit fait partie de l'offre : ${gift.title}.\n\nVous pouvez vendre $neededQty produit(s) supplémentaire(s) pour débloquer le cadeau associé.",
                           textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            color: LightModeColors.dashboardTextSecondary,
+                          ),
                         ),
-                      ),
+                        if (gift.description.isNotEmpty) ...[
+                          const SizedBox(height: 12),
+                          Text(
+                            gift.description,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: LightModeColors.dashboardTextPrimary,
+                            ),
+                          ),
+                        ],
+                        const SizedBox(height: 24),
+                        ElevatedButton(
+                          onPressed: () async {
+                            final allProducts = await _productService.getProducts();
+                            final eligible = _getEligibleProductsForGift(gift, allProducts);
+                            if (context.mounted) {
+                              final selected = await _showProductSelectionDialog(
+                                eligibleProducts: eligible,
+                                primaryProduct: product,
+                              );
+                              if (selected != null) {
+                                Navigator.pop(context, selected);
+                              }
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: LightModeColors.lightPrimary,
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                            elevation: 0,
+                          ),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.add_shopping_cart, color: Colors.white),
+                              SizedBox(width: 8),
+                              Text(
+                                "Ajouter d'autres produits éligibles",
+                                style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 12),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: OutlinedButton(
+                                onPressed: () => Navigator.pop(context, false),
+                                style: OutlinedButton.styleFrom(
+                                  side: const BorderSide(color: LightModeColors.lightOutline),
+                                  padding: const EdgeInsets.symmetric(vertical: 14),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                                ),
+                                child: const Text(
+                                  "Continuer sans cadeau",
+                                  style: TextStyle(color: LightModeColors.dashboardTextSecondary, fontSize: 12),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: () => Navigator.pop(context, true),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: LightModeColors.lightPrimary,
+                                  padding: const EdgeInsets.symmetric(vertical: 14),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                                  elevation: 0,
+                                ),
+                                child: Text(
+                                  "Ajuster à $targetQty",
+                                  style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 12),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
+                ],
+              ),
+              Positioned(
+                top: 12,
+                right: 12,
+                child: GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: gift.imageUrl.isNotEmpty
+                          ? Colors.black.withOpacity(0.4)
+                          : Colors.grey.shade100,
+                      shape: BoxShape.circle,
+                    ),
+                    padding: const EdgeInsets.all(6),
+                    child: Icon(
+                      Icons.close,
+                      size: 20,
+                      color: gift.imageUrl.isNotEmpty
+                          ? Colors.white
+                          : LightModeColors.dashboardTextSecondary,
+                    ),
+                  ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       );
