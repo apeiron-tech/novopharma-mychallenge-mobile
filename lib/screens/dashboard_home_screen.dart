@@ -20,6 +20,8 @@ import 'package:novopharma/theme.dart';
 import 'package:novopharma/services/popup_service.dart';
 import 'package:novopharma/widgets/popup_dialog.dart';
 import 'package:novopharma/screens/challenges_list_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:novopharma/screens/pharmacy_profile_screen.dart';
 
 class DashboardHomeScreen extends StatefulWidget {
   const DashboardHomeScreen({super.key});
@@ -398,7 +400,7 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
                                       );
                                     },
                                   ),
-                                  const SizedBox(height: 20),
+                                  const SizedBox(height: 24),
                                   Consumer<PluxeeRedemptionProvider>(
                                     builder: (context, pluxee, _) =>
                                         _buildPointsCard(
@@ -408,10 +410,7 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
                                           pluxee,
                                         ),
                                   ),
-                                  const SizedBox(height: 16),
-                                  _buildRedeemButton(context, l10n),
-                                  const SizedBox(height: 20),
-                                  const SizedBox(height: 20),
+                                  const SizedBox(height: 28),
                                   _buildDashboardGrid(
                                     context,
                                     l10n,
@@ -444,6 +443,9 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
     final pendingPoints = pluxeeRedemption.totalPendingPoints;
     final allTimePoints = pluxeeRedemption.allTimePoints;
 
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double scaleFactor = (screenWidth > 600) ? 1.4 : 1.0;
+
     return Column(
       children: [
         Container(
@@ -473,8 +475,8 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
                 right: -20,
                 top: -20,
                 child: Container(
-                  width: 100,
-                  height: 100,
+                  width: 100 * scaleFactor,
+                  height: 100 * scaleFactor,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: Colors.white.withOpacity(0.1),
@@ -485,8 +487,8 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
                 left: -30,
                 bottom: -30,
                 child: Container(
-                  width: 120,
-                  height: 120,
+                  width: 120 * scaleFactor,
+                  height: 120 * scaleFactor,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: Colors.white.withOpacity(0.05),
@@ -495,7 +497,7 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
               ),
               // Main content
               Padding(
-                padding: const EdgeInsets.all(24),
+                padding: EdgeInsets.all(24 * scaleFactor),
                 child: Row(
                   children: [
                     // Current year points section (left side)
@@ -515,15 +517,15 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
                             child: Text(
                               'TOTAL POINTS CUMULÉS ',
                               textAlign: TextAlign.center,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 11,
+                                fontSize: 11 * scaleFactor,
                                 fontWeight: FontWeight.w600,
                                 letterSpacing: 1.2,
                               ),
                             ),
                           ),
-                          const SizedBox(height: 16),
+                          SizedBox(height: 16 * scaleFactor),
                           _isCalculatingYearPoints
                               ? const SizedBox(
                                   width: 24,
@@ -544,9 +546,9 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
                                         RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
                                         (Match m) => '${m[1]} ',
                                       ),
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 32,
+                                        fontSize: 32 * scaleFactor,
                                         fontWeight: FontWeight.w800,
                                         letterSpacing: -1,
                                       ),
@@ -558,7 +560,7 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
                                         'pts',
                                         style: TextStyle(
                                           color: Colors.white.withOpacity(0.9),
-                                          fontSize: 16,
+                                          fontSize: 16 * scaleFactor,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       ),
@@ -571,8 +573,8 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
                     // Vertical divider
                     Container(
                       width: 1,
-                      height: 80,
-                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      height: 80 * scaleFactor,
+                      margin: EdgeInsets.symmetric(horizontal: 16 * scaleFactor),
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           begin: Alignment.topCenter,
@@ -602,15 +604,15 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
                             child: Text(
                               l10n.currentPointsBalance.toUpperCase(),
                               textAlign: TextAlign.center,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 11,
+                                fontSize: 11 * scaleFactor,
                                 fontWeight: FontWeight.w600,
                                 letterSpacing: 1.2,
                               ),
                             ),
                           ),
-                          const SizedBox(height: 16),
+                          SizedBox(height: 16 * scaleFactor),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -621,9 +623,9 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
                                   RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
                                   (Match m) => '${m[1]} ',
                                 ),
-                                style: const TextStyle(
+                                style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 32,
+                                  fontSize: 32 * scaleFactor,
                                   fontWeight: FontWeight.w800,
                                   letterSpacing: -1,
                                 ),
@@ -635,7 +637,7 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
                                   'pts',
                                   style: TextStyle(
                                     color: Colors.white.withOpacity(0.9),
-                                    fontSize: 16,
+                                    fontSize: 16 * scaleFactor,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -772,7 +774,9 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
       mainAxisSpacing: 16,
       childAspectRatio: 1.0,
       children: [
-        _buildManualSaleCard(context, l10n),
+        if (user.role == 'Dermo-conseiller') _buildCheckInCard(context),
+        if (user.role != 'Dermo-conseiller')
+          _buildManualSaleCard(context, l10n),
         _buildLeaderboardCard(context, l10n),
         _buildGoalsCard(context, l10n),
         _buildBadgesCard(context, l10n),
@@ -782,6 +786,13 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
   }
 
   Widget _buildManualSaleCard(BuildContext context, AppLocalizations l10n) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double scaleFactor = (screenWidth > 600) ? 1.4 : 1.0;
+    final double iconSize = 40 * scaleFactor;
+    final double paddingVal = 16 * scaleFactor;
+    final double fontSizeVal = 14 * scaleFactor;
+    final double spacingVal = 12 * scaleFactor;
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -809,27 +820,25 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  padding: const EdgeInsets.all(16),
+                  padding: EdgeInsets.all(paddingVal),
                   decoration: const BoxDecoration(
                     color: LightModeColors.warning,
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.shopping_cart,
                     color: Colors.white,
-                    size: 40,
+                    size: iconSize,
                   ),
                 ),
-                const SizedBox(height: 12),
-                Expanded(
-                  child: Text(
-                    l10n.manualSale,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: LightModeColors.dashboardTextPrimary,
-                    ),
+                SizedBox(height: spacingVal),
+                Text(
+                  l10n.manualSale,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: fontSizeVal,
+                    fontWeight: FontWeight.bold,
+                    color: LightModeColors.dashboardTextPrimary,
                   ),
                 ),
               ],
@@ -841,6 +850,13 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
   }
 
   Widget _buildLeaderboardCard(BuildContext context, AppLocalizations l10n) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double scaleFactor = (screenWidth > 600) ? 1.4 : 1.0;
+    final double iconSize = 40 * scaleFactor;
+    final double paddingVal = 16 * scaleFactor;
+    final double fontSizeVal = 14 * scaleFactor;
+    final double spacingVal = 12 * scaleFactor;
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -869,27 +885,25 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  padding: const EdgeInsets.all(16),
+                  padding: EdgeInsets.all(paddingVal),
                   decoration: const BoxDecoration(
                     color: LightModeColors.success,
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.check_circle,
                     color: Colors.white,
-                    size: 40,
+                    size: iconSize,
                   ),
                 ),
-                const SizedBox(height: 12),
-                Expanded(
-                  child: Text(
-                    l10n.performanceTracking,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: LightModeColors.dashboardTextPrimary,
-                    ),
+                SizedBox(height: spacingVal),
+                Text(
+                  l10n.performanceTracking,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: fontSizeVal,
+                    fontWeight: FontWeight.bold,
+                    color: LightModeColors.dashboardTextPrimary,
                   ),
                 ),
               ],
@@ -901,6 +915,13 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
   }
 
   Widget _buildGoalsCard(BuildContext context, AppLocalizations l10n) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double scaleFactor = (screenWidth > 600) ? 1.4 : 1.0;
+    final double iconSize = 40 * scaleFactor;
+    final double paddingVal = 16 * scaleFactor;
+    final double fontSizeVal = 14 * scaleFactor;
+    final double spacingVal = 12 * scaleFactor;
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -929,27 +950,25 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  padding: const EdgeInsets.all(16),
+                  padding: EdgeInsets.all(paddingVal),
                   decoration: BoxDecoration(
                     color: LightModeColors.lightError,
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.flag_circle,
                     color: Colors.white,
-                    size: 40,
+                    size: iconSize,
                   ),
                 ),
-                const SizedBox(height: 12),
-                Expanded(
-                  child: Text(
-                    l10n.objectives,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: LightModeColors.dashboardTextPrimary,
-                    ),
+                SizedBox(height: spacingVal),
+                Text(
+                  l10n.objectives,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: fontSizeVal,
+                    fontWeight: FontWeight.bold,
+                    color: LightModeColors.dashboardTextPrimary,
                   ),
                 ),
               ],
@@ -961,6 +980,13 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
   }
 
   Widget _buildBadgesCard(BuildContext context, AppLocalizations l10n) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double scaleFactor = (screenWidth > 600) ? 1.4 : 1.0;
+    final double iconSize = 40 * scaleFactor;
+    final double paddingVal = 16 * scaleFactor;
+    final double fontSizeVal = 14 * scaleFactor;
+    final double spacingVal = 12 * scaleFactor;
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -989,27 +1015,25 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  padding: const EdgeInsets.all(16),
+                  padding: EdgeInsets.all(paddingVal),
                   decoration: const BoxDecoration(
                     color: LightModeColors.lightwarning,
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.military_tech,
                     color: Colors.white,
-                    size: 40,
+                    size: iconSize,
                   ),
                 ),
-                const SizedBox(height: 12),
-                Expanded(
-                  child: Text(
-                    l10n.lastBadge,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: LightModeColors.dashboardTextPrimary,
-                    ),
+                SizedBox(height: spacingVal),
+                Text(
+                  l10n.lastBadge,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: fontSizeVal,
+                    fontWeight: FontWeight.bold,
+                    color: LightModeColors.dashboardTextPrimary,
                   ),
                 ),
               ],
@@ -1021,6 +1045,13 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
   }
 
   Widget _buildChallengesCard(BuildContext context, AppLocalizations l10n) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double scaleFactor = (screenWidth > 600) ? 1.4 : 1.0;
+    final double iconSize = 40 * scaleFactor;
+    final double paddingVal = 16 * scaleFactor;
+    final double fontSizeVal = 14 * scaleFactor;
+    final double spacingVal = 12 * scaleFactor;
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -1049,27 +1080,112 @@ class _DashboardHomeScreenState extends State<DashboardHomeScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  padding: const EdgeInsets.all(16),
+                  padding: EdgeInsets.all(paddingVal),
                   decoration: const BoxDecoration(
                     color: LightModeColors.lightPrimary,
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.emoji_events_rounded,
                     color: Colors.white,
-                    size: 40,
+                    size: iconSize,
                   ),
                 ),
-                const SizedBox(height: 12),
-                Expanded(
-                  child: const Text(
-                    "Challenges",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: LightModeColors.dashboardTextPrimary,
+                SizedBox(height: spacingVal),
+                Text(
+                  "Challenges",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: fontSizeVal,
+                    fontWeight: FontWeight.bold,
+                    color: LightModeColors.dashboardTextPrimary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCheckInCard(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double scaleFactor = (screenWidth > 600) ? 1.4 : 1.0;
+    final double iconSize = 40 * scaleFactor;
+    final double paddingVal = 16 * scaleFactor;
+    final double fontSizeVal = 14 * scaleFactor;
+    final double spacingVal = 12 * scaleFactor;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: LightModeColors.lightOutlineVariant),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(16),
+        child: InkWell(
+          onTap: () async {
+            final prefs = await SharedPreferences.getInstance();
+            final activeVisitId = prefs.getString('active_visit_id');
+            final activePharId = prefs.getString('active_pharmacy_id');
+            final activePharName = prefs.getString('active_pharmacy_name');
+
+            if (activeVisitId != null &&
+                activePharId != null &&
+                activePharName != null) {
+              if (context.mounted) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PharmacyProfileScreen(
+                      pharmacyId: activePharId,
+                      pharmacyName: activePharName,
                     ),
+                  ),
+                );
+              }
+            } else {
+              if (context.mounted) {
+                Navigator.pushNamed(context, '/pharmacy_selection');
+              }
+            }
+          },
+          borderRadius: BorderRadius.circular(16),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  padding: EdgeInsets.all(paddingVal),
+                  decoration: const BoxDecoration(
+                    color: LightModeColors.warning,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.pin_drop_rounded,
+                    color: Colors.white,
+                    size: iconSize,
+                  ),
+                ),
+                SizedBox(height: spacingVal),
+                Text(
+                  "Check-in / Check-out",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: fontSizeVal,
+                    fontWeight: FontWeight.bold,
+                    color: LightModeColors.dashboardTextPrimary,
                   ),
                 ),
               ],

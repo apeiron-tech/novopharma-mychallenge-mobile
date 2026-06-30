@@ -53,6 +53,10 @@
 		<string>Cette application a besoin de l'autorisation d'ajouter des photos à votre bibliothèque pour enregistrer des documents ou des images téléchargés.</string>
 		<key>NSCameraUsageDescription</key>
 		<string>Cette application a besoin d'accéder à votre caméra pour prendre une photo de profil</string>
+		<key>NSLocationWhenInUseUsageDescription</key>
+		<string>Cette application nécessite l'accès à votre position pour vous suggérer les pharmacies à proximité et valider les Check-in / Check-out.</string>
+		<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+		<string>Cette application nécessite l'accès à votre position pour valider les Check-in / Check-out.</string>
 		<key>UIFileSharingEnabled</key>
 		<true/>
 		<key>LSSupportsOpeningDocumentsInPlace</key>

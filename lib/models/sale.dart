@@ -13,6 +13,7 @@ class Sale {
   final String? productBrandSnapshot;
   final String? productCategorySnapshot;
   final String status;
+  final String? visitId;
 
   Sale({
     required this.id,
@@ -27,6 +28,7 @@ class Sale {
     this.productBrandSnapshot,
     this.productCategorySnapshot,
     required this.status,
+    this.visitId,
   });
 
   factory Sale.fromFirestore(DocumentSnapshot doc) {
@@ -44,6 +46,7 @@ class Sale {
       productBrandSnapshot: data['productBrandSnapshot'],
       productCategorySnapshot: data['productCategorySnapshot'],
       status: data['status'] ?? 'pending',
+      visitId: data['visitId'],
     );
   }
 
@@ -60,6 +63,7 @@ class Sale {
       'productBrandSnapshot': productBrandSnapshot,
       'productCategorySnapshot': productCategorySnapshot,
       'status': status,
+      'visitId': visitId,
     };
   }
 }

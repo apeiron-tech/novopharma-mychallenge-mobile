@@ -7,6 +7,29 @@ class SaleService {
   final String _collection = 'sales';
 
   Future<String> createSale(Sale sale) async {
+    // Enforce active visit check for Dermo-conseiller
+    final userSnap = await _firestore.collection('users').doc(sale.userId).get();
+    if (userSnap.exists) {
+      final role = userSnap.data()?['role'];
+      if (role == 'Dermo-conseiller') {
+        final activeVisits = await _firestore
+            .collection('visits_history')
+            .where('dermoId', isEqualTo: sale.userId)
+            .where('status', isEqualTo: 'active')
+            .limit(1)
+            .get();
+
+        if (activeVisits.docs.isEmpty) {
+          throw Exception("Vente non autorisée: Pas de check-in actif.");
+        }
+
+        final activeVisit = activeVisits.docs.first;
+        if (sale.visitId != activeVisit.id || sale.pharmacyId != activeVisit.data()['pharmacyId']) {
+          throw Exception("Vente non autorisée: Correspondance de visite invalide.");
+        }
+      }
+    }
+
     //final userRef = _firestore.collection('users').doc(sale.userId);
     final saleRef = _firestore.collection(_collection).doc();
 
@@ -40,10 +63,32 @@ class SaleService {
   }
 
   Future<void> updateSale(Sale oldSale, Sale newSale) async {
-    final userRef = _firestore.collection('users').doc(newSale.userId);
     final saleRef = _firestore.collection(_collection).doc(newSale.id);
 
     log('Attempting to update sale ${newSale.id}');
+
+    // Enforce active visit check for Dermo-conseiller
+    final userSnap = await _firestore.collection('users').doc(newSale.userId).get();
+    if (userSnap.exists) {
+      final role = userSnap.data()?['role'];
+      if (role == 'Dermo-conseiller') {
+        final activeVisits = await _firestore
+            .collection('visits_history')
+            .where('dermoId', isEqualTo: newSale.userId)
+            .where('status', isEqualTo: 'active')
+            .limit(1)
+            .get();
+
+        if (activeVisits.docs.isEmpty) {
+          throw Exception("Modification non autorisée: Pas de check-in actif.");
+        }
+
+        final activeVisit = activeVisits.docs.first;
+        if (newSale.visitId != activeVisit.id || newSale.pharmacyId != activeVisit.data()['pharmacyId']) {
+          throw Exception("Modification non autorisée: Correspondance de visite invalide.");
+        }
+      }
+    }
 
     await _firestore
         .runTransaction((transaction) async {
@@ -64,7 +109,6 @@ class SaleService {
   }
 
   Future<void> deleteSale(Sale sale) async {
-    final userRef = _firestore.collection('users').doc(sale.userId);
     final saleRef = _firestore.collection(_collection).doc(sale.id);
 
     log('Attempting to delete sale ${sale.id}');

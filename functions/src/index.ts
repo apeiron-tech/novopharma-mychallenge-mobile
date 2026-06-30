@@ -362,9 +362,12 @@ function isSaleEligible(sale: any, goal: any, user: any, pharmacy: any, product:
   if (criteria.categories?.length > 0 && !criteria.categories.includes(product?.category)) return false;
 
   // Check pharmacy-related criteria
-  if (criteria.pharmacyIds?.length > 0 && !criteria.pharmacyIds.includes(user?.pharmacyId)) return false;
+  const targetPharmacyId = sale?.pharmacyId || user?.pharmacyId;
+  if (criteria.pharmacyIds?.length > 0 && !criteria.pharmacyIds.includes(targetPharmacyId)) return false;
   if (criteria.zones?.length > 0 && !criteria.zones.includes(pharmacy?.zone)) return false;
-  if (criteria.clientCategories?.length > 0 && !criteria.clientCategories.includes(pharmacy?.clientCategory)) return false;
+
+  const userCategory = user?.role === 'Dermo-conseiller' ? 'Dermo-conseiller' : pharmacy?.clientCategory;
+  if (criteria.clientCategories?.length > 0 && !criteria.clientCategories.includes(userCategory)) return false;
 
   return true; // If no checks failed, the sale is eligible
 }
