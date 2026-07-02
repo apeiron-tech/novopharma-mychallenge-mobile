@@ -24,6 +24,32 @@ class GiftService {
     }
   }
 
+  Future<List<GiftAssignment>> getAssignmentsForDermoOrPharmacy({
+    required String pharmacyId,
+    required String dermoId,
+  }) async {
+    try {
+      final pharmSnap = await _db
+          .collection('giftAssignments')
+          .where('assigneeId', isEqualTo: pharmacyId)
+          .get();
+
+      final dermoSnap = await _db
+          .collection('giftAssignments')
+          .where('assigneeId', isEqualTo: dermoId)
+          .get();
+
+      final List<GiftAssignment> list = [];
+      list.addAll(pharmSnap.docs.map((doc) => GiftAssignment.fromFirestore(doc)));
+      list.addAll(dermoSnap.docs.map((doc) => GiftAssignment.fromFirestore(doc)));
+
+      return list.where((assignment) => assignment.assignedStock > 0).toList();
+    } catch (e) {
+      print('Error getting gift assignments for dermo/pharmacy: $e');
+      return [];
+    }
+  }
+
   Future<Gift?> getGiftById(String id) async {
     try {
       final doc = await _db.collection('gifts').doc(id).get();
@@ -48,47 +74,62 @@ class GiftService {
     String? clientPhone,
     required String userId,
     String? pointOfSale,
+    String? assignmentId,
+    String? visitId,
   }) async {
     final operationRef = _db.collection('giftOperations').doc();
 
     await _db.runTransaction((transaction) async {
-      final assignmentsQuery = _db
-          .collection('giftAssignments')
-          .where('assigneeId', isEqualTo: pharmacyId)
-          .where('giftId', isEqualTo: giftId);
-
-      final assignmentsSnapshot = await assignmentsQuery.get();
-
-      List<DocumentSnapshot> assignments = assignmentsSnapshot.docs;
-      // Sort by createdAt ascending
-      assignments.sort((a, b) {
-        Timestamp t1 = a.get('createdAt') ?? Timestamp.now();
-        Timestamp t2 = b.get('createdAt') ?? Timestamp.now();
-        return t1.compareTo(t2);
-      });
-
-      int remainingToDeduct = quantity;
+      List<DocumentSnapshot> freshAssignments = [];
       int totalAvailable = 0;
 
-      // We need to re-read each doc inside the transaction to be safe?
-      // Actually, if we use the snapshot docs, they might be stale if we don't use transaction.get.
-      // But firestore transactions on collections are tricky.
-      // Let's do it this way: fetch IDs first, then get each one via transaction.
-
-      List<String> assignmentIds = assignments.map((d) => d.id).toList();
-      List<DocumentSnapshot> freshAssignments = [];
-      for (String id in assignmentIds) {
+      if (assignmentId != null) {
         final freshDoc = await transaction.get(
-          _db.collection('giftAssignments').doc(id),
+          _db.collection('giftAssignments').doc(assignmentId),
         );
-        freshAssignments.add(freshDoc);
-        totalAvailable += (freshDoc.get('assignedStock') as int);
+        if (freshDoc.exists) {
+          freshAssignments.add(freshDoc);
+          totalAvailable += (freshDoc.get('assignedStock') as int);
+        }
+      }
+
+      if (freshAssignments.isEmpty) {
+        var assignmentsSnapshot = await _db
+            .collection('giftAssignments')
+            .where('assigneeId', isEqualTo: pharmacyId)
+            .where('giftId', isEqualTo: giftId)
+            .get();
+
+        if (assignmentsSnapshot.docs.isEmpty) {
+          assignmentsSnapshot = await _db
+              .collection('giftAssignments')
+              .where('assigneeId', isEqualTo: userId)
+              .where('giftId', isEqualTo: giftId)
+              .get();
+        }
+
+        List<DocumentSnapshot> assignments = assignmentsSnapshot.docs;
+        assignments.sort((a, b) {
+          Timestamp t1 = a.get('createdAt') ?? Timestamp.now();
+          Timestamp t2 = b.get('createdAt') ?? Timestamp.now();
+          return t1.compareTo(t2);
+        });
+
+        List<String> assignmentIds = assignments.map((d) => d.id).toList();
+        for (String id in assignmentIds) {
+          final freshDoc = await transaction.get(
+            _db.collection('giftAssignments').doc(id),
+          );
+          freshAssignments.add(freshDoc);
+          totalAvailable += (freshDoc.get('assignedStock') as int);
+        }
       }
 
       if (totalAvailable < quantity) {
         throw Exception("Not enough total stock!");
       }
 
+      int remainingToDeduct = quantity;
       for (var doc in freshAssignments) {
         if (remainingToDeduct <= 0) break;
         int currentStock = doc.get('assignedStock') as int;
@@ -116,6 +157,7 @@ class GiftService {
         'userId': userId,
         'pointOfSale': pointOfSale,
         'createdAt': FieldValue.serverTimestamp(),
+        if (visitId != null) 'visitId': visitId,
       });
     });
   }

@@ -23,105 +23,123 @@ class GoalService {
     }
 
     try {
-      // Step 1: Get User and Pharmacy context
+      // Step 1: Get User Profile
       final userProfile = await _userService.getUser(user.uid);
-      if (userProfile == null || userProfile.pharmacyId.isEmpty) {
-        log('User profile or pharmacyId not found.');
+      if (userProfile == null) {
+        log('User profile not found.');
         return [];
       }
 
-      final pharmacy = await _pharmacyService.getPharmacy(
-        userProfile.pharmacyId,
-      );
-      if (pharmacy == null) {
-        log(
-          'Pharmacy details not found for pharmacyId: ${userProfile.pharmacyId}',
-        );
-        return [];
-      }
-
-      // Step 2: Construct and execute parallel queries
       final now = Timestamp.now();
-      log('Fetching goals with endDate >= $now');
-
       final baseQuery = _db
           .collection('goals')
           .where('isActive', isEqualTo: true)
           .where('endDate', isGreaterThanOrEqualTo: now);
 
-      final queries = <Future<QuerySnapshot<Map<String, dynamic>>>>[
-        // Goals with no pharmacy restrictions (global goals)
-        baseQuery.where('criteria.pharmacyIds', isEqualTo: []).get(),
-        // Goals targeting the user's specific zone
-        baseQuery.where('criteria.zones', arrayContains: pharmacy.zone).get(),
-        // Goals targeting the user's specific client category
-        baseQuery
-            .where(
-              'criteria.clientCategories',
-              arrayContains: pharmacy.clientCategory,
-            )
-            .get(),
-        // Goals targeting the user's specific pharmacy ID
-        baseQuery
-            .where(
-              'criteria.pharmacyIds',
-              arrayContains: userProfile.pharmacyId,
-            )
-            .get(),
-      ];
+      List<Goal> goalList = [];
 
-      final querySnapshots = await Future.wait(queries);
-
-      // Log the results of each query
-      log('Query 1 (Global) returned ${querySnapshots[0].docs.length} goals.');
-      log(
-        'Query 2 (Zone: ${pharmacy.zone}) returned ${querySnapshots[1].docs.length} goals.',
-      );
-      log(
-        'Query 3 (Client Category: ${pharmacy.clientCategory}) returned ${querySnapshots[2].docs.length} goals.',
-      );
-      log(
-        'Query 4 (Pharmacy ID: ${userProfile.pharmacyId}) returned ${querySnapshots[3].docs.length} goals.',
-      );
-
-      // Step 3: Merge and de-duplicate results
-      final Map<String, Goal> relevantGoals = {};
-      for (final snapshot in querySnapshots) {
-        for (final doc in snapshot.docs) {
-          final data = doc.data();
-          if (data['status'] == 'DELETED') {
-            continue;
-          }
-          relevantGoals[doc.id] = Goal.fromFirestore(doc);
+      if (userProfile.role == 'Dermo-conseiller') {
+        final querySnapshot = await baseQuery.get();
+        goalList = querySnapshot.docs
+            .where((doc) => (doc.data() as Map<String, dynamic>)['status'] != 'DELETED')
+            .map((doc) => Goal.fromFirestore(doc))
+            .where((goal) =>
+                goal.criteria.clientCategories.isEmpty ||
+                goal.criteria.clientCategories.contains('Dermo-conseiller'))
+            .toList();
+      } else {
+        if (userProfile.pharmacyId.isEmpty) {
+          log('User pharmacyId not found.');
+          return [];
         }
-      }
 
-      log('Total unique goals after merging: ${relevantGoals.length}');
-
-      var goalList = relevantGoals.values.toList();
-
-      if (pharmacy.clientCategory == 'Pharmacie' ||
-          pharmacy.clientCategory.isEmpty) {
-        goalList = goalList
-            .where(
-              (goal) => goal.criteria.clientCategories.contains('Pharmacie'),
-            )
-            .toList();
-
-        print(
-          'Filtered goals for client category Pharmacie: ${goalList.length}',
+        final pharmacy = await _pharmacyService.getPharmacy(
+          userProfile.pharmacyId,
         );
-      } else if (pharmacy.clientCategory == 'Para-Pharmacie') {
-        goalList = goalList
-            .where(
-              (goal) =>
-                  goal.criteria.clientCategories.contains('Para-Pharmacie'),
-            )
-            .toList();
+        if (pharmacy == null) {
+          log(
+            'Pharmacy details not found for pharmacyId: ${userProfile.pharmacyId}',
+          );
+          return [];
+        }
 
-        print(
-          'Filtered goals for client category Para-Pharmacie: ${goalList.length}',
+        // Step 2: Construct and execute parallel queries
+        log('Fetching goals with endDate >= $now');
+
+        final queries = <Future<QuerySnapshot<Map<String, dynamic>>>>[
+          // Goals with no pharmacy restrictions (global goals)
+          baseQuery.where('criteria.pharmacyIds', isEqualTo: []).get(),
+          // Goals targeting the user's specific zone
+          baseQuery.where('criteria.zones', arrayContains: pharmacy.zone).get(),
+          // Goals targeting the user's specific client category
+          baseQuery
+              .where(
+                'criteria.clientCategories',
+                arrayContains: pharmacy.clientCategory,
+              )
+              .get(),
+          // Goals targeting the user's specific pharmacy ID
+          baseQuery
+              .where(
+                'criteria.pharmacyIds',
+                arrayContains: userProfile.pharmacyId,
+              )
+              .get(),
+        ];
+
+        final querySnapshots = await Future.wait(queries);
+
+        // Log the results of each query
+        log('Query 1 (Global) returned ${querySnapshots[0].docs.length} goals.');
+        log(
+          'Query 2 (Zone: ${pharmacy.zone}) returned ${querySnapshots[1].docs.length} goals.',
         );
+        log(
+          'Query 3 (Client Category: ${pharmacy.clientCategory}) returned ${querySnapshots[2].docs.length} goals.',
+        );
+        log(
+          'Query 4 (Pharmacy ID: ${userProfile.pharmacyId}) returned ${querySnapshots[3].docs.length} goals.',
+        );
+
+        // Step 3: Merge and de-duplicate results
+        final Map<String, Goal> relevantGoals = {};
+        for (final snapshot in querySnapshots) {
+          for (final doc in snapshot.docs) {
+            final data = doc.data();
+            if (data['status'] == 'DELETED') {
+              continue;
+            }
+            relevantGoals[doc.id] = Goal.fromFirestore(doc);
+          }
+        }
+
+        log('Total unique goals after merging: ${relevantGoals.length}');
+
+        goalList = relevantGoals.values.toList();
+
+        if (pharmacy.clientCategory == 'Pharmacie' ||
+            pharmacy.clientCategory.isEmpty) {
+          goalList = goalList
+              .where(
+                (goal) => goal.criteria.clientCategories.contains('Pharmacie'),
+              )
+              .toList();
+
+          print(
+            'Filtered goals for client category Pharmacie: ${goalList.length}',
+          );
+        } else if (pharmacy.clientCategory == 'Para-Pharmacie') {
+          goalList = goalList
+              .where(
+                (goal) =>
+                    goal.criteria.clientCategories.contains('Para-Pharmacie'),
+              )
+              .toList();
+
+          print(
+            'Filtered goals for client category Para-Pharmacie: ${goalList.length}',
+          );
+        }
       }
 
       if (goalList.isEmpty) {

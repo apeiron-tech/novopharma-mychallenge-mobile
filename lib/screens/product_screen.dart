@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:novopharma/controllers/sales_history_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:novopharma/controllers/auth_provider.dart';
@@ -103,9 +105,19 @@ class _ProductScreenState extends State<ProductScreen> {
 
     Pharmacy? pharmacy;
     final userModel = user as UserModel?;
-    if (userModel != null && userModel.pharmacyId.isNotEmpty) {
+    String? resolvedPharmacyId;
+    if (userModel != null) {
+      if (userModel.role == 'Dermo-conseiller') {
+        final prefs = await SharedPreferences.getInstance();
+        resolvedPharmacyId = prefs.getString('active_pharmacy_id');
+      } else {
+        resolvedPharmacyId = userModel.pharmacyId;
+      }
+    }
+
+    if (resolvedPharmacyId != null && resolvedPharmacyId.isNotEmpty) {
       final pharmacies = await _pharmacyService.getPharmaciesByIds([
-        userModel.pharmacyId,
+        resolvedPharmacyId,
       ]);
       if (pharmacies.isNotEmpty) {
         pharmacy = pharmacies.first;
@@ -577,6 +589,66 @@ class _ProductScreenState extends State<ProductScreen> {
     final double unitPoints = _getEffectivePoints(product, challenges, pharmacyCategory);
     final double totalPrice = product.price * quantity;
 
+    String? activeVisitId;
+    String? activePharmacyId;
+
+    if (user.role == 'Dermo-conseiller') {
+      final prefs = await SharedPreferences.getInstance();
+      activeVisitId = prefs.getString('active_visit_id');
+      activePharmacyId = prefs.getString('active_pharmacy_id');
+
+      if (activeVisitId == null || activePharmacyId == null) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                "Vous devez effectuer un check-in dans une pharmacie avant de pouvoir enregistrer ou modifier une vente.",
+              ),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+        return;
+      }
+
+      // Verify visit is still active in Firestore
+      try {
+        final visitDoc = await FirebaseFirestore.instance
+            .collection('visits_history')
+            .doc(activeVisitId)
+            .get();
+
+        if (!visitDoc.exists || visitDoc.data()?['status'] != 'active') {
+          // The visit is no longer active, clear local storage
+          await prefs.remove('active_visit_id');
+          await prefs.remove('active_pharmacy_id');
+          await prefs.remove('active_pharmacy_name');
+
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text(
+                  "Votre session de visite a expiré ou n'est plus active. Veuillez faire un nouveau check-in.",
+                ),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+          return;
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Erreur de validation de la visite: $e"),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+        return;
+      }
+    }
+
     Future<List<String>> performSave(Map<Product, int> productsToSell) async {
       List<String> saleIds = [];
       for (var entry in productsToSell.entries) {
@@ -591,7 +663,7 @@ class _ProductScreenState extends State<ProductScreen> {
           final updatedSale = Sale(
             id: widget.sale!.id,
             userId: user.uid,
-            pharmacyId: user.pharmacyId,
+            pharmacyId: user.role == 'Dermo-conseiller' ? activePharmacyId! : user.pharmacyId,
             productId: p.id,
             productNameSnapshot: p.name,
             quantity: qty,
@@ -601,6 +673,7 @@ class _ProductScreenState extends State<ProductScreen> {
             productBrandSnapshot: p.marque,
             productCategorySnapshot: p.category,
             status: widget.sale!.status, // Keep original status
+            visitId: user.role == 'Dermo-conseiller' ? activeVisitId : widget.sale!.visitId,
           );
           Provider.of<SalesHistoryProvider>(
             context,
@@ -612,7 +685,7 @@ class _ProductScreenState extends State<ProductScreen> {
           final newSale = Sale(
             id: '', // Firestore will generate ID
             userId: user.uid,
-            pharmacyId: user.pharmacyId,
+            pharmacyId: user.role == 'Dermo-conseiller' ? activePharmacyId! : user.pharmacyId,
             productId: p.id,
             productNameSnapshot: p.name,
             quantity: qty,
@@ -622,6 +695,7 @@ class _ProductScreenState extends State<ProductScreen> {
             productBrandSnapshot: p.marque,
             productCategorySnapshot: p.category,
             status: 'pending',
+            visitId: user.role == 'Dermo-conseiller' ? activeVisitId : null,
           );
           saleId = await _saleService.createSale(newSale);
         }
@@ -632,7 +706,13 @@ class _ProductScreenState extends State<ProductScreen> {
 
     // Check for gifts if it's a new sale or existing sale
     final giftService = GiftService();
-    final assignments = await giftService.getAssignmentsForPharmacy(user.pharmacyId);
+    final String targetPharmacyId = user.role == 'Dermo-conseiller' ? activePharmacyId! : user.pharmacyId;
+    final List<GiftAssignment> assignments = user.role == 'Dermo-conseiller'
+        ? await giftService.getAssignmentsForDermoOrPharmacy(
+            pharmacyId: targetPharmacyId,
+            dermoId: user.uid,
+          )
+        : await giftService.getAssignmentsForPharmacy(targetPharmacyId);
 
     // 1. Check for Trade Offer Reminders
     int finalQuantity = quantity;
@@ -967,21 +1047,21 @@ class _ProductScreenState extends State<ProductScreen> {
       Map<String, Map<String, dynamic>> groupedGifts = {};
       for (var data in validGiftsData) {
         final assignment = data['assignment'] as GiftAssignment;
-        final giftId = assignment.giftId;
+        final key = "${assignment.giftId}_${assignment.assigneeId}";
         
-        if (!groupedGifts.containsKey(giftId)) {
-          groupedGifts[giftId] = {
+        if (!groupedGifts.containsKey(key)) {
+          groupedGifts[key] = {
             'gift': data['gift'],
             'assignment': assignment,
             'totalStock': assignment.assignedStock,
           };
         } else {
-           groupedGifts[giftId]!['totalStock'] += assignment.assignedStock;
-           final existingAssignment = groupedGifts[giftId]!['assignment'] as GiftAssignment;
+           groupedGifts[key]!['totalStock'] += assignment.assignedStock;
+           final existingAssignment = groupedGifts[key]!['assignment'] as GiftAssignment;
            final existingCreatedAt = existingAssignment.createdAt ?? DateTime.now();
            final currentCreatedAt = assignment.createdAt ?? DateTime.now();
            if (currentCreatedAt.isBefore(existingCreatedAt)) {
-              groupedGifts[giftId]!['assignment'] = assignment;
+              groupedGifts[key]!['assignment'] = assignment;
            }
         }
       }
@@ -1074,12 +1154,13 @@ class _ProductScreenState extends State<ProductScreen> {
          await _showGiftSelectionDialog(
            availableGifts,
            savedSaleIds,
-           user.pharmacyId,
+           user.role == 'Dermo-conseiller' ? activePharmacyId! : user.pharmacyId,
            user.uid,
            user.pointOfSale,
            giftService,
            finalQuantity,
            finalTotalPrice,
+           visitId: activeVisitId,
          );
       }
     }
@@ -1106,7 +1187,8 @@ class _ProductScreenState extends State<ProductScreen> {
       String? pointOfSale,
       GiftService giftService,
       int quantity,
-      double totalPrice) async {
+      double totalPrice,
+      {String? visitId}) async {
     final l10n = AppLocalizations.of(context)!;
     final formKey = GlobalKey<FormState>();
     final quantityController = TextEditingController();
@@ -1191,9 +1273,13 @@ class _ProductScreenState extends State<ProductScreen> {
                           items: availableGifts.map((data) {
                             final gift = data['gift'] as Gift;
                             final totalStock = data['totalStock'] as int;
+                            final assignment = data['assignment'] as GiftAssignment;
+                            final String sourceType = assignment.assigneeType == 'Dermo-conseiller'
+                                ? "Stock personnel"
+                                : "Stock pharmacie";
                             return DropdownMenuItem(
                               value: data,
-                              child: Text('${gift.title} (Stock: $totalStock)', style: const TextStyle(fontSize: 14)),
+                              child: Text('${gift.title} (Stock: $totalStock - $sourceType)', style: const TextStyle(fontSize: 14)),
                             );
                           }).toList(),
                           onChanged: (value) {
@@ -1267,6 +1353,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                     formKey.currentState!.save();
                                     if (selectedGiftData != null) {
                                        final gift = selectedGiftData!['gift'] as Gift;
+                                       final assignment = selectedGiftData!['assignment'] as GiftAssignment;
                                        await _handleGiftSubmission(
                                          saleIds: saleIds,
                                          giftId: gift.id,
@@ -1280,6 +1367,8 @@ class _ProductScreenState extends State<ProductScreen> {
                                          giftService: giftService,
                                          l10n: l10n,
                                          context: context,
+                                         assignmentId: assignment.id,
+                                         visitId: visitId,
                                        );
                                     }
                                   }
@@ -1320,7 +1409,9 @@ class _ProductScreenState extends State<ProductScreen> {
       required String? pointOfSale,
       required GiftService giftService,
       required AppLocalizations l10n,
-      required BuildContext context}) async {
+      required BuildContext context,
+      String? assignmentId,
+      String? visitId}) async {
     try {
       await giftService.saveGiftOperation(
         saleId: saleIds.first,
@@ -1333,6 +1424,8 @@ class _ProductScreenState extends State<ProductScreen> {
         clientPhone: clientPhone,
         userId: userId,
         pointOfSale: pointOfSale,
+        assignmentId: assignmentId,
+        visitId: visitId,
       );
       if (context.mounted) {
         Navigator.pop(context);
@@ -1389,6 +1482,61 @@ class _ProductScreenState extends State<ProductScreen> {
 
           if (product == null) return Center(child: Text('Product not found.'));
           if (user == null || pharmacy == null) {
+            if (user?.role == 'Dermo-conseiller' && pharmacy == null) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.pin_drop_rounded,
+                        size: 80,
+                        color: Colors.redAccent,
+                      ),
+                      const SizedBox(height: 24),
+                      const Text(
+                        "Check-in Requis",
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: LightModeColors.dashboardTextPrimary,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      const Text(
+                        "Vous devez effectuer un check-in dans une pharmacie avant de pouvoir enregistrer une vente ou consulter un produit.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: LightModeColors.dashboardTextSecondary,
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pushReplacementNamed('/dashboard_home');
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: LightModeColors.lightPrimary,
+                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: const Text(
+                          "Aller au Tableau de Bord",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
             return Center(child: Text('Could not load user profile.'));
           }
 

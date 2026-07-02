@@ -227,27 +227,34 @@ class BadgeProvider with ChangeNotifier {
       }
     }
 
-    allBadges = allBadges.where((badge) {
-      final categories = badge.visibilityCriteria.clientCategories;
+    if (userProfile?.role == 'Dermo-conseiller') {
+      allBadges = allBadges.where((badge) {
+        final categories = badge.visibilityCriteria.clientCategories;
+        return categories.isEmpty || categories.contains('Dermo-conseiller');
+      }).toList();
+    } else {
+      allBadges = allBadges.where((badge) {
+        final categories = badge.visibilityCriteria.clientCategories;
 
-      if (categories.isEmpty ||
-          (categories.contains('Para-Pharmacie') &&
-              categories.contains('Pharmacie'))) {
-        return true;
-      }
+        if (categories.isEmpty ||
+            (categories.contains('Para-Pharmacie') &&
+                categories.contains('Pharmacie'))) {
+          return true;
+        }
 
-      if (categories.contains('Para-Pharmacie') &&
-          !categories.contains('Pharmacie')) {
-        return userCategory == 'Para-Pharmacie';
-      }
+        if (categories.contains('Para-Pharmacie') &&
+            !categories.contains('Pharmacie')) {
+          return userCategory == 'Para-Pharmacie';
+        }
 
-      if (categories.contains('Pharmacie') &&
-          !categories.contains('Para-Pharmacie')) {
-        return userCategory == 'Pharmacie' || userCategory.isEmpty;
-      }
+        if (categories.contains('Pharmacie') &&
+            !categories.contains('Para-Pharmacie')) {
+          return userCategory == 'Pharmacie' || userCategory.isEmpty;
+        }
 
-      return false;
-    }).toList();
+        return false;
+      }).toList();
+    }
 
     final List<BadgeDisplayInfo> badgeInfos = [];
     for (final badge in allBadges) {

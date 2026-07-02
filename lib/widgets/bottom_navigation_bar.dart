@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:novopharma/screens/dashboard_home_screen.dart';
 import 'package:novopharma/screens/formations_screen.dart';
@@ -6,6 +7,8 @@ import 'package:novopharma/screens/actualites_screen.dart';
 import 'package:novopharma/screens/sales_history_screen.dart';
 import 'package:novopharma/screens/barcode_scanner_screen.dart';
 import 'package:novopharma/generated/l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
+import 'package:novopharma/controllers/auth_provider.dart';
 import '../theme.dart';
 
 // Constants for consistent positioning
@@ -141,6 +144,36 @@ class BottomNavigationScaffoldWrapper extends StatefulWidget {
 
 class _BottomNavigationScaffoldWrapperState
     extends State<BottomNavigationScaffoldWrapper> {
+  bool _hasActivePharmacy = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkActivePharmacy();
+  }
+
+  @override
+  void didUpdateWidget(BottomNavigationScaffoldWrapper oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _checkActivePharmacy();
+  }
+
+  Future<void> _checkActivePharmacy() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final activePharId = prefs.getString('active_pharmacy_id');
+      final activeVisitId = prefs.getString('active_visit_id');
+      final hasActive = activePharId != null && activeVisitId != null;
+      if (mounted && _hasActivePharmacy != hasActive) {
+        setState(() {
+          _hasActivePharmacy = hasActive;
+        });
+      }
+    } catch (e) {
+      debugPrint("Error checking active pharmacy: $e");
+    }
+  }
+
   void _openScanner(BuildContext context) {
     Navigator.push(
       context,
@@ -153,13 +186,18 @@ class _BottomNavigationScaffoldWrapperState
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
+    final user = authProvider.userProfile;
+    final isDermo = user?.role == 'Dermo-conseiller';
+    final isScannerActive = !isDermo || _hasActivePharmacy;
+
     return Scaffold(
       extendBody: true, // Keep extendBody: true as requested
       body: widget.child, // Use widget.child instead of child
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _openScanner(context),
-        backgroundColor: LightModeColors.lightPrimary,
-        elevation: 10,
+        onPressed: isScannerActive ? () => _openScanner(context) : null,
+        backgroundColor: isScannerActive ? LightModeColors.lightPrimary : Colors.grey.shade400,
+        elevation: isScannerActive ? 10 : 0,
         shape: const CircleBorder(),
         child: const Icon(Icons.qr_code_scanner, color: LightModeColors.lightOnPrimary, size: 30),
       ),

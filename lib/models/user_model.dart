@@ -17,6 +17,7 @@ class UserModel {
   final String? position;
   final String? city;
   final String? pointOfSale;
+  final String role;
 
   static const String defaultAvatarUrl =
       'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face';
@@ -39,6 +40,7 @@ class UserModel {
     this.position,
     this.city,
     this.pointOfSale,
+    this.role = '',
   });
 
   factory UserModel.fromFirestore(DocumentSnapshot doc) {
@@ -76,6 +78,7 @@ class UserModel {
       position: positionStr,
       city: data['city'],
       pointOfSale: data['pointOfSale'],
+      role: data['role'] ?? '',
     );
   }
 

@@ -69,16 +69,22 @@ class PopupService {
         final popupCategories = popup.clientCategory;
         bool shouldShow = false;
 
-        if (popupCategories.isEmpty || 
-            (popupCategories.contains("Pharmacie") && popupCategories.contains("Para-Pharmacie"))) {
-          shouldShow = true;
-        } else if (popupCategories.contains("Pharmacie")) {
-          if (userCategory == "Pharmacie" || userCategory.isEmpty) {
+        if (user.role == 'Dermo-conseiller') {
+          if (popupCategories.isEmpty || popupCategories.contains('Dermo-conseiller')) {
             shouldShow = true;
           }
-        } else if (popupCategories.contains("Para-Pharmacie")) {
-          if (userCategory == "Para-Pharmacie") {
+        } else {
+          if (popupCategories.isEmpty || 
+              (popupCategories.contains("Pharmacie") && popupCategories.contains("Para-Pharmacie"))) {
             shouldShow = true;
+          } else if (popupCategories.contains("Pharmacie")) {
+            if (userCategory == "Pharmacie" || userCategory.isEmpty) {
+              shouldShow = true;
+            }
+          } else if (popupCategories.contains("Para-Pharmacie")) {
+            if (userCategory == "Para-Pharmacie") {
+              shouldShow = true;
+            }
           }
         }
 

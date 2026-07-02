@@ -26,6 +26,8 @@ import 'package:novopharma/theme.dart';
 import 'package:novopharma/screens/dashboard_home_screen.dart';
 import 'package:novopharma/screens/leaderboard_screen.dart';
 import 'package:novopharma/screens/profile_screen.dart';
+import 'package:novopharma/screens/pharmacy_selection_screen.dart';
+import 'package:novopharma/screens/pharmacy_profile_screen.dart';
 import 'package:novopharma/screens/goals_screen.dart';
 import 'package:novopharma/screens/barcode_scanner_screen.dart';
 import 'package:novopharma/screens/login_screen.dart';
@@ -38,6 +40,9 @@ import 'package:novopharma/screens/splash_screen.dart';
 import 'package:novopharma/screens/manual_sale_screen.dart';
 import 'package:novopharma/screens/product_screen.dart';
 import 'package:novopharma/screens/sales_history_screen.dart';
+import 'package:novopharma/screens/stock_brand_selection_screen.dart';
+import 'package:novopharma/screens/brand_stock_input_screen.dart';
+import 'package:novopharma/screens/stock_review_screen.dart';
 import 'package:novopharma/models/blog_post.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:chottu_link/chottu_link.dart';
@@ -168,6 +173,44 @@ class NovoPharmaApp extends StatelessWidget {
           return BadgesScreen(initialBadgeId: args?['id']);
         },
         '/actualites': (context) => const ActualitesScreen(),
+        '/pharmacy_selection': (context) => const PharmacySelectionScreen(),
+        '/pharmacy_profile': (context) {
+          final args =
+              ModalRoute.of(context)?.settings.arguments
+                  as Map<String, dynamic>?;
+          return PharmacyProfileScreen(
+            pharmacyId: args?['pharmacyId'] ?? '',
+            pharmacyName: args?['pharmacyName'] ?? '',
+          );
+        },
+        '/stock_brand_selection': (context) {
+          final args =
+              ModalRoute.of(context)?.settings.arguments
+                  as Map<String, dynamic>?;
+          return StockBrandSelectionScreen(
+            pharmacyId: args?['pharmacyId'] ?? '',
+            pharmacyName: args?['pharmacyName'] ?? '',
+          );
+        },
+        '/brand_stock_input': (context) {
+          final args =
+              ModalRoute.of(context)?.settings.arguments
+                  as Map<String, dynamic>?;
+          return BrandStockInputScreen(
+            pharmacyId: args?['pharmacyId'] ?? '',
+            pharmacyName: args?['pharmacyName'] ?? '',
+            brand: args?['brand'] ?? '',
+          );
+        },
+        '/stock_review': (context) {
+          final args =
+              ModalRoute.of(context)?.settings.arguments
+                  as Map<String, dynamic>?;
+          return StockReviewScreen(
+            pharmacyId: args?['pharmacyId'] ?? '',
+            pharmacyName: args?['pharmacyName'] ?? '',
+          );
+        },
         '/product': (context) {
           final args =
               ModalRoute.of(context)?.settings.arguments

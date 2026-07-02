@@ -410,9 +410,11 @@ export const onNewBadgeCreated = functions.firestore
 
 
                 const userPharmacyId = userData.pharmacyId;
-                const userClientCategory = userPharmacyId ?
-                    (pharmacyCategoryMap.get(userPharmacyId) || "Pharmacie") :
-                    "Pharmacie";
+                const userClientCategory = userData.role === "Dermo-conseiller" ?
+                    "Dermo-conseiller" :
+                    (userPharmacyId ?
+                        (pharmacyCategoryMap.get(userPharmacyId) || "Pharmacie") :
+                        "Pharmacie");
 
                 if (!allowedCategories.includes(userClientCategory)) {
                     continue; // Skip user not in allowed client categories
@@ -765,9 +767,11 @@ export const onNewGoalCreated = functions.firestore
 
 
                 const userPharmacyId = userData.pharmacyId;
-                const userClientCategory = userPharmacyId ?
-                    (pharmacyCategoryMap.get(userPharmacyId) || "Pharmacie") :
-                    "Pharmacie";
+                const userClientCategory = userData.role === "Dermo-conseiller" ?
+                    "Dermo-conseiller" :
+                    (userPharmacyId ?
+                        (pharmacyCategoryMap.get(userPharmacyId) || "Pharmacie") :
+                        "Pharmacie");
 
                 if (!allowedCategories.includes(userClientCategory)) {
                     continue; // Skip user not in allowed client categories
@@ -1131,10 +1135,12 @@ export const sendReminderNotifications = functions.pubsub
 
                 if (allowedCategories) {
                     const userPharmacyId = userData.pharmacyId;
-                    const userClientCategory = userPharmacyId ?
-                        (pharmacyCategoryMap.get(userPharmacyId) ||
-                            "Pharmacie") :
-                        "Pharmacie";
+                    const userClientCategory = userData.role === "Dermo-conseiller" ?
+                        "Dermo-conseiller" :
+                        (userPharmacyId ?
+                            (pharmacyCategoryMap.get(userPharmacyId) ||
+                                "Pharmacie") :
+                            "Pharmacie");
                     if (!allowedCategories.includes(userClientCategory)) {
                         continue;
                     }
@@ -1380,7 +1386,9 @@ async function sendCustomNotificationLogic(docId: string, notifMsg: any) {
             }
             if (targetClientCategories.length > 0) {
                 const uPhId = userData.pharmacyId;
-                const uCat = (uPhId && pharmacyCategoryMap.get(uPhId)) || "Pharmacie";
+                const uCat = userData.role === "Dermo-conseiller" ?
+                    "Dermo-conseiller" :
+                    ((uPhId && pharmacyCategoryMap.get(uPhId)) || "Pharmacie");
                 if (!targetClientCategories.includes(uCat)) {
                     isEligible = false;
                 }
